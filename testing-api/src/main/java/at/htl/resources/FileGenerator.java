@@ -1,4 +1,4 @@
-package at.htl.endpoints;
+package at.htl.resources;
 
 import io.quarkus.launcher.shaded.org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
