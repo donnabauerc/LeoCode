@@ -1,6 +1,8 @@
 package at.htl.endpoints;
 
 import io.quarkus.launcher.shaded.org.apache.commons.io.IOUtils;
+import io.quarkus.launcher.shaded.org.slf4j.Logger;
+import io.quarkus.launcher.shaded.org.slf4j.LoggerFactory;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
@@ -19,6 +21,7 @@ import java.util.Map;
 @Path("/upload")
 public class TestEndpoint {
     private final String UPLOADED_FILE_PATH = "../src/test/java/at/htl/examples/";
+    private final Logger log = LoggerFactory.getLogger(TestEndpoint.class);
 
     @POST
     @Consumes("multipart/form-data")
@@ -33,26 +36,33 @@ public class TestEndpoint {
         for (InputPart inputPart : inputParts) {
             try {
                 MultivaluedMap<String, String> header = inputPart.getHeaders();
+
                 fileName = getFileName(header);
 
-                //convert the uploaded file to inputstream
-                InputStream inputStream = inputPart.getBody(InputStream.class, null);
+                if (!fileName
+                        .substring(fileName.lastIndexOf(".") + 1)
+                        .toLowerCase()
+                        .equals("java")){
+                    throw new IOException("Wrong file format!");
+                }
 
-                byte[] bytes = IOUtils.toByteArray(inputStream);
+                //convert the uploaded file to inputstream
+                InputStream inputStream = inputPart.getBody(InputStream.class,null);
+
+                byte [] bytes = IOUtils.toByteArray(inputStream);
 
                 //constructs upload file path
                 fileName = UPLOADED_FILE_PATH + fileName;
 
-                saveFile(bytes, fileName);
+                saveFile(bytes,fileName);
 
-                System.out.println("Uploaded " + fileName);
+                log.info("Uploaded "+fileName);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
 
-        return Response.ok("Uploaded " + fileName).build();
+        return Response.ok(fileName).build();
     }
 
     /*
@@ -65,7 +75,6 @@ public class TestEndpoint {
 
     //get uploaded filename
     private String getFileName(MultivaluedMap<String, String> header) {
-
         String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
 
         for (String filename : contentDisposition) {
@@ -81,7 +90,6 @@ public class TestEndpoint {
     }
 
     private void saveFile(byte[] content, String filename) throws IOException {
-
         File file = new File(filename);
 
         if (!file.exists()) {
