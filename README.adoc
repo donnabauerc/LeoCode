@@ -1,0 +1,24 @@
+= Leo Code
+Christian Donnabauer
+1.0, 2020-06-21
+ifndef::imagesdir[:imagesdir: images]
+:icons: font
+:toc: left
+
+Following file only serves as a quick overview of the repository. You
+can find more specific documentation about each child directory and its purpose
+in additional README.adoc files, located in the corresponding directories.
+
+If interested maybe also have a look at the documentation-only repository ->
+https://github.com/donnabauerc/LeoCodeDocs
+
+== Structure of the Repo
+image::https://raw.githubusercontent.com/donnabauerc/LeoCodeDocs/master/protocols/images/tree.png[]
+
+== production-system
+Currently this directory is empty, because we aren't sure which method works best. When we find the best method,
+the src of it will be located in this directory.
+
+== prototypes
+As explained above, right now we're not sure which method works best, but to figure out the best one I try multiple
+methods, which you can see in this directory.
