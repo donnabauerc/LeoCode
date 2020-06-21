@@ -1,4 +1,4 @@
-package at.htl.resources;
+package at.htl.control;
 
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 
