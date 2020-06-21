@@ -2,14 +2,14 @@
 Christian Donnabauer
 1.0, 2020-06-17
 
-Die Test API ist dafür zuständig, Tests sowie Code per Rest Endpoint zu importieren, und anschließend
-auszuführen.
+The Testing API is used to import files (tests and code) via Rest endpoints and then run
+said.
+
 
 == Deployment:
-* Um den Quarkus Server zu starten: `./mvnw clean compile quarkus:dev`
-* Nun stehen die Endpoints (z.B.: http://localhost:8080/upload/code) zu Verfügung
-* Aus Testzwecken ist unter http://localhost:8080 auch eine einfache HTML Seite verfügbar, um den
-die Endpoints einfach zu Testen.
+* At first start the Quarkus Server: `./mvnw clean compile quarkus:dev`
+* Now the Endpoints are running (e.g.: http://localhost:8080/upload/code)
+* To test the endpoints, you can use the simple website under http://localhost:8080
 
-Außerdem findet man im Repo unter LeoCode/prototypes/simulating-files auch fertige
-Dokumente, welche zum Testen verwendet werden können
+Also, you can find already created files under LeoCode/prototypes/simulating-files, to
+test the api yourself.
