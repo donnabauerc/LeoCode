@@ -1,6 +1,5 @@
 package at.htl.resources;
 
-import io.quarkus.launcher.shaded.org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 
 import javax.ws.rs.core.MultivaluedMap;
@@ -69,7 +68,7 @@ public abstract class FileGenerator {
                 //convert the uploaded file to inputstream
                 InputStream inputStream = inputPart.getBody(InputStream.class,null);
 
-                byte [] bytes = IOUtils.toByteArray(inputStream);
+                byte [] bytes = inputStream.readAllBytes();
 
                 //constructs upload file path
                 fileName = uploadPath + fileName;

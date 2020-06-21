@@ -1,7 +1,8 @@
+
 package at.htl.resources;
 
-import io.quarkus.launcher.shaded.org.slf4j.Logger;
-import io.quarkus.launcher.shaded.org.slf4j.LoggerFactory;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.jboss.logmanager.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
@@ -15,7 +16,10 @@ import java.util.Map;
 @Path("/code")
 public class CodeEndpoint {
 
-    private final Logger log = LoggerFactory.getLogger(CodeEndpoint.class);
+    @ConfigProperty(name = "project-under-test-folder")
+    String projectUnderTestFolder;
+
+    private final Logger log = Logger.getLogger(CodeEndpoint.class.getSimpleName());
 
     @POST
     @Path("/upload")
@@ -26,7 +30,7 @@ public class CodeEndpoint {
         // depends on form eg. name="uploadedFile"
         List<InputPart> inputParts = uploadForm.get("uploadedFile");
 
-        String fileName = FileGenerator.uploadFile("../src/main/java/at/htl/examples/", inputParts);
+        String fileName = FileGenerator.uploadFile(projectUnderTestFolder + System.getProperty("file.separator"), inputParts);
         log.info("Uploaded " + fileName);
 
         return Response.ok("Uploaded "+fileName).build();

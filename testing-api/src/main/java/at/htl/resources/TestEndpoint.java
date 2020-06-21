@@ -1,7 +1,7 @@
 package at.htl.resources;
 
-import io.quarkus.launcher.shaded.org.slf4j.Logger;
-import io.quarkus.launcher.shaded.org.slf4j.LoggerFactory;
+
+import org.jboss.logmanager.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
@@ -15,7 +15,7 @@ import java.util.Map;
 @Path("/test")
 public class TestEndpoint {
 
-    private final Logger log = LoggerFactory.getLogger(TestEndpoint.class);
+    private final Logger log = Logger.getLogger(TestEndpoint.class.getSimpleName());
 
     @POST
     @Path("/upload")
