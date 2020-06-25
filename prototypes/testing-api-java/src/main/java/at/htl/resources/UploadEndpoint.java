@@ -28,23 +28,27 @@ public class UploadEndpoint {
     @Consumes("multipart/form-data")
     public Response uploadFile(MultipartFormDataInput input, @PathParam("type")String type) throws IOException {
 
+        String directoryUrl = projectUnderTestFolder;
+
         switch (type){
             case "code":
-                projectUnderTestFolder += "main/java";
+                directoryUrl += "main/java";
                 break;
             case "test":
-                projectUnderTestFolder += "test/java";
+                directoryUrl += "test/java";
                 break;
             default:
                 throw new IOException("Invalid Link! => http://localhost:8080/upload/"+type);
         }
+
+        directoryUrl += "/at/htl";
 
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 
         // depends on form eg. name="uploadedFile"
         List<InputPart> inputParts = uploadForm.get("uploadedFile");
 
-        String fileName = FileGenerator.uploadFile(projectUnderTestFolder + System.getProperty("file.separator"), inputParts);
+        String fileName = FileGenerator.uploadFile(directoryUrl + System.getProperty("file.separator"), inputParts);
         log.info("Uploaded " + fileName);
 
         return Response.ok("Uploaded "+fileName).build();
