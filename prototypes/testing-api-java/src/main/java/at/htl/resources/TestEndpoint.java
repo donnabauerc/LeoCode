@@ -18,18 +18,9 @@ public class TestEndpoint {
     public void testProject() throws IOException, InterruptedException {
         log.info("Run tests");
 
-        boolean isSchwammerl = System.getProperty("os.name")
-                .toLowerCase().startsWith("windows");
-
-        ProcessBuilder builder;
-        if (isSchwammerl) {
-            builder = new ProcessBuilder("../run-tests.cmd");
-            log.info("Windows not supported yet");
-        } else {
-            builder = new ProcessBuilder("../run-tests.sh");
-        }
-
+        ProcessBuilder builder = new ProcessBuilder("../run-tests.sh");
         Process process = builder.start();
+
         StreamGobbler streamGobbler =
                 new StreamGobbler(process.getInputStream(), System.out::println);
         Executors.newSingleThreadExecutor().submit(streamGobbler);
