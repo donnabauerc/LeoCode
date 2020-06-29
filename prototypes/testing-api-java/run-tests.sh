@@ -11,3 +11,7 @@ mvn site -DgenerateReports=false
 
 
 mv ./target/site ../target/
+
+rm -rf ./src/main/java/at/htl/*
+
+rm -rf ./src/test/java/at/htl/*
