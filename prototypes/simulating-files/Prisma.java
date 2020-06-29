@@ -1,4 +1,4 @@
-package at.htl.examples;
+package at.htl;
 
 public class Prisma {
     public static void main(String[] args) {
