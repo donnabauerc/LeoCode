@@ -1,6 +1,7 @@
 package at.htl.resources;
 
 import at.htl.control.StreamGobbler;
+import org.jboss.logmanager.Logger;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -11,19 +12,23 @@ import java.util.concurrent.Executors;
 @Path("run")
 public class TestEndpoint {
 
+    private final Logger log = Logger.getLogger(TestEndpoint.class.getSimpleName());
+
     @GET
     public void testProject() throws IOException, InterruptedException {
-        System.out.println("run");
+        log.info("Run tests");
+
         boolean isSchwammerl = System.getProperty("os.name")
                 .toLowerCase().startsWith("windows");
 
-        ProcessBuilder builder = new ProcessBuilder();
+        ProcessBuilder builder;
         if (isSchwammerl) {
-            builder.command("cmd.exe", "/c", "dir");
+            builder = new ProcessBuilder("../run-tests.cmd");
+            log.info("Windows not supported yet");
         } else {
-            builder.command("sh", "-c", "ls");
+            builder = new ProcessBuilder("../run-tests.sh");
         }
-        builder.directory(new File(System.getProperty("user.home")));
+
         Process process = builder.start();
         StreamGobbler streamGobbler =
                 new StreamGobbler(process.getInputStream(), System.out::println);
