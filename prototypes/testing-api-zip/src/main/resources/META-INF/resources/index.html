@@ -1,0 +1,15 @@
+<html>
+    <body>
+        <h1>Upload Zip:</h1>
+        <form action="/upload/project" method="post" enctype="multipart/form-data">
+            <p>
+                Select a file : <input type="file" name="uploadedFile" />
+            </p>
+            <input type="submit" value="Upload" />
+        </form>
+        <h1>Run Tests: </h1>
+        <form action="/run" method="get">
+            <input type="submit" value="Run" />
+        </form>
+    </body>
+</html>
