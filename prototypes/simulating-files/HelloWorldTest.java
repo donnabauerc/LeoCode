@@ -1,4 +1,4 @@
-package at.htl;
+package at.htl.examples;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
