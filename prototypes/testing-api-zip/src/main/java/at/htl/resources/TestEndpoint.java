@@ -1,6 +1,7 @@
 package at.htl.resources;
 
 import at.htl.control.StreamGobbler;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logmanager.Logger;
 
 import javax.ws.rs.GET;

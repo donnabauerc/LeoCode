@@ -74,7 +74,6 @@ public abstract class FileGenerator {
                 fileName = uploadPath + fileName;
 
                 saveFile(bytes,fileName);
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
