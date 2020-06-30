@@ -1,6 +1,5 @@
 package at.htl.resources;
 
-import at.htl.control.StreamGobbler;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logmanager.Logger;
 
@@ -24,9 +23,6 @@ public class TestEndpoint {
         ProcessBuilder builder = new ProcessBuilder("../run-tests.sh");
         Process process = builder.start();
 
-        StreamGobbler streamGobbler =
-                new StreamGobbler(process.getInputStream(), System.out::println);
-        Executors.newSingleThreadExecutor().submit(streamGobbler);
         int exitCode = process.waitFor();
         assert exitCode == 0;
 
