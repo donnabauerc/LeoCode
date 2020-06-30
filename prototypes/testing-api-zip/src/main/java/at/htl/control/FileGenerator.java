@@ -49,7 +49,7 @@ public abstract class FileGenerator {
         fop.close();
     }
 
-    public static String uploadFile(String uploadPath, List<InputPart> inputParts){
+    public static String uploadFile(String uploadPath, List<InputPart> inputParts, String fileType){
         String fileName = "";
 
         for (InputPart inputPart : inputParts) {
@@ -61,7 +61,7 @@ public abstract class FileGenerator {
                 if (!fileName
                         .substring(fileName.lastIndexOf(".") + 1)
                         .toLowerCase()
-                        .equals("zip")){
+                        .equals(fileType)){
                     throw new IOException("Wrong file format!");
                 }
 
