@@ -1,5 +1,6 @@
 package at.htl.control;
 
+import org.jboss.logmanager.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 
 import javax.ws.rs.core.MultivaluedMap;
@@ -9,17 +10,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-public abstract class FileGenerator {
+public class FileGenerator {
 
-    /*
-     * header sample
-     * {
-     * 	Content-Type=[image/png],
-     * 	Content-Disposition=[form-data; name="file"; filename="filename.extension"]
-     * }
-     */
+    private static final Logger log = Logger.getLogger(FileGenerator.class.getSimpleName());
 
-    //get uploaded filename
     public static String getFileName(MultivaluedMap<String, String> header) {
         String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
 
@@ -49,36 +43,32 @@ public abstract class FileGenerator {
         fop.close();
     }
 
-    public static String uploadFile(String uploadPath, List<InputPart> inputParts, String fileType){
+    public static String uploadFile(String uploadPath, List<InputPart> inputParts, String fileType) {
         String fileName = "";
 
         for (InputPart inputPart : inputParts) {
             try {
                 MultivaluedMap<String, String> header = inputPart.getHeaders();
-
                 fileName = getFileName(header);
 
                 if (!fileName
                         .substring(fileName.lastIndexOf(".") + 1)
                         .toLowerCase()
-                        .equals(fileType)){
+                        .equals(fileType)) {
                     throw new IOException("Wrong file format!");
                 }
 
-                //convert the uploaded file to inputstream
-                InputStream inputStream = inputPart.getBody(InputStream.class,null);
+                InputStream inputStream = inputPart.getBody(InputStream.class, null);
+                byte[] bytes = inputStream.readAllBytes();
 
-                byte [] bytes = inputStream.readAllBytes();
-
-                //constructs upload file path
                 fileName = uploadPath + fileName;
+                saveFile(bytes, fileName);
 
-                saveFile(bytes,fileName);
+                log.info("Upload " + fileName);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
         return fileName;
     }
 }

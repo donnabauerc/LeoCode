@@ -11,110 +11,102 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 @Path("/upload")
 public class UploadEndpoint {
 
-    @ConfigProperty(name = "project-under-test-folder")
-    String projectUnderTestFolder;
-
     private final Logger log = Logger.getLogger(UploadEndpoint.class.getSimpleName());
-    public String projectUnderTestName;
 
-    //Later should be dynamic - must be the same as test anyway -> read first line
-    public String projectUnderTestPackages;
+    @ConfigProperty(name = "project-under-test")
+    private String projectUnderTest;
+
+    private String path = projectUnderTest + "/";
+
+    public String projectName;
+    public String projectPackages;
 
     @POST
     @Path("/project")
     @Consumes("multipart/form-data")
-    public Response uploadProject(MultipartFormDataInput input) throws IOException {
+    public Response uploadProject(MultipartFormDataInput input) {
 
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 
         // depends on form eg. name="uploadedFile"
         List<InputPart> inputParts = uploadForm.get("uploadedFile");
 
-        String fileName = FileGenerator.uploadFile(projectUnderTestFolder + System.getProperty("file.separator"),
-                inputParts, "zip");
-        log.info("Uploaded " + fileName);
+        path = FileGenerator
+                .uploadFile(path, inputParts, "zip");
 
-        setProjectName(fileName);
+        projectName = path.substring(
+                path.lastIndexOf("/") + 1,
+                path.lastIndexOf(".")
+        );
 
         try {
-            log.info("Unzip " + fileName);
-            ZipFile zipFile = new ZipFile(fileName);
-            zipFile.extractAll(projectUnderTestFolder);
+            ZipFile zipFile = new ZipFile(path);
+            zipFile.extractAll(projectUnderTest);
+            log.info("Unzip " + path);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        log.info("Delete " + fileName);
-        new File(fileName).delete();
+        new File(path).delete();
+        log.info("Delete " + path);
 
-        return Response.ok("Uploaded "+fileName).build();
+        return Response.ok("Uploaded " + path).build();
     }
 
     @POST
     @Path("/test")
     @Consumes("multipart/form-data")
     public Response uploadTests(MultipartFormDataInput input) throws IOException {
+        path = projectUnderTest + "/";
 
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 
-        // depends on form eg. name="uploadedFile"
         List<InputPart> inputParts = uploadForm.get("uploadedFile");
 
-        String fileName = FileGenerator.uploadFile(projectUnderTestFolder + System.getProperty("file.separator"),
-                inputParts, "java");
-        log.info("Uploaded " + fileName);
+        path = FileGenerator
+                .uploadFile(path, inputParts, "java");
 
-        setProjectUnderTestPackages(fileName);
+        getProjectPackages();
 
-        if(projectUnderTestName != null){//filename
-            String filenameWithoutPath = fileName
+        if (projectName != null) {
+            String fileName = path
                     .substring(
-                            (fileName.lastIndexOf("/")+1),
-                            fileName.length());
+                            (path.lastIndexOf("/") + 1),
+                            path.length());
 
-            projectUnderTestPackages = "../project-under-test/"
-                    + projectUnderTestName
-                    + "/src/test/java"
-                    + projectUnderTestPackages
-                    + "/" + filenameWithoutPath;
-
-            log.info("Filename "+fileName);
-            log.info("Filepath "+projectUnderTestPackages);
+            path =  projectUnderTest + "/" + projectName + "/src/test/java"
+                    + projectPackages + "/" + fileName;
 
             File f = new File(fileName);
-            f.renameTo(new File(projectUnderTestPackages));
+            f.renameTo(new File(path));
 
-        }else {
+            log.info("Move File " + path);
+        } else {
             throw new IOException("Please upload a Project first!");
         }
 
-        return Response.ok("Uploaded "+fileName).build();
+        return Response.ok("Uploaded Test" ).build();
     }
 
-    public void setProjectName(String path){
-        projectUnderTestName = path.substring(path.lastIndexOf("/")+1,
-                path.lastIndexOf("."));
-    }
-
-    public void setProjectUnderTestPackages(String path){
+    public void getProjectPackages() {
         try {
-            log.info("Read Packages");
             BufferedReader br = new BufferedReader(new FileReader(new File(path)));
-            projectUnderTestPackages = br.readLine();
+            projectPackages = br.readLine();
 
-            projectUnderTestPackages = "/" + projectUnderTestPackages
+            projectPackages = "/" + projectPackages
                     .substring(
-                            projectUnderTestPackages.lastIndexOf(" ")+1,
-                            projectUnderTestPackages.lastIndexOf(";"))
+                            projectPackages.lastIndexOf(" ") + 1,
+                            projectPackages.lastIndexOf(";"))
                     .replace(".", "/");
 
         } catch (IOException e) {
