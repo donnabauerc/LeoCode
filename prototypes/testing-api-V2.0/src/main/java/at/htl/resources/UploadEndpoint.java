@@ -24,9 +24,9 @@ public class UploadEndpoint {
     private final Logger log = Logger.getLogger(UploadEndpoint.class.getSimpleName());
 
     @ConfigProperty(name = "project-under-test")
-    private String projectUnderTest;
+    String projectUnderTest;
 
-    private String path = projectUnderTest + "/";
+    String path;
 
     public String projectName;
     public String projectPackages;
@@ -35,6 +35,7 @@ public class UploadEndpoint {
     @Path("/project")
     @Consumes("multipart/form-data")
     public Response uploadProject(MultipartFormDataInput input) {
+        path = projectUnderTest + "/";
 
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 
