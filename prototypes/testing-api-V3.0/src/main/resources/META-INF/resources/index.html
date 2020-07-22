@@ -1,13 +1,13 @@
 <html>
 <body>
     <h1>Teacher</h1>
-    <form action="/upload/teacher" method="post" enctype="multipart/form-data">
+    <form action="/upload" method="post" enctype="multipart/form-data">
         <p>Upload pom.xml <input type="file" name="pom" accept=".xml"></p>
         <p>Upload Tests <input type="file" name="tests" accept=".java" multiple></p>
         <input type="submit" value="Upload">
     </form>
     <h1>Students:</h1>
-    <form action="/upload/student" method="post" enctype="multipart/form-data">
+    <form action="/upload" method="post" enctype="multipart/form-data">
         <p>Upload Code <input type="file" name="code" accept=".java" multiple></p>
         <input type="submit" value="Upload">
     </form>

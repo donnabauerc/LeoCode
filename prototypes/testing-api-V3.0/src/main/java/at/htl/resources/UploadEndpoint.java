@@ -25,20 +25,14 @@ public class UploadEndpoint {
     @ConfigProperty(name = "project-under-test")
     String projectUnderTest;
 
-    public UploadEndpoint() {
-
-    }
-
     @POST
-    @Path("/teacher")
     @Consumes("multipart/form-data")
     public Response uploadProject(MultipartFormDataInput input) {
-
         path += fileSeparator + projectUnderTest + fileSeparator;
-
-        FileHandler.clearDirectory(path);
-
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
+
+        //Deleting possible leftovers
+        FileHandler.clearDirectory(path);
 
         uploadForm.forEach((k,v) -> {
             FileHandler.uploadFile(path, v);
@@ -46,4 +40,5 @@ public class UploadEndpoint {
 
         return Response.ok("Uploaded").build();
     }
+
 }

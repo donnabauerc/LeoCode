@@ -59,7 +59,7 @@ public class FileHandler {
                 fileName = uploadPath + fileName;
                 saveFile(bytes, fileName);
 
-                log.info("Upload " + fileName);
+                log.info("Uploaded " + fileName);
             } catch (IOException e) {
                 e.printStackTrace();
             }
