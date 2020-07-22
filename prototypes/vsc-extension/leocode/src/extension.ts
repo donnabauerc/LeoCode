@@ -1,5 +1,6 @@
 
 import * as vscode from 'vscode';
+import { runRequest } from './control';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -8,6 +9,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	let disposable = vscode.commands.registerCommand('leocode.myCommand', () => {
 		vscode.window.showInformationMessage('This is my custom Command');
+		runRequest();
 	});
 
 }
