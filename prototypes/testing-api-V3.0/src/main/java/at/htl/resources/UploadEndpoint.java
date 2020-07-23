@@ -10,6 +10,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,9 +19,12 @@ public class UploadEndpoint {
 
     private final Logger log = Logger.getLogger(UploadEndpoint.class.getSimpleName());
 
-    public final String fileSeparator = System.getProperty("file.separator");
+    public static List<String> files;
+    public static boolean filesAreForTesting = false;
 
-    public String path = "..";
+    public final static String FILE_SEPARATOR = System.getProperty("file.separator");
+
+    public String path;
 
     @ConfigProperty(name = "project-under-test")
     String projectUnderTest;
@@ -28,8 +32,14 @@ public class UploadEndpoint {
     @POST
     @Consumes("multipart/form-data")
     public Response uploadProject(MultipartFormDataInput input) {
-        path += fileSeparator + projectUnderTest + fileSeparator;
+        path = ".." + FILE_SEPARATOR + projectUnderTest + FILE_SEPARATOR;
+        files = new LinkedList<>();
+
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
+
+        if(uploadForm.size() == 2){
+            filesAreForTesting = true;
+        }
 
         //Deleting possible leftovers
         FileHandler.clearDirectory(path);
@@ -38,7 +48,9 @@ public class UploadEndpoint {
             FileHandler.uploadFile(path, v);
         });
 
-        return Response.ok("Uploaded").build();
+        FileHandler.moveToRequiredDirectory(files);
+
+        return Response.ok("Uploaded " + files).build();
     }
 
 }

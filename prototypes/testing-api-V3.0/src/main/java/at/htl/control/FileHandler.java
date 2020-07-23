@@ -6,10 +6,9 @@ import org.jboss.logmanager.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 
 import javax.ws.rs.core.MultivaluedMap;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class FileHandler {
@@ -45,32 +44,81 @@ public class FileHandler {
         fop.close();
     }
 
-    public static String uploadFile(String uploadPath, List<InputPart> inputParts) {
-        String fileName = "";
+    public static void uploadFile(String uploadPath, List<InputPart> inputParts) {
+        String fileDestination = "unknown";
 
         for (InputPart inputPart : inputParts) {
             try {
                 MultivaluedMap<String, String> header = inputPart.getHeaders();
-                fileName = getFileName(header);
+                fileDestination = getFileName(header);
 
                 InputStream inputStream = inputPart.getBody(InputStream.class, null);
                 byte[] bytes = inputStream.readAllBytes();
 
-                fileName = uploadPath + fileName;
-                saveFile(bytes, fileName);
+                fileDestination = uploadPath + fileDestination;
+                saveFile(bytes, fileDestination);
 
-                log.info("Uploaded " + fileName);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            UploadEndpoint.files.add(fileDestination);
         }
-        return fileName;
+
+        log.info("Uploaded Files");
     }
 
     public static void clearDirectory(String path){
         log.info("Deleting " + path);
         for (File f: new File(path).listFiles()) {
             f.delete();
+        }
+    }
+
+    public static void moveToRequiredDirectory(List<String> files){
+        log.info("Moving files");
+
+        for (String fileDestination: files) {
+            if(fileDestination.endsWith("xml")){
+                return;
+            }
+            try {
+                File file = new File(fileDestination);
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String packages = br.readLine();
+                String path = UploadEndpoint.FILE_SEPARATOR + "src" + UploadEndpoint.FILE_SEPARATOR;
+
+                if(UploadEndpoint.filesAreForTesting){
+                    path += "test";
+                }else{
+                    path += "main";
+                }
+
+                packages = UploadEndpoint.FILE_SEPARATOR + "java" + UploadEndpoint.FILE_SEPARATOR
+                        + packages
+                            .substring(
+                                packages.lastIndexOf(" ") + 1,
+                                packages.lastIndexOf(";"))
+                            .replace(".", UploadEndpoint.FILE_SEPARATOR);
+
+                fileDestination = fileDestination.substring(0, fileDestination.lastIndexOf(UploadEndpoint.FILE_SEPARATOR))
+                        + path
+                        + packages
+                        + fileDestination.substring(fileDestination.lastIndexOf(UploadEndpoint.FILE_SEPARATOR));
+
+                //move file
+                File directories = new File(fileDestination
+                        .substring(0, fileDestination.lastIndexOf(UploadEndpoint.FILE_SEPARATOR))
+                        + UploadEndpoint.FILE_SEPARATOR);
+
+                if(!directories.exists()){
+                    directories.mkdirs();
+                }
+
+                file.renameTo(new File(fileDestination));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
