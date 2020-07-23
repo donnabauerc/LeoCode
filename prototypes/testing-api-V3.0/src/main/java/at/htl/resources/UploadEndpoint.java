@@ -2,7 +2,6 @@ package at.htl.resources;
 
 import at.htl.control.FileHandler;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.jboss.logmanager.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
@@ -17,40 +16,44 @@ import java.util.Map;
 @Path("upload")
 public class UploadEndpoint {
 
-    private final Logger log = Logger.getLogger(UploadEndpoint.class.getSimpleName());
-
-    public static List<String> files;
-    public static boolean filesAreForTesting = false;
-
     public final static String FILE_SEPARATOR = System.getProperty("file.separator");
-
-    public String path;
+    public static List<String> currentlyUploadedFiles;
+    public static boolean filesAreForTesting = false;
+    private String pathToProject;
 
     @ConfigProperty(name = "project-under-test")
     String projectUnderTest;
 
+    public UploadEndpoint() {
+
+    }
+
     @POST
     @Consumes("multipart/form-data")
     public Response uploadProject(MultipartFormDataInput input) {
-        path = ".." + FILE_SEPARATOR + projectUnderTest + FILE_SEPARATOR;
-        files = new LinkedList<>();
-        filesAreForTesting = false;
+
+        reset();
 
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 
-        if(uploadForm.size() == 2){
-            //Deleting possible leftovers
-            FileHandler.clearDirectory(path);
+        if (uploadForm.size() == 2) {
+            FileHandler.clearDirectory(pathToProject);
             filesAreForTesting = true;
         }
 
-        uploadForm.forEach((k,v) -> {
-            FileHandler.uploadFile(path, v);
+        uploadForm.forEach((k, v) -> {
+            FileHandler.uploadFile(pathToProject, v);
         });
 
-        FileHandler.moveToRequiredDirectory(files);
+        FileHandler.moveToRequiredDirectory(currentlyUploadedFiles);
 
-        return Response.ok("Uploaded " + files).build();
+        return Response.ok("Uploaded " + currentlyUploadedFiles).build();
+    }
+
+    private void reset(){
+        pathToProject = ".." + FILE_SEPARATOR + projectUnderTest + FILE_SEPARATOR;
+        currentlyUploadedFiles = new LinkedList<>();
+        filesAreForTesting = false;
     }
 
 }

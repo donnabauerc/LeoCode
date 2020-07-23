@@ -14,7 +14,7 @@ public class TestEndpoint {
 
     @GET
     public Response testProject() throws IOException, InterruptedException {
-        log.info("Run tests");
+        log.info("Running tests");
 
         ProcessBuilder builder = new ProcessBuilder("../run-tests.sh");
         Process process = builder.start();

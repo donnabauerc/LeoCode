@@ -1,14 +1,11 @@
 package at.htl.control;
 
 import at.htl.resources.UploadEndpoint;
-import org.apache.commons.io.FileUtils;
 import org.jboss.logmanager.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 public class FileHandler {
@@ -47,6 +44,8 @@ public class FileHandler {
     public static void uploadFile(String uploadPath, List<InputPart> inputParts) {
         String fileDestination = "unknown";
 
+        log.info("Uploading Files");
+
         for (InputPart inputPart : inputParts) {
             try {
                 MultivaluedMap<String, String> header = inputPart.getHeaders();
@@ -61,13 +60,11 @@ public class FileHandler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            UploadEndpoint.files.add(fileDestination);
+            UploadEndpoint.currentlyUploadedFiles.add(fileDestination);
         }
-
-        log.info("Uploaded Files");
     }
 
-    public static void clearDirectory(String path){
+    public static void clearDirectory(String path) {
         try {
             ProcessBuilder builder = new ProcessBuilder();
             builder.command("bash", "-c", "rm -rf ../project-under-test/*");
@@ -82,34 +79,34 @@ public class FileHandler {
         }
     }
 
-    public static void moveToRequiredDirectory(List<String> files){
+    public static void moveToRequiredDirectory(List<String> files) {
         log.info("Moving files");
 
-        for (String fileDestination: files) {
-            if(fileDestination.endsWith("xml")){
+        for (String fileDestination : files) {
+            if (fileDestination.endsWith("xml")) {
                 return;
             }
             try {
                 File file = new File(fileDestination);
                 BufferedReader br = new BufferedReader(new FileReader(file));
                 String packages = br.readLine();
-                String path = UploadEndpoint.FILE_SEPARATOR + "src" + UploadEndpoint.FILE_SEPARATOR;
+                String pathBeforePackages = UploadEndpoint.FILE_SEPARATOR + "src" + UploadEndpoint.FILE_SEPARATOR;
 
-                if(UploadEndpoint.filesAreForTesting){
-                    path += "test";
-                }else{
-                    path += "main";
+                if (UploadEndpoint.filesAreForTesting) {
+                    pathBeforePackages += "test";
+                } else {
+                    pathBeforePackages += "main";
                 }
 
                 packages = UploadEndpoint.FILE_SEPARATOR + "java" + UploadEndpoint.FILE_SEPARATOR
                         + packages
-                            .substring(
+                        .substring(
                                 packages.lastIndexOf(" ") + 1,
                                 packages.lastIndexOf(";"))
-                            .replace(".", UploadEndpoint.FILE_SEPARATOR);
+                        .replace(".", UploadEndpoint.FILE_SEPARATOR);
 
                 fileDestination = fileDestination.substring(0, fileDestination.lastIndexOf(UploadEndpoint.FILE_SEPARATOR))
-                        + path
+                        + pathBeforePackages
                         + packages
                         + fileDestination.substring(fileDestination.lastIndexOf(UploadEndpoint.FILE_SEPARATOR));
 
@@ -118,7 +115,7 @@ public class FileHandler {
                         .substring(0, fileDestination.lastIndexOf(UploadEndpoint.FILE_SEPARATOR))
                         + UploadEndpoint.FILE_SEPARATOR);
 
-                if(!directories.exists()){
+                if (!directories.exists()) {
                     directories.mkdirs();
                 }
 
