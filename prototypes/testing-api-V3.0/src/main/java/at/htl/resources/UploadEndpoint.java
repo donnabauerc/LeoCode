@@ -34,15 +34,15 @@ public class UploadEndpoint {
     public Response uploadProject(MultipartFormDataInput input) {
         path = ".." + FILE_SEPARATOR + projectUnderTest + FILE_SEPARATOR;
         files = new LinkedList<>();
+        filesAreForTesting = false;
 
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 
         if(uploadForm.size() == 2){
+            //Deleting possible leftovers
+            FileHandler.clearDirectory(path);
             filesAreForTesting = true;
         }
-
-        //Deleting possible leftovers
-        FileHandler.clearDirectory(path);
 
         uploadForm.forEach((k,v) -> {
             FileHandler.uploadFile(path, v);

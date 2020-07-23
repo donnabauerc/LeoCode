@@ -68,9 +68,17 @@ public class FileHandler {
     }
 
     public static void clearDirectory(String path){
-        log.info("Deleting " + path);
-        for (File f: new File(path).listFiles()) {
-            f.delete();
+        try {
+            ProcessBuilder builder = new ProcessBuilder();
+            builder.command("bash", "-c", "rm -rf ../project-under-test/*");
+            Process process = builder.start();
+
+            log.info("Deleting " + path);
+
+            int exitCode = process.waitFor();
+            assert exitCode == 0;
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
