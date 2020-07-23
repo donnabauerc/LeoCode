@@ -8,10 +8,8 @@ mvn test
 # Put the CSS and images where they need to be without the rest of the
 #mvn site -DgenerateReports=false
 
-cd ..
-
 # Not really necessary
 #mv ./project-under-test/target/site ./target/projectUnderTest-site
 
-cat ./project-under-test/target/surefire-reports/*.txt > ./target/log.txt
+cat ./target/surefire-reports/*.txt > ../target/log.txt
 
