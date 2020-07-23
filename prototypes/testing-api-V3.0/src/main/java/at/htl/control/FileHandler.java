@@ -67,7 +67,13 @@ public class FileHandler {
     public static void clearDirectory(String path) {
         try {
             ProcessBuilder builder = new ProcessBuilder();
-            builder.command("bash", "-c", "rm -rf ../project-under-test/*");
+
+            if(!UploadEndpoint.OS.contains("win")){
+                builder.command("bash", "-c", "rm -rf ../project-under-test/*");
+            }else{
+                builder.command("cmd", "/c", "rm ../project-under-test/*");
+            }
+
             Process process = builder.start();
 
             log.info("Deleting " + path);

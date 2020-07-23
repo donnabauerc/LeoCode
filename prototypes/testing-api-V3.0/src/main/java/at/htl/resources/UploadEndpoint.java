@@ -17,6 +17,7 @@ import java.util.Map;
 public class UploadEndpoint {
 
     public final static String FILE_SEPARATOR = System.getProperty("file.separator");
+    public final static String OS = System.getProperty("os.name").toLowerCase();
     public static List<String> currentlyUploadedFiles;
     public static boolean filesAreForTesting = false;
     private String pathToProject;

@@ -16,7 +16,13 @@ public class TestEndpoint {
     public Response testProject() throws IOException, InterruptedException {
         log.info("Running tests");
 
-        ProcessBuilder builder = new ProcessBuilder("../run-tests.sh");
+        ProcessBuilder builder;
+
+        if(!UploadEndpoint.OS.contains("win")){
+            builder = new ProcessBuilder("../run-tests.sh");
+        }else{
+            builder = new ProcessBuilder("..\\run-tests.bat");
+        }
         Process process = builder.start();
 
         int exitCode = process.waitFor();
