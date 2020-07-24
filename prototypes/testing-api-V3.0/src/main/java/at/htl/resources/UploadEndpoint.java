@@ -25,14 +25,9 @@ public class UploadEndpoint {
     @ConfigProperty(name = "project-under-test")
     String projectUnderTest;
 
-    public UploadEndpoint() {
-
-    }
-
     @POST
     @Consumes("multipart/form-data")
     public Response uploadProject(MultipartFormDataInput input) {
-
         reset();
 
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
