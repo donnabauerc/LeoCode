@@ -1,7 +1,4 @@
-...work in progress
-cd ..\project-under-test
+cd ..\project-under-test\
 
-mvn test
-
-#cat ./target/surefire-reports/*.txt > ../target/log.txt
+mvn test & type .\target\surefire-reports\*.txt > ..\target\log.txt
 
