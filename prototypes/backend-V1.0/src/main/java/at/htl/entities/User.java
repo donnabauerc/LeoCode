@@ -5,7 +5,10 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -15,12 +18,16 @@ public class User extends PanacheEntityBase {
     private String lastName;
     private String firstName;
     private String schoolClass;
+    @OneToMany
+    private List<Exercise> exercises;
 
     public User() {
         this.username = "NAN";
+        this.exercises = new LinkedList<>();
     }
 
     public User(String username, String lastName, String firstName, String schoolClass) {
+        this();
         this.username = username;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -57,6 +64,14 @@ public class User extends PanacheEntityBase {
 
     public void setSchoolClass(String schoolClass) {
         this.schoolClass = schoolClass;
+    }
+
+    public List<Exercise> getExercises() {
+        return exercises;
+    }
+
+    public void addExercise(Exercise exercise){
+        this.exercises.add(exercise);
     }
 
     @Override
