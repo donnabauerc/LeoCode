@@ -2,23 +2,27 @@ package at.htl.entities;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "exercises")
 public class Exercise extends PanacheEntity {
 
-    //private User user;
-    //private Example example;
+    @ManyToOne
+    private User user;
+    @ManyToOne
+    private Example example;
     private String result;
+    @Temporal(TemporalType.DATE)
     private Date date;
 
     public Exercise() {
     }
 
-    public Exercise(String result, Date date) {
+    public Exercise(User user, Example example, String result, Date date) {
+        this.user = user;
+        this.example = example;
         this.result = result;
         this.date = date;
     }
@@ -39,10 +43,28 @@ public class Exercise extends PanacheEntity {
         this.date = date;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Example getExample() {
+        return example;
+    }
+
+    public void setExample(Example example) {
+        this.example = example;
+    }
+
     @Override
     public String toString() {
         return "Exercise{" +
-                "result='" + result + '\'' +
+                "user=" + user +
+                ", example=" + example +
+                ", result='" + result + '\'' +
                 ", date=" + date +
                 '}';
     }
