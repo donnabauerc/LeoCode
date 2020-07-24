@@ -11,15 +11,16 @@ public class File extends PanacheEntity {
 
     private String name;
     private FileType type;
-    //private File file;
+    private java.io.File file;
 
 
     public File() {
     }
 
-    public File(String name, FileType type) {
+    public File(String name, FileType type, java.io.File file) {
         this.name = name;
         this.type = type;
+        this.file = file;
     }
 
     public String getName() {
