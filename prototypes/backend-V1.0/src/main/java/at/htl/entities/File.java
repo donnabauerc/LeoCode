@@ -3,6 +3,7 @@ package at.htl.entities;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 @Entity
@@ -10,6 +11,7 @@ import javax.persistence.Table;
 public class File extends PanacheEntity {
 
     private String name;
+    @Enumerated
     private FileType type;
     private java.io.File file;
 
