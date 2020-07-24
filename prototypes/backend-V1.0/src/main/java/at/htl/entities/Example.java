@@ -3,7 +3,10 @@ package at.htl.entities;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -11,16 +14,22 @@ import java.util.List;
 public class Example extends PanacheEntity {
 
     private String name;
-//    private File pom;
-//    private File instruction;
-//    private List<File> tests;
-//    private List<File> solutions;
-
+    @OneToOne
+    private File pom;
+    @OneToOne
+    private File instruction;
+    @OneToMany
+    private List<File> tests;
+    @OneToMany
+    private List<File> solutions;
 
     public Example() {
+        this.tests = new LinkedList<>();
+        this.solutions = new LinkedList<>();
     }
 
     public Example(String name) {
+        this();
         this.name = name;
     }
 
@@ -30,6 +39,30 @@ public class Example extends PanacheEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public File getPom() {
+        return pom;
+    }
+
+    public void setPom(File pom) {
+        this.pom = pom;
+    }
+
+    public void addTest(File file){
+        this.tests.add(file);
+    }
+
+    public void addSolution(File file){
+        this.solutions.add(file);
+    }
+
+    public List<File> getTests() {
+        return tests;
+    }
+
+    public List<File> getSolutions() {
+        return solutions;
     }
 
     @Override
