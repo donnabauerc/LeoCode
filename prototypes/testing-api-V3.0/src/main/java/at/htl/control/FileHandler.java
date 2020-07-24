@@ -71,7 +71,7 @@ public class FileHandler {
             if(!UploadEndpoint.OS.contains("win")){
                 builder.command("bash", "-c", "rm -rf ../project-under-test/*");
             }else{
-                builder.command("cmd", "/c", "rm ../project-under-test/*");
+                builder.command("cmd", "/c", "del ..\\project-under-test\\*");
             }
 
             Process process = builder.start();
