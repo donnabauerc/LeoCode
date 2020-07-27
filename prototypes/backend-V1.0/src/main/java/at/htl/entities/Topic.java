@@ -4,6 +4,8 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -14,13 +16,17 @@ public class Topic extends PanacheEntity {
     private String description;
     private Date year;
 
+    @Transient
+    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+
     public Topic() {
+        this.year = new Date();
     }
 
-    public Topic(String name, String description, Date year) {
+    public Topic(String name, String description) {
+        this();
         this.name = name;
         this.description = description;
-        this.year = year;
     }
 
     public String getName() {
@@ -39,8 +45,8 @@ public class Topic extends PanacheEntity {
         this.description = description;
     }
 
-    public Date getYear() {
-        return year;
+    public String getYear() {
+        return formatter.format(year);
     }
 
     public void setYear(Date year) {
@@ -52,7 +58,7 @@ public class Topic extends PanacheEntity {
         return "Topic{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", year=" + year +
+                ", year=" + formatter.format(year) +
                 '}';
     }
 }
