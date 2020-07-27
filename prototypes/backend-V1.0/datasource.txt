@@ -1,0 +1,6 @@
+#DataSourceSettings#
+#LocalDataSource: db@localhost
+#BEGIN#
+<data-source source="LOCAL" name="db@localhost" uuid="0a7545e9-1519-47e7-97f0-53e0129cec2c"><database-info product="PostgreSQL" version="12.3 (Debian 12.3-1.pgdg100+1)" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.2.5" dbms="POSTGRES" exact-version="12.3" exact-driver-version="42.2"><identifier-quote-string>&quot;</identifier-quote-string></database-info><case-sensitivity plain-identifiers="lower" quoted-identifiers="exact"/><driver-ref>postgresql</driver-ref><synchronize>true</synchronize><jdbc-driver>org.postgresql.Driver</jdbc-driver><jdbc-url>jdbc:postgresql://localhost:5432/db</jdbc-url><secret-storage>master_key</secret-storage><student-name>app</student-name><schema-mapping><introspection-scope><node kind="database" qname="@"><node kind="schema" qname="@"/></node></introspection-scope></schema-mapping></data-source>
+#END#
+

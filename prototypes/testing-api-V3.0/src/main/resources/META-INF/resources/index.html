@@ -1,0 +1,20 @@
+<html>
+<body>
+    <h1>Teacher</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <p>Upload pom.xml <input type="file" name="pom" accept=".xml"></p>
+        <p>Upload Tests <input type="file" name="tests" accept=".java" multiple></p>
+        <input type="submit" value="Upload">
+    </form>
+    <h1>Students:</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <p>Upload Code <input type="file" name="code" accept=".java" multiple></p>
+        <input type="submit" value="Upload">
+    </form>
+
+    <h1>Run Tests: </h1>
+    <form action="/run" method="get">
+        <input type="submit" value="Run" />
+    </form>
+</body>
+</html>
