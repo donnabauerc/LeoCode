@@ -2,9 +2,7 @@ package at.htl.entities;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "files")
@@ -15,14 +13,19 @@ public class File extends PanacheEntity {
     private FileType type;
     private java.io.File file;
 
+    @ManyToOne
+    @JoinColumn(name = "example", nullable = false)
+    private Example example;
+
 
     public File() {
     }
 
-    public File(String name, FileType type, java.io.File file) {
+    public File(String name, FileType type, java.io.File file, Example example) {
         this.name = name;
         this.type = type;
         this.file = file;
+        this.example = example;
     }
 
     public String getName() {
@@ -39,6 +42,14 @@ public class File extends PanacheEntity {
 
     public void setType(FileType type) {
         this.type = type;
+    }
+
+    public Example getExample() {
+        return example;
+    }
+
+    public void setExample(Example example) {
+        this.example = example;
     }
 
     @Override

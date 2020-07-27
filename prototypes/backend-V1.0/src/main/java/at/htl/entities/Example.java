@@ -18,9 +18,9 @@ public class Example extends PanacheEntity {
     private File pom;
     @OneToOne
     private File instruction;
-    @OneToMany
+    @OneToMany(mappedBy = "example")
     private List<File> tests;
-    @OneToMany
+    @OneToMany(mappedBy = "example")
     private List<File> solutions;
     @OneToMany
     private List<Topic> topics;
