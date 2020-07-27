@@ -2,10 +2,7 @@ package at.htl.entities;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,6 +20,7 @@ public class Example extends PanacheEntity {
     @OneToMany(mappedBy = "example")
     private List<File> solutions;
     @OneToMany
+    @JoinColumn(name = "fk_example")
     private List<Topic> topics;
 
     public Example() {
