@@ -22,10 +22,13 @@ public class Example extends PanacheEntity {
     private List<File> tests;
     @OneToMany
     private List<File> solutions;
+    @OneToMany
+    private List<Topic> topics;
 
     public Example() {
         this.tests = new LinkedList<>();
         this.solutions = new LinkedList<>();
+        this.topics = new LinkedList<>();
     }
 
     public Example(String name) {
@@ -63,6 +66,22 @@ public class Example extends PanacheEntity {
 
     public List<File> getSolutions() {
         return solutions;
+    }
+
+    public File getInstruction() {
+        return instruction;
+    }
+
+    public void setInstruction(File instruction) {
+        this.instruction = instruction;
+    }
+
+    public List<Topic> getTopics() {
+        return topics;
+    }
+
+    public void addTopic(Topic topic) {
+        this.topics.add(topic);
     }
 
     @Override
