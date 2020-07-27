@@ -11,21 +11,22 @@ public class File extends PanacheEntity {
     private String name;
     @Enumerated(value = EnumType.STRING)
     private FileType type;
-    private java.io.File file;
+    @Lob
+    @Basic(fetch = FetchType.EAGER)
+    private byte[] file;
 
     @ManyToOne
-    @JoinColumn(name = "example", nullable = false)
+    @JoinColumn(name = "example")
     private Example example;
 
 
     public File() {
     }
 
-    public File(String name, FileType type, java.io.File file, Example example) {
+    public File(String name, FileType type, byte[] file) {
         this.name = name;
         this.type = type;
         this.file = file;
-        this.example = example;
     }
 
     public String getName() {
@@ -50,6 +51,14 @@ public class File extends PanacheEntity {
 
     public void setExample(Example example) {
         this.example = example;
+    }
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
     }
 
     @Override
