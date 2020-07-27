@@ -3,6 +3,7 @@ package at.htl.entities;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.text.SimpleDateFormat;
@@ -14,6 +15,8 @@ public class Topic extends PanacheEntity {
 
     private String name;
     private String description;
+    @Enumerated
+    private Curriculum curriculum;
     private Date year;
 
     @Transient
@@ -23,10 +26,11 @@ public class Topic extends PanacheEntity {
         this.year = new Date();
     }
 
-    public Topic(String name, String description) {
+    public Topic(String name, String description, Curriculum curriculum) {
         this();
         this.name = name;
         this.description = description;
+        this.curriculum = curriculum;
     }
 
     public String getName() {
@@ -53,12 +57,21 @@ public class Topic extends PanacheEntity {
         this.year = year;
     }
 
+    public Curriculum getCurriculum() {
+        return curriculum;
+    }
+
+    public void setCurriculum(Curriculum curriculum) {
+        this.curriculum = curriculum;
+    }
+
     @Override
     public String toString() {
         return "Topic{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", year=" + formatter.format(year) +
+                ", curriculum=" + curriculum +
+                ", year=" + formatter.format(year)  +
                 '}';
     }
 }
