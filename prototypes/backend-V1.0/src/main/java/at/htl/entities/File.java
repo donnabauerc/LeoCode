@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class File extends PanacheEntity {
 
     private String name;
-    @Enumerated
+    @Enumerated(value = EnumType.STRING)
     private FileType type;
     private java.io.File file;
 

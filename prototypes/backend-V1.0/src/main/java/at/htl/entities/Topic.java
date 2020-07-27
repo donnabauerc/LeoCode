@@ -2,10 +2,7 @@ package at.htl.entities;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -15,7 +12,7 @@ public class Topic extends PanacheEntity {
 
     private String name;
     private String description;
-    @Enumerated
+    @Enumerated(value = EnumType.STRING)
     private Curriculum curriculum;
     private Date year;
 
