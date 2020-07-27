@@ -10,7 +10,9 @@ import java.util.Date;
 public class Exercise extends PanacheEntity {
 
     @ManyToOne
+    @JoinColumn(name = "student", nullable = false)
     private Student student;
+
     @ManyToOne
     private Example example;
     private String result;

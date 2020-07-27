@@ -2,22 +2,20 @@ package at.htl.entities;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "students")
 public class Student extends PanacheEntityBase {
     @Id
     private String username;
     private String lastName;
     private String firstName;
     private String schoolClass;
-    @OneToMany
+
+    @OneToMany(mappedBy = "student")
     private List<Exercise> exercises;
 
     public Student() {
