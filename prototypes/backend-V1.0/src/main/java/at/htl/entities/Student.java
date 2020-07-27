@@ -1,6 +1,5 @@
 package at.htl.entities;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import javax.persistence.Entity;
@@ -12,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User extends PanacheEntityBase {
+public class Student extends PanacheEntityBase {
     @Id
     private String username;
     private String lastName;
@@ -21,12 +20,12 @@ public class User extends PanacheEntityBase {
     @OneToMany
     private List<Exercise> exercises;
 
-    public User() {
+    public Student() {
         this.username = "NAN";
         this.exercises = new LinkedList<>();
     }
 
-    public User(String username, String lastName, String firstName, String schoolClass) {
+    public Student(String username, String lastName, String firstName, String schoolClass) {
         this();
         this.username = username;
         this.lastName = lastName;

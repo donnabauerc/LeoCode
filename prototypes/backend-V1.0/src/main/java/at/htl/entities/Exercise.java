@@ -10,7 +10,7 @@ import java.util.Date;
 public class Exercise extends PanacheEntity {
 
     @ManyToOne
-    private User user;
+    private Student student;
     @ManyToOne
     private Example example;
     private String result;
@@ -20,8 +20,8 @@ public class Exercise extends PanacheEntity {
     public Exercise() {
     }
 
-    public Exercise(User user, Example example, String result, Date date) {
-        this.user = user;
+    public Exercise(Student student, Example example, String result, Date date) {
+        this.student = student;
         this.example = example;
         this.result = result;
         this.date = date;
@@ -43,12 +43,12 @@ public class Exercise extends PanacheEntity {
         this.date = date;
     }
 
-    public User getUser() {
-        return user;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     public Example getExample() {
@@ -62,7 +62,7 @@ public class Exercise extends PanacheEntity {
     @Override
     public String toString() {
         return "Exercise{" +
-                "user=" + user +
+                "user=" + student +
                 ", example=" + example +
                 ", result='" + result + '\'' +
                 ", date=" + date +
