@@ -10,8 +10,10 @@ import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 
 import javax.transaction.Transactional;
 import javax.ws.rs.core.MultivaluedMap;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 public class FileHandler {
@@ -76,6 +78,23 @@ public class FileHandler {
             }
         }
 
+    }
+
+    public static java.io.File createFile(File file){
+        String filename = file.getName();
+        byte[] bytes = file.getFile();
+        log.info("Extracting " + filename + " from DB");
+        java.io.File newFile = new java.io.File("./"+filename);
+
+        try {
+            OutputStream os = new FileOutputStream(newFile);
+            os.write(bytes);
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return newFile;
     }
 
 }

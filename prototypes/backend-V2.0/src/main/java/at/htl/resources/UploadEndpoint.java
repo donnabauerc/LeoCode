@@ -2,6 +2,7 @@ package at.htl.resources;
 
 import at.htl.control.FileHandler;
 import at.htl.entities.Example;
+import at.htl.entities.File;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
@@ -25,7 +26,7 @@ public class UploadEndpoint {
     @POST
     @Consumes("multipart/form-data")
     @Transactional
-    public Response uploadProject(MultipartFormDataInput input) {
+    public Response uploadExample(MultipartFormDataInput input) {
 
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
         uploadIsFromStudent = (uploadForm.size() < 5);
