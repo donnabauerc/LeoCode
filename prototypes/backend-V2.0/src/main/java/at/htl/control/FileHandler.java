@@ -1,14 +1,11 @@
 package at.htl.control;
 
-//import at.htl.entities.FileType;
-import at.htl.entities.Example;
 import at.htl.entities.File;
 import at.htl.entities.FileType;
 import at.htl.resources.UploadEndpoint;
 import org.jboss.logmanager.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 
-import javax.transaction.Transactional;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.FileOutputStream;
 import java.io.IOException;

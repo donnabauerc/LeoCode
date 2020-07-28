@@ -30,14 +30,31 @@ public class UploadEndpoint {
 
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
         uploadIsFromStudent = (uploadForm.size() < 5);
-        example = new Example();
 
-        uploadForm.forEach((k, v) -> {
-            FileHandler.uploadFile(k, v);
-        });
+        if(!uploadIsFromStudent){
+            example = new Example();
 
-        example.persist();
+            uploadForm.forEach((k, v) -> {
+                FileHandler.uploadFile(k, v);
+            });
 
+            example.persist();
+        }else{
+
+            try {
+                String username = uploadForm.get("username").get(0).getBodyAsString();
+                String exampleId = uploadForm.get("example").get(0).getBodyAsString();
+                List<InputPart> files = uploadForm.get("test");
+
+                System.out.println(username);
+                System.out.println(exampleId);
+                System.out.println(files);
+
+                //callTestApi
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         return Response.ok("Uploaded" ).build();
     }
 
