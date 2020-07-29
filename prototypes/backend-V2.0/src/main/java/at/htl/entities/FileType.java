@@ -4,5 +4,6 @@ public enum FileType {
     POM,
     INSTRUCTION,
     TEST,
-    SOLUTION
+    SOLUTION,
+    CODE
 }
