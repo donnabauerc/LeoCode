@@ -7,6 +7,7 @@ import at.htl.entities.File;
 import at.htl.entities.FileType;
 import at.htl.entities.MultipartBody;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.jboss.logmanager.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
@@ -34,6 +35,8 @@ public class UploadEndpoint {
     @RestClient
     MultipartService service;
 
+    private static final Logger log = Logger.getLogger(UploadEndpoint.class.getSimpleName());
+
     public static boolean uploadIsFromStudent;
     public static Example example;
     public List<MultipartBody> files;
@@ -47,6 +50,7 @@ public class UploadEndpoint {
         uploadIsFromStudent = (uploadForm.size() < 5);
 
         if(!uploadIsFromStudent){
+            log.info("Creating Example");
             example = new Example();
 
             uploadForm.forEach((k, v) -> {
@@ -99,6 +103,7 @@ public class UploadEndpoint {
     }
 
     public void sendFile() throws Exception {
+        log.info("Uploading " + files.size() + " Files to Test API");
         files.forEach(multipartBody -> {
             service.sendMultipartData(multipartBody);
         });
