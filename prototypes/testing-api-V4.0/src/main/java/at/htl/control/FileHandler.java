@@ -54,11 +54,12 @@ public class FileHandler {
                 InputStream inputStream = inputPart.getBody(InputStream.class, null);
                 byte[] bytes = inputStream.readAllBytes();
 
+                fileDestination = UploadEndpoint.pathToProject + fileDestination;
+
                 if(fileType.equals("test")){
-                    new File(UploadEndpoint.pathToProject + "temp" + UploadEndpoint.FILE_SEPARATOR).mkdirs();
-                    fileDestination = UploadEndpoint.pathToProject + "temp" + UploadEndpoint.FILE_SEPARATOR + fileDestination ;
-                }else{
-                    fileDestination = UploadEndpoint.pathToProject + fileDestination;
+                    UploadEndpoint.testFiles.add(fileDestination);
+                }else if(fileType.equals("code")){
+                    UploadEndpoint.codeFiles.add(fileDestination);
                 }
 
                 saveFile(bytes, fileDestination);
@@ -104,9 +105,7 @@ public class FileHandler {
                 String packages = br.readLine();
                 String pathBeforePackages = UploadEndpoint.FILE_SEPARATOR + "src" + UploadEndpoint.FILE_SEPARATOR;
 
-                if (fileDestination.contains("/temp/")) {
-                    fileDestination = fileDestination.substring(0, fileDestination.indexOf("/temp/")) +
-                            fileDestination.substring(fileDestination.indexOf("/temp/")+5, fileDestination.length());
+                if (UploadEndpoint.testFiles.contains(fileDestination)) {
                     pathBeforePackages += "test";
                 } else {
                     pathBeforePackages += "main";
