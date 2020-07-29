@@ -30,13 +30,9 @@ public class UploadEndpoint {
     @POST
     @Consumes("multipart/form-data")
     public Response uploadProject(MultipartFormDataInput input) {
-        System.out.println("in" + input);
-
         reset();
 
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
-
-        System.out.println("map"+uploadForm);
 
         uploadForm.forEach((k, v) -> {
             FileHandler.uploadFile(k, v);
