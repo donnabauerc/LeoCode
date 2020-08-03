@@ -6,26 +6,16 @@ import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.*;
+import java.util.LinkedList;
 import java.util.List;
 
 public class FileHandler {
 
     private static final Logger log = Logger.getLogger(FileHandler.class.getSimpleName());
+    private static List<String> testFiles = new LinkedList<>();
+    private static List<String> codeFiles = new LinkedList<>();
+    public static List<String> currentlyUploadedFiles = new LinkedList<>();
 
-    public static String getFileName(MultivaluedMap<String, String> header) {
-        String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
-
-        for (String filename : contentDisposition) {
-            if ((filename.trim().startsWith("filename"))) {
-                String[] name = filename.split("=");
-
-                String finalFileName = name[1].trim().replaceAll("\"", "");
-
-                return finalFileName;
-            }
-        }
-        return "unknown";
-    }
 
     public static void saveFile(byte[] content, String filename) throws IOException {
         File file = new File(filename);
@@ -41,34 +31,31 @@ public class FileHandler {
         fop.close();
     }
 
-    public static void uploadFile(String fileType, List<InputPart> inputParts) {// test, pom, code
+    public static void uploadFile(MultipartBody multipartBody) {// test, pom, code
         String fileDestination = "unknown";
 
         log.info("Uploading Files");
 
-        for (InputPart inputPart : inputParts) {
-            try {
-                MultivaluedMap<String, String> header = inputPart.getHeaders();
-                fileDestination = getFileName(header);
+        try {
+            fileDestination = multipartBody.fileName;
 
-                InputStream inputStream = inputPart.getBody(InputStream.class, null);
-                byte[] bytes = inputStream.readAllBytes();
+            InputStream inputStream = multipartBody.file;
+            byte[] bytes = inputStream.readAllBytes();
 
-                fileDestination = UploadEndpoint.pathToProject + fileDestination;
+            fileDestination = UploadEndpoint.pathToProject + fileDestination;
 
-                if(fileType.equals("test")){
-                    UploadEndpoint.testFiles.add(fileDestination);
-                }else if(fileType.equals("code")){
-                    UploadEndpoint.codeFiles.add(fileDestination);
-                }
+            if(multipartBody.fileType.toLowerCase().equals("test")){
+                testFiles.add(fileDestination);
+            }else if(multipartBody.fileType.toLowerCase().equals("code")){
+                codeFiles.add(fileDestination);
+            }
 
-                saveFile(bytes, fileDestination);
+            saveFile(bytes, fileDestination);
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            UploadEndpoint.currentlyUploadedFiles.add(fileDestination);
-        }
+            currentlyUploadedFiles.add(fileDestination);
     }
 
     public static void clearDirectory(String path) {
@@ -92,50 +79,57 @@ public class FileHandler {
         }
     }
 
-    public static void moveToRequiredDirectory(List<String> files) {
+    public static void moveToRequiredDirectory() {
         log.info("Moving files");
 
-        for (String fileDestination : files) {
-            if (fileDestination.endsWith("xml")) {
-                return;
-            }
-            try {
-                File file = new File(fileDestination);
-                BufferedReader br = new BufferedReader(new FileReader(file));
-                String packages = br.readLine();
-                String pathBeforePackages = UploadEndpoint.FILE_SEPARATOR + "src" + UploadEndpoint.FILE_SEPARATOR;
+        System.out.println("CurrentlyUploadedFiles: " + currentlyUploadedFiles.toString());
+        System.out.println("TestFiles: "+ testFiles.toString());
+        System.out.println("CodeFiles: "+ codeFiles.toString());
+        System.out.println(UploadEndpoint.FILE_SEPARATOR);
 
-                if (UploadEndpoint.testFiles.contains(fileDestination)) {
-                    pathBeforePackages += "test";
-                } else {
-                    pathBeforePackages += "main";
+
+        for (String fileDestination : currentlyUploadedFiles) {
+            System.out.println("fileDestination" + fileDestination);
+            if (!fileDestination.endsWith("xml")) {
+                try {
+                    File file = new File(fileDestination);
+                    BufferedReader br = new BufferedReader(new FileReader(file));
+                    String packages = br.readLine();
+                    String pathBeforePackages = UploadEndpoint.FILE_SEPARATOR + "src" + UploadEndpoint.FILE_SEPARATOR;
+
+                    if (testFiles.contains(fileDestination)) {
+                        pathBeforePackages += "test";
+                    } else {
+                        pathBeforePackages += "main";
+                    }
+
+                    System.out.println(packages);
+                    packages = UploadEndpoint.FILE_SEPARATOR + "java" + UploadEndpoint.FILE_SEPARATOR
+                            + packages
+                            .substring(
+                                    packages.lastIndexOf(" ") + 1,
+                                    packages.lastIndexOf(";"))
+                            .replace(".", UploadEndpoint.FILE_SEPARATOR);
+
+                    fileDestination = fileDestination.substring(0, fileDestination.lastIndexOf(UploadEndpoint.FILE_SEPARATOR))
+                            + pathBeforePackages
+                            + packages
+                            + fileDestination.substring(fileDestination.lastIndexOf(UploadEndpoint.FILE_SEPARATOR));
+
+                    //move file
+                    File directories = new File(fileDestination
+                            .substring(0, fileDestination.lastIndexOf(UploadEndpoint.FILE_SEPARATOR))
+                            + UploadEndpoint.FILE_SEPARATOR);
+
+                    if (!directories.exists()) {
+                        directories.mkdirs();
+                    }
+
+                    file.renameTo(new File(fileDestination));
+
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-
-                packages = UploadEndpoint.FILE_SEPARATOR + "java" + UploadEndpoint.FILE_SEPARATOR
-                        + packages
-                        .substring(
-                                packages.lastIndexOf(" ") + 1,
-                                packages.lastIndexOf(";"))
-                        .replace(".", UploadEndpoint.FILE_SEPARATOR);
-
-                fileDestination = fileDestination.substring(0, fileDestination.lastIndexOf(UploadEndpoint.FILE_SEPARATOR))
-                        + pathBeforePackages
-                        + packages
-                        + fileDestination.substring(fileDestination.lastIndexOf(UploadEndpoint.FILE_SEPARATOR));
-
-                //move file
-                File directories = new File(fileDestination
-                        .substring(0, fileDestination.lastIndexOf(UploadEndpoint.FILE_SEPARATOR))
-                        + UploadEndpoint.FILE_SEPARATOR);
-
-                if (!directories.exists()) {
-                    directories.mkdirs();
-                }
-
-                file.renameTo(new File(fileDestination));
-
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }

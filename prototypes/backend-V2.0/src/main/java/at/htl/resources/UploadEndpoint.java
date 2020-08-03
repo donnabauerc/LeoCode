@@ -2,6 +2,7 @@ package at.htl.resources;
 
 import at.htl.control.FileHandler;
 import at.htl.control.MultipartService;
+import at.htl.control.RunningTestService;
 import at.htl.entities.Example;
 import at.htl.entities.File;
 import at.htl.entities.FileType;
@@ -74,9 +75,9 @@ public class UploadEndpoint {
                 InputStream pomInputStream = new ByteArrayInputStream(pom.getFile());
                 files.add(new MultipartBody(pom.getName(), pomInputStream, FileType.POM.toString()));
 
-                example.getTests().forEach(file -> {
-                    InputStream testInputStream = new ByteArrayInputStream(file.getFile());
-                    files.add(new MultipartBody(file.getName(), testInputStream, FileType.TEST.toString()));
+                example.getTests().forEach(test -> { //getTests returns all Files, not just the tests
+                    InputStream testInputStream = new ByteArrayInputStream(test.getFile());
+                    files.add(new MultipartBody(test.getName(), testInputStream, FileType.TEST.toString()));
                 });
 
                 for (InputPart inputPart : codeFiles) {
@@ -91,8 +92,10 @@ public class UploadEndpoint {
                     }
                 }
 
-                sendFile();
+                log.info(files.toString());
+                //sendFile();
 
+                //service.runTests();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {

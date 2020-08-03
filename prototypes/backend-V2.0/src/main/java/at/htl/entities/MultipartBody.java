@@ -27,4 +27,11 @@ public class MultipartBody {
         this.file = file;
         this.fileType = fileType;
     }
+
+    @Override
+    public String toString() {
+        return "MultipartBody{" +
+                "fileName='" + fileName + '\'' +
+                '}';
+    }
 }
