@@ -53,21 +53,6 @@ public class FileHandler {
                     f.setExample(UploadEndpoint.example);
                     f.persist();
 
-                    switch (fileType){
-                        case "test":
-                            UploadEndpoint.example.addTest(f);
-                            break;
-                        case "solution":
-                            UploadEndpoint.example.addSolution(f);
-                            break;
-                        case "pom":
-                            UploadEndpoint.example.setPom(f);
-                            break;
-                        case "instruction":
-                            UploadEndpoint.example.setInstruction(f);
-                            break;
-                    }
-
                     log.info("Uploaded " + f);
                 } catch (IOException e) {
                     e.printStackTrace();
