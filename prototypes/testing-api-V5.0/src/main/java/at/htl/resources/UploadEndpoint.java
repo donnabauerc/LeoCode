@@ -26,8 +26,6 @@ public class UploadEndpoint {
     public final static String FILE_SEPARATOR = System.getProperty("file.separator");
     public final static String OS = System.getProperty("os.name").toLowerCase();
     public static List<MultipartBody> files = new LinkedList<>();
-    //public static List<String> codeFiles;
-    //public static List<String> testFiles;
     public static String pathToProject;
 
     @ConfigProperty(name = "project-under-test")
@@ -51,19 +49,13 @@ public class UploadEndpoint {
             e.printStackTrace();
         }
 
-        // FileHandler.moveToRequiredDirectory(currentlyUploadedFiles);
-
-        //return Response.ok("Uploaded " + currentlyUploadedFiles).build();
         return Response.ok("Uploaded File").build();
     }
 
-    private void reset(){
+    /*public void reset(){
         files = new LinkedList<>();
         pathToProject = ".." + FILE_SEPARATOR + projectUnderTest + FILE_SEPARATOR;
-//        currentlyUploadedFiles = new LinkedList<>();
-//        codeFiles = new LinkedList<>();
-//        testFiles = new LinkedList<>();
         FileHandler.clearDirectory(pathToProject);
-    }
+    }*/
 
 }

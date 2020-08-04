@@ -6,6 +6,8 @@ import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -82,14 +84,7 @@ public class FileHandler {
     public static void moveToRequiredDirectory() {
         log.info("Moving files");
 
-        System.out.println("CurrentlyUploadedFiles: " + currentlyUploadedFiles.toString());
-        System.out.println("TestFiles: "+ testFiles.toString());
-        System.out.println("CodeFiles: "+ codeFiles.toString());
-        System.out.println(UploadEndpoint.FILE_SEPARATOR);
-
-
         for (String fileDestination : currentlyUploadedFiles) {
-            System.out.println("fileDestination" + fileDestination);
             if (!fileDestination.endsWith("xml")) {
                 try {
                     File file = new File(fileDestination);
@@ -103,7 +98,6 @@ public class FileHandler {
                         pathBeforePackages += "main";
                     }
 
-                    System.out.println(packages);
                     packages = UploadEndpoint.FILE_SEPARATOR + "java" + UploadEndpoint.FILE_SEPARATOR
                             + packages
                             .substring(
@@ -132,5 +126,15 @@ public class FileHandler {
                 }
             }
         }
+    }
+
+    public static String fetchResult(){
+        Path file = Path.of("." + UploadEndpoint.FILE_SEPARATOR + "log.txt");
+        try {
+            return Files.readString(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "Something went wrong";
     }
 }

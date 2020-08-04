@@ -94,9 +94,10 @@ public class UploadEndpoint {
                     }
                 }
 
-                //sendFile();
+                sendFile();
+                log.info("Running Tests");
+                log.info(service.runTests());
 
-                //service.runTests();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {

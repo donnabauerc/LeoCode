@@ -22,18 +22,18 @@ public class TestEndpoint {
 
         ProcessBuilder builder;
 
-//        if(!UploadEndpoint.OS.contains("win")){
-//            builder = new ProcessBuilder("../run-tests.sh");
-//        }else{
-//            builder = new ProcessBuilder("..\\run-tests.bat");
-//        }
-//        Process process = builder.start();
-//
-//        int exitCode = process.waitFor();
-//        assert exitCode == 0;
+        if(!UploadEndpoint.OS.contains("win")){
+            builder = new ProcessBuilder("../run-tests.sh");
+        }else{
+            builder = new ProcessBuilder("..\\run-tests.bat");
+        }
+        Process process = builder.start();
 
-        //reset
-        return Response.ok("Executed Tests").build();
+        int exitCode = process.waitFor();
+        assert exitCode == 0;
+
+        //UploadEndpoint.reset();
+        return Response.ok(FileHandler.fetchResult()).build();
     }
 
     public void setup(List<MultipartBody> files){
