@@ -71,11 +71,13 @@ public class UploadEndpoint {
 
                 Example example = Example.findById(Long.parseLong(exampleId));
 
-                File pom = example.getPom();
+                File pom = File.find("select f from File f where type = ?1 and example = ?2", FileType.POM, example).firstResult();
                 InputStream pomInputStream = new ByteArrayInputStream(pom.getFile());
                 files.add(new MultipartBody(pom.getName(), pomInputStream, FileType.POM.toString()));
 
-                example.getTests().forEach(test -> { //getTests returns all Files, not just the tests
+                List<File> tests = File.find("select f from File f where type = ?1 and example = ?2", FileType.TEST, example).list();
+
+                tests.forEach(test -> {
                     InputStream testInputStream = new ByteArrayInputStream(test.getFile());
                     files.add(new MultipartBody(test.getName(), testInputStream, FileType.TEST.toString()));
                 });
@@ -92,7 +94,6 @@ public class UploadEndpoint {
                     }
                 }
 
-                log.info(files.toString());
                 //sendFile();
 
                 //service.runTests();
@@ -101,6 +102,7 @@ public class UploadEndpoint {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
             return Response.ok("Ran Tests" ).build();
         }
     }
