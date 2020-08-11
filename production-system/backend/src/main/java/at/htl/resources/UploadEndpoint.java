@@ -17,7 +17,9 @@ import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Link;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import java.io.ByteArrayInputStream;
@@ -44,6 +46,7 @@ public class UploadEndpoint {
 
     @POST
     @Consumes("multipart/form-data")
+    @Produces(MediaType.TEXT_PLAIN)
     @Transactional
     public Response handleUploads(MultipartFormDataInput input) {
 
@@ -63,7 +66,7 @@ public class UploadEndpoint {
         }else{
 
             files = new LinkedList<>();
-
+            String res = "";
             try {
                 String username = uploadForm.get("username").get(0).getBodyAsString();
                 String exampleId = uploadForm.get("example").get(0).getBodyAsString();
@@ -96,21 +99,21 @@ public class UploadEndpoint {
 
                 sendFile();
                 log.info("Running Tests");
-                log.info(service.runTests());
+                res = service.runTests();
+                log.info("\n" + res);
 
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            return Response.ok("Ran Tests" ).build();
+            return Response.ok(res).build();
         }
     }
 
     public void sendFile() throws Exception {
-        log.info("Uploading " + files.size() + " Files to Test API");
         files.forEach(multipartBody -> {
+            log.info(multipartBody.fileName);
             service.sendMultipartData(multipartBody);
         });
     }
