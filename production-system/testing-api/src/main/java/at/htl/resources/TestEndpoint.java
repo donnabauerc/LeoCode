@@ -32,7 +32,8 @@ public class TestEndpoint {
         int exitCode = process.waitFor();
         assert exitCode == 0;
 
-        //UploadEndpoint.reset();
+        UploadEndpoint.reset();
+
         return Response.ok(FileHandler.fetchResult()).build();
     }
 

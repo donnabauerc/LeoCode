@@ -14,8 +14,8 @@ import java.util.List;
 public class FileHandler {
 
     private static final Logger log = Logger.getLogger(FileHandler.class.getSimpleName());
-    private static List<String> testFiles = new LinkedList<>();
-    private static List<String> codeFiles = new LinkedList<>();
+    public static List<String> testFiles = new LinkedList<>();
+    public static List<String> codeFiles = new LinkedList<>();
     public static List<String> currentlyUploadedFiles = new LinkedList<>();
 
 
