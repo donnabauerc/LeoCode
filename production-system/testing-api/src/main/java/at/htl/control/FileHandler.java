@@ -6,10 +6,14 @@ import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FileHandler {
 
@@ -17,6 +21,7 @@ public class FileHandler {
     public static List<String> testFiles = new LinkedList<>();
     public static List<String> codeFiles = new LinkedList<>();
     public static List<String> currentlyUploadedFiles = new LinkedList<>();
+    private static final List<String> executeTests = Arrays.asList("cd ../project-under-test", "mvn test", "cat ./target/surefire-reports/*.txt > ../target/log.txt");
 
 
     public static void saveFile(byte[] content, String filename) throws IOException {
@@ -136,5 +141,24 @@ public class FileHandler {
             e.printStackTrace();
         }
         return "Something went wrong";
+    }
+
+    public static void createDir(){
+        File dir = new File(".." + UploadEndpoint.FILE_SEPARATOR + "project-under-test");
+
+        if(!dir.exists()){
+            dir.mkdir();
+            try {
+                new File("./log.txt").createNewFile();
+
+                File shellScript = new File("../run-tests.sh");
+                shellScript.createNewFile();
+                shellScript.setExecutable(true);
+                Files.write(shellScript.toPath(), executeTests, StandardCharsets.UTF_8);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
