@@ -3,10 +3,7 @@ package at.htl.resources;
 import at.htl.control.FileHandler;
 import at.htl.control.MultipartService;
 import at.htl.control.RunningTestService;
-import at.htl.entities.Example;
-import at.htl.entities.File;
-import at.htl.entities.FileType;
-import at.htl.entities.MultipartBody;
+import at.htl.entities.*;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logmanager.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
@@ -45,10 +42,11 @@ public class UploadEndpoint {
     public List<MultipartBody> files;
 
     @POST
-    @Consumes("multipart/form-data")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response handleUploads(MultipartFormDataInput input) {
+        String res = "";
 
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
         uploadIsFromStudent = (uploadForm.size() < 5);
@@ -62,11 +60,9 @@ public class UploadEndpoint {
             });
 
             example.persist();
-            return Response.ok("Created Example" ).build();
+            res = "Created Example";
         }else{
-
             files = new LinkedList<>();
-            String res = "";
             try {
                 String username = uploadForm.get("username").get(0).getBodyAsString();
                 String exampleId = uploadForm.get("example").get(0).getBodyAsString();
@@ -107,8 +103,8 @@ public class UploadEndpoint {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return Response.ok(res).build();
         }
+        return Response.ok(new Result(res)).build();
     }
 
     public void sendFile() throws Exception {
