@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {HttpClientService} from '../submission/http-client.service';
 
 @Component({
   selector: 'app-create-example',
@@ -7,9 +8,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateExampleComponent implements OnInit {
 
-  constructor() { }
+  form: HTMLFormElement;
+
+  constructor(
+    public httpClient: HttpClientService
+  ) { }
 
   ngOnInit(): void {
   }
 
+  upload(): void {
+    this.form = document.forms.namedItem('createExample');
+    if (this.form.checkValidity()) {
+      this.httpClient.uploadEndpoint(this.form).subscribe(
+        data => {
+          console.log(data.valueOf());
+        }
+      );
+    }
+  }
 }
