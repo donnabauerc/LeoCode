@@ -13,12 +13,14 @@ import { SubmissionComponent } from './submission/submission.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import { CreateExampleComponent } from './create-example/create-example.component';
 
 const appRoutes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'examples', component: ExampleListComponent},
   {path: 'example/:id', component: ExampleComponent},
   {path: 'hand-in', component: SubmissionComponent},
+  {path: 'create-example', component: CreateExampleComponent},
   {path: '**', component: FileNotFoundComponent}
 ];
 
@@ -31,7 +33,8 @@ const appRoutes: Routes = [
     ExampleComponent,
     ExampleListComponent,
     SubmissionComponent,
-    FeedbackComponent
+    FeedbackComponent,
+    CreateExampleComponent
   ],
   imports: [
     BrowserModule,
@@ -42,4 +45,5 @@ const appRoutes: Routes = [
   providers: [],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }
