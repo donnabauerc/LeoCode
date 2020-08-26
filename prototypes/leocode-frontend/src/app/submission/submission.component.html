@@ -1,1 +1,29 @@
-<p>submission works!</p>
+<div class="container mt-5">
+<!--  <form (ngSubmit)="onSubmit(f)" #f="ngForm">-->
+<!--    <div class="form-group">-->
+<!--      <label for="username">Username:</label>-->
+<!--      <input type="text" id="username" class="form-control" ngModel name="username">-->
+<!--    </div>-->
+<!--    <div class="form-group">-->
+<!--      <label for="example-id">Example ID:</label>-->
+<!--      <input type="text" id="example-id" class="form-control" ngModel name="example">-->
+<!--    </div>-->
+<!--    <div class="form-group">-->
+<!--      <label for="files">Your Sourcecode</label>-->
+<!--      <input type="file" class="form-control" id="files" ngModel name="code" accept=".java" multiple>-->
+<!--    </div>-->
+
+<!--    <button class="btn btn-outline-success" type="submit" style="position: absolute;right: 400px;">Hand In</button>-->
+<!--  </form>-->
+
+
+  <form enctype="multipart/form-data" method="post" name="submission">
+    <label>User Id:</label>
+    <input type="text" name="username" placeholder="user-id" required class="form-control">
+    <label>Example Id:</label>
+    <input type="text" name="example" placeholder="example-id" required class="form-control">
+    <label>Your Sourcecode: </label>
+    <input type="file" class="form-control" name="code" accept=".java" multiple required>
+    <input type="submit" (click)="upload()" value="Test your Code">
+  </form>
+</div>

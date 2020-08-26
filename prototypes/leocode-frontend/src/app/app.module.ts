@@ -11,11 +11,14 @@ import { ExampleComponent } from './example/example.component';
 import { ExampleListComponent } from './example-list/example-list.component';
 import { SubmissionComponent } from './submission/submission.component';
 import { FeedbackComponent } from './feedback/feedback.component';
+import {FormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
 
 const appRoutes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'examples', component: ExampleListComponent},
   {path: 'example/:id', component: ExampleComponent},
+  {path: 'hand-in', component: SubmissionComponent},
   {path: '**', component: FileNotFoundComponent}
 ];
 
@@ -32,7 +35,9 @@ const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(appRoutes)
+    HttpClientModule,
+    RouterModule.forRoot(appRoutes),
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
