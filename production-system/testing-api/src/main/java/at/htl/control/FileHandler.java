@@ -21,7 +21,8 @@ public class FileHandler {
     public static List<String> testFiles = new LinkedList<>();
     public static List<String> codeFiles = new LinkedList<>();
     public static List<String> currentlyUploadedFiles = new LinkedList<>();
-    private static final List<String> executeTests = Arrays.asList("cd ../project-under-test", "mvn test", "cat ./target/surefire-reports/*.txt > ../target/log.txt");
+    private static final List<String> executeTests = Arrays.asList("cd ./project-under-test",
+            "mvn test", "cat ./target/surefire-reports/*.txt > ../log.txt");
 
 
     public static void saveFile(byte[] content, String filename) throws IOException {
@@ -69,11 +70,7 @@ public class FileHandler {
         try {
             ProcessBuilder builder = new ProcessBuilder();
 
-            if(!UploadEndpoint.OS.contains("win")){
-                builder.command("bash", "-c", "rm -rf ../project-under-test/*");
-            }else{
-                builder.command("cmd", "/c", "del ..\\project-under-test\\*");
-            }
+            builder.command("bash", "-c", "rm -rf " + path + "/*");
 
             Process process = builder.start();
 
@@ -144,14 +141,14 @@ public class FileHandler {
     }
 
     public static void createDir(){
-        File dir = new File(".." + UploadEndpoint.FILE_SEPARATOR + "project-under-test");
+        File dir = new File(UploadEndpoint.pathToProject);
 
         if(!dir.exists()){
             dir.mkdir();
             try {
                 new File("./log.txt").createNewFile();
 
-                File shellScript = new File("../run-tests.sh");
+                File shellScript = new File("./run-tests.sh");
                 shellScript.createNewFile();
                 shellScript.setExecutable(true);
                 Files.write(shellScript.toPath(), executeTests, StandardCharsets.UTF_8);

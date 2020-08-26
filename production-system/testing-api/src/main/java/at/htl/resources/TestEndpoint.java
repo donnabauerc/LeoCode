@@ -20,13 +20,7 @@ public class TestEndpoint {
         setup(UploadEndpoint.files);
         log.info("Running tests");
 
-        ProcessBuilder builder;
-
-        if(!UploadEndpoint.OS.contains("win")){
-            builder = new ProcessBuilder("../run-tests.sh");
-        }else{
-            builder = new ProcessBuilder("..\\run-tests.bat");
-        }
+        ProcessBuilder builder =  new ProcessBuilder("./run-tests.sh");
         Process process = builder.start();
 
         int exitCode = process.waitFor();

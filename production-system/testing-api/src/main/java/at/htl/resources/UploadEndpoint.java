@@ -35,8 +35,8 @@ public class UploadEndpoint {
     @Consumes("multipart/form-data")
     public Response uploadProject(MultipartFormDataInput input) {
 
+        pathToProject = "." + FILE_SEPARATOR + projectUnderTest + FILE_SEPARATOR;
         FileHandler.createDir();
-        pathToProject = ".." + FILE_SEPARATOR + projectUnderTest + FILE_SEPARATOR;
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 
         try {
@@ -59,7 +59,7 @@ public class UploadEndpoint {
         FileHandler.testFiles = new LinkedList<>();
         FileHandler.codeFiles = new LinkedList<>();
         FileHandler.currentlyUploadedFiles = new LinkedList<>();
-        FileHandler.clearDirectory(pathToProject);
+        //FileHandler.clearDirectory(pathToProject);
     }
 
 }
