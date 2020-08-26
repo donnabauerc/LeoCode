@@ -30,10 +30,9 @@ export class SubmissionComponent implements OnInit {
     let dat: object;
     this.form = document.forms.namedItem('submission');
     if (this.form.checkValidity()) {
-      this.httpClient.uploadForm(this.form).subscribe(
+      this.httpClient.uploadEndpoint(this.form).subscribe(
         data => {
           dat = data;
-          // console.log(JSON.stringify(data));
           console.log(data.valueOf());
         }
       );

@@ -11,7 +11,7 @@ export class HttpClientService {
 
   constructor(private http: HttpClient) { }
 
-  uploadForm(form: HTMLFormElement): Observable<any> {
+  uploadEndpoint(form: HTMLFormElement): Observable<any> {
     const formData: FormData = new FormData(form);
 
     return this.http.post(`${this.url}/upload`, formData)
@@ -21,7 +21,4 @@ export class HttpClientService {
       }));
   }
 
-  test(): void {
-    console.log('test');
-  }
 }
