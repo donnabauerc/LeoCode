@@ -1,6 +1,7 @@
 package at.htl.entities;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 
