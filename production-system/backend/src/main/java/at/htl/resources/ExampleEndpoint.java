@@ -25,7 +25,9 @@ public class ExampleEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
         log.info("Received Get All Request");
-        return Response.ok(Example.listAll()).build();
+        Response res = Response.ok(Example.listAll()).build();
+        res.getHeaders().add("Access-Control-Allow-Origin","*");
+        return res;
     }
 
     @GET
@@ -36,7 +38,9 @@ public class ExampleEndpoint {
         log.info("Received Get By Id Request");
         Example e = Example.findById(id);
         ExampleResponse exampleResponse = new ExampleResponse(e, File.find("select f from File f where example = ?1" ,  e).list());
-        return Response.ok(exampleResponse).build();
+        Response res = Response.ok(exampleResponse).build();
+        res.getHeaders().add("Access-Control-Allow-Origin","*");
+        return res;
     }
 }
 
