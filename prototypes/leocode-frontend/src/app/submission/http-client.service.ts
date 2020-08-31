@@ -21,4 +21,17 @@ export class HttpClientService {
       }));
   }
 
+  listAllExamples(): Observable<any> {
+    return this.http.get(`${this.url}/example/getAll`)
+      .pipe(map(data => {
+        const result = [];
+        for (const key in data) {
+          if (data.hasOwnProperty(key)){
+            result.push({...data[key], id: key});
+          }
+        }
+        return result;
+      }));
+  }
+
 }

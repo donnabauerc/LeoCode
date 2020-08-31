@@ -1,1 +1,8 @@
-<p>example-list works!</p>
+<table class="table table-striped table-dark" *ngIf="!isLoading && examples.length > 0">
+  <tbody>
+  <tr *ngFor="let e of this.examples; let i = index;">
+    <td class="tabletext">{{e.name}}</td>
+    <td class="tabletext">{{e.topics.length}} Topics</td>
+  </tr>
+  </tbody>
+</table>
