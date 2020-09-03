@@ -1,5 +1,12 @@
-node {
-    docker.image('alpine:latest').inside {
-        sh 'echo Hello World!'
+pipeline {
+    agent {
+        docker { image 'node:14-alpine' }
+    }
+    stages {
+        stage('Test') {
+            steps {
+                sh 'node --version'
+            }
+        }
     }
 }
