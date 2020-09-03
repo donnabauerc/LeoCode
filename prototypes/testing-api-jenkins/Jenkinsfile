@@ -1,15 +1,5 @@
-pipeline {
-  agent any
-  triggers {
-        cron('H/10 * * * *')
+node {
+    docker.image('alpine:latest').inside {
+        sh 'echo Hello World!'
     }
-  stages {
-    stage('Print 10 times') {
-    steps {
-        sh '''#!/bin/bash
-        set -ex
-        echo "Hello world"
-        ''' }
-      }
-  }
 }
