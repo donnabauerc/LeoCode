@@ -1,10 +1,15 @@
 pipeline {
-    agent { docker { image 'maven:3.3.3' } }
-    stages {
-        stage('build') {
-            steps {
-                sh 'mvn --version'
-            }
-        }
+  agent any
+  triggers {
+        cron('H/10 * * * *')
     }
+  stages {
+    stage('Print 10 times') {
+    steps {
+        sh '''#!/bin/bash
+        set -ex
+        echo "Hello world"
+        ''' }
+      }
+  }
 }
