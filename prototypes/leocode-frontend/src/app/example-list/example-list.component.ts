@@ -28,5 +28,7 @@ export class ExampleListComponent implements OnInit {
         this.isLoading = false;
       }
     );
+    const e = this.examples[0];
+    console.log(e.id);
   }
 }
