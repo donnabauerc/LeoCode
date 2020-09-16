@@ -19,7 +19,7 @@
 # Then run the container using : 
 #
 # docker run -i --rm -p 8080:8080 -p 5005:5005 -e JAVA_ENABLE_DEBUG="true" quarkus/leocode-testing-api-jvm
-#
+# the container still doesn't have maven installed, install it manually?
 ###
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.1
 
