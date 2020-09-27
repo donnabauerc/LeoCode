@@ -7,7 +7,8 @@ pipeline {
             steps {
                 sh 'java --version'
                 sh 'mvn --version'
-                sh 'ls '
+                sh 'cd prototypes/simulating-files/code-examples'
+                sh 'ls'
             }
         }
     }

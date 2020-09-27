@@ -1,4 +1,4 @@
-package at.htl.examples;
+package at.htl.example;
 
 public class HelloWorld {
     public static void main(String[] args) {
