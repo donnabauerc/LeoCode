@@ -14,7 +14,7 @@ services:
     image: leocode-testing-api
     build:
       context: ./testing-api
-      dockerfile: src/main/docker/Dockerfile.multistage
+      dockerfile: src/main/docker/Dockerfile.jvm
     ports:
       - "8080:8080"
   leocode-backend:
