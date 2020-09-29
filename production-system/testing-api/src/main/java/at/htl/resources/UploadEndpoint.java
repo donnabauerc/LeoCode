@@ -35,7 +35,7 @@ public class UploadEndpoint {
     @Consumes("multipart/form-data")
     public Response uploadProject(MultipartFormDataInput input) {
 
-        pathToProject = "." + FILE_SEPARATOR + projectUnderTest + FILE_SEPARATOR;
+        pathToProject = ".." + FILE_SEPARATOR + projectUnderTest + FILE_SEPARATOR;
         FileHandler.createDir();
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 

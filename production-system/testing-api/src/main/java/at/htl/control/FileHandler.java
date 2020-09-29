@@ -21,8 +21,8 @@ public class FileHandler {
     public static List<String> testFiles = new LinkedList<>();
     public static List<String> codeFiles = new LinkedList<>();
     public static List<String> currentlyUploadedFiles = new LinkedList<>();
-    private static final List<String> executeTests = Arrays.asList("cd ./project-under-test",
-            "mvn test", "cat ./target/surefire-reports/*.txt > ../log.txt");
+    private static final List<String> executeTests = Arrays.asList("cd ../project-under-test",
+            "mvn test", "cat ./target/surefire-reports/*.txt > log.txt");
 
 
     public static void saveFile(byte[] content, String filename) throws IOException {
@@ -131,7 +131,7 @@ public class FileHandler {
     }
 
     public static String fetchResult(){
-        Path file = Path.of("." + UploadEndpoint.FILE_SEPARATOR + "log.txt");
+        Path file = Path.of(UploadEndpoint.pathToProject + UploadEndpoint.FILE_SEPARATOR + "log.txt");
         try {
             return Files.readString(file);
         } catch (IOException e) {
@@ -145,17 +145,20 @@ public class FileHandler {
 
         if(!dir.exists()){
             dir.mkdir();
-            try {
-                new File("./log.txt").createNewFile();
+        }
 
-                File shellScript = new File("./run-tests.sh");
+        try {
+
+            File shellScript = new File("../run-tests.sh");
+
+            if(!shellScript.exists()){
                 shellScript.createNewFile();
                 shellScript.setExecutable(true);
                 Files.write(shellScript.toPath(), executeTests, StandardCharsets.UTF_8);
-
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
