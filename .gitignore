@@ -1,1 +1,3 @@
-prototypes/vsc-extension/leocode/node_modules/
+.idea
+backend/.idea
+testing-api/.idea
