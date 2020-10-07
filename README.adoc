@@ -13,12 +13,17 @@ If interested maybe also have a look at the documentation-only repository ->
 https://github.com/donnabauerc/LeoCodeDocs
 
 == Structure of the Repo
-image::https://raw.githubusercontent.com/donnabauerc/LeoCodeDocs/master/protocols/images/tree.png[]
+So the structure of the repository is pretty basic. In the backend directory you can find everything related to the
+backend e.g. a Quarkus Server => same thing for the other directory.
 
-== production-system
-Currently this directory is empty, because we aren't sure which method works best. When we find the best method,
-the src of it will be located in this directory.
+== Setup
+To run the project yourself follow these steps:
 
-== prototypes
-As explained above, right now we're not sure which method works best, but to figure out the best one I try multiple
-methods, which you can see in this directory.
+* Prerequesites:
+** Docker
+** jdk/maven
+* Clone the Repository
+* Open a command line and go to the `testing-api` directory
+* In said directory type: `mvn package` => is "required" for Docker
+* After the build finished go to the root directory of the repository
+* Simply type: `docker-compose up` and docker should do its magic (don't worry may take quite a bit)
