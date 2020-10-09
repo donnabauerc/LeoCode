@@ -19,7 +19,7 @@ backend e.g. a Quarkus Server => same thing for the other directory.
 == Setup
 To run the project yourself follow these steps:
 
-* Prerequesites:
+* Prerequisites:
 ** Docker
 ** jdk/maven
 * Clone the Repository
