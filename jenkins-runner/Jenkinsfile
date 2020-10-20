@@ -1,13 +1,9 @@
 pipeline {
-    agent {
-        docker { image 'maven:3.6.3-adoptopenjdk-11' }
-    }
+    agent any
     stages {
-        stage('Test') {
+        stage('Compile') {
             steps {
-                sh 'java --version'
-                sh 'mvn --version'
-                sh 'cd prototypes/simulating-files/code-examples && mvn test'
+                sh 'cd project-under-test && mvn clean compile'
             }
         }
     }
