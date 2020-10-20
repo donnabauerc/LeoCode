@@ -1,3 +1,4 @@
 backend/.idea
 testing-api/.idea
 .idea
+jenkins-runner/jenkins.war
