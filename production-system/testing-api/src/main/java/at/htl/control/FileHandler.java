@@ -1,6 +1,11 @@
 package at.htl.control;
 
 import at.htl.resources.UploadEndpoint;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.internal.storage.file.FileRepository;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.jboss.logmanager.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 
@@ -21,8 +26,11 @@ public class FileHandler {
     public static List<String> testFiles = new LinkedList<>();
     public static List<String> codeFiles = new LinkedList<>();
     public static List<String> currentlyUploadedFiles = new LinkedList<>();
-    private static final List<String> executeTests = Arrays.asList("cd ./project-under-test",
-            "mvn test", "cat ./target/surefire-reports/*.txt > ../log.txt");
+    private static final List<String> executeTests = Arrays.asList("cd ../../project-under-test",
+            "mvn test", "cat ./target/surefire-reports/*.txt > testing-api-V6.0/target/log.txt");
+
+    public static Repository repository;
+    public static Git git;
 
 
     public static void saveFile(byte[] content, String filename) throws IOException {
@@ -144,11 +152,12 @@ public class FileHandler {
         File dir = new File(UploadEndpoint.pathToProject);
 
         if(!dir.exists()){
-            dir.mkdir();
+            FileHandler.cloneRepo();
+            //dir.mkdir();
             try {
                 new File("./log.txt").createNewFile();
 
-                File shellScript = new File("./run-tests.sh");
+                File shellScript = new File("../run-tests.sh");
                 shellScript.createNewFile();
                 shellScript.setExecutable(true);
                 Files.write(shellScript.toPath(), executeTests, StandardCharsets.UTF_8);
@@ -156,6 +165,33 @@ public class FileHandler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public static void cloneRepo(){
+        try {
+            log.info(UploadEndpoint.pathToProject);
+            Git.cloneRepository()
+                    .setURI("https://github.com/donnabauerc/project-under-test.git")
+                    .setDirectory(new File(UploadEndpoint.pathToProject))
+                    .call();
+
+            repository =  new FileRepositoryBuilder()
+                    .setGitDir(new File(UploadEndpoint.pathToProject + ".git"))
+                    .readEnvironment()
+                    .findGitDir()
+                    .setMustExist(true)
+                    .build();
+
+            git = new Git(FileHandler.repository);
+
+            //empty repo
+            git.rm().addFilepattern("src").call();
+            git.rm().addFilepattern("pom.xml").call();
+
+
+        } catch (GitAPIException | IOException e) {
+            e.printStackTrace();
         }
     }
 }

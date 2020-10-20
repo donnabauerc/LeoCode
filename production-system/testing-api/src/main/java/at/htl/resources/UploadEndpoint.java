@@ -2,6 +2,7 @@ package at.htl.resources;
 
 import at.htl.control.FileHandler;
 import at.htl.control.MultipartBody;
+import org.apache.commons.io.FileUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logmanager.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
@@ -11,6 +12,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -35,8 +37,12 @@ public class UploadEndpoint {
     @Consumes("multipart/form-data")
     public Response uploadProject(MultipartFormDataInput input) {
 
-        pathToProject = "." + FILE_SEPARATOR + projectUnderTest + FILE_SEPARATOR;
+        pathToProject = ".." + FILE_SEPARATOR + projectUnderTest + FILE_SEPARATOR;
+
+
         FileHandler.createDir();
+
+
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 
         try {
@@ -59,7 +65,11 @@ public class UploadEndpoint {
         FileHandler.testFiles = new LinkedList<>();
         FileHandler.codeFiles = new LinkedList<>();
         FileHandler.currentlyUploadedFiles = new LinkedList<>();
-        //FileHandler.clearDirectory(pathToProject);
+        try {
+            FileUtils.deleteDirectory(new File(pathToProject));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

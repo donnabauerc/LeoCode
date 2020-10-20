@@ -61,6 +61,12 @@
           <artifactId>resteasy-multipart-provider</artifactId>
           <version>4.5.3.Final</version>
       </dependency>
+    <dependency>
+      <groupId>org.eclipse.jgit</groupId>
+      <artifactId>org.eclipse.jgit</artifactId>
+      <version>5.9.0.202009080501-r</version>
+    </dependency>
+
   </dependencies>
   <build>
     <plugins>
