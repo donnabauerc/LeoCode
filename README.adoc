@@ -41,7 +41,10 @@ and install the recommended set of plugins
 `./mvnw clean compile quarkus:dev`
 3. Now you can use the Project under https://localhost:8080
 
-PS: Import Database into Intellij with backend/datasource.txt file
+Then you can run the requests.http file located in testing/http-requests but be sure to use the right ID, which can
+be found in the database.
+
+Import Database into Intellij with backend/datasource.txt file
 => Import from Clipboard => search for Example ID to test the project
 
 == https://github.com/jenkinsci/jenkinsfile-runner#usage-in-command-line[Jenkins-Runner]
