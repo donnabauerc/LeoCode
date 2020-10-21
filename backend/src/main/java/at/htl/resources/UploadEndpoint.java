@@ -1,9 +1,8 @@
 package at.htl.resources;
 
-import at.htl.control.FileHandler;
-import at.htl.control.MultipartService;
-import at.htl.control.RunningTestService;
+import at.htl.control.*;
 import at.htl.entities.*;
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logmanager.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
@@ -70,9 +69,15 @@ public class UploadEndpoint {
 
                 Example example = Example.findById(Long.parseLong(exampleId));
 
+                //add pom
                 File pom = File.find("select f from File f where type = ?1 and example = ?2", FileType.POM, example).firstResult();
                 InputStream pomInputStream = new ByteArrayInputStream(pom.getFile());
                 files.add(new MultipartBody(pom.getName(), pomInputStream, FileType.POM.toString()));
+
+                //add Jenkinsfile
+                File jenkinsfile = File.find("select f from File f where type = ?1 and example = ?2", FileType.JENKINSFILE, example).firstResult();
+                InputStream jenkinsInputStream = new ByteArrayInputStream(jenkinsfile.getFile());
+                files.add(new MultipartBody(jenkinsfile.getName(), jenkinsInputStream, FileType.JENKINSFILE.toString()));
 
                 List<File> tests = File.find("select f from File f where type = ?1 and example = ?2", FileType.TEST, example).list();
 

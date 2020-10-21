@@ -5,5 +5,6 @@ public enum FileType {
     INSTRUCTION,
     TEST,
     SOLUTION,
-    CODE
+    CODE,
+    JENKINSFILE
 }
