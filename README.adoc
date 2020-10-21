@@ -6,19 +6,45 @@ ifndef::imagesdir[:imagesdir: images]
 :toc: left
 
 Following file only serves as a quick overview of the repository. You
-can find more specific documentation about each child directory and its purpose
+should find more specific documentation about each child directory and its purpose
 in additional README.adoc files, located in the corresponding directories.
 
 If interested maybe also have a look at the documentation-only repository ->
 https://github.com/donnabauerc/LeoCodeDocs
 
 == Structure of the Repo
-image::https://raw.githubusercontent.com/donnabauerc/LeoCodeDocs/master/protocols/images/tree.png[]
+So the structure of the repository is pretty basic. In the backend directory you can find everything related to the
+backend e.g. a Quarkus Server => same thing for the testing-api directory.
 
-== production-system
-Currently this directory is empty, because we aren't sure which method works best. When we find the best method,
-the src of it will be located in this directory.
+== Run this Branch yourself
+Since until now I haven't dockerized this version you need to setup some stuff, in order to run the project:
 
-== prototypes
-As explained above, right now we're not sure which method works best, but to figure out the best one I try multiple
-methods, which you can see in this directory.
+=== Setup
+
+* You will need: JDK(8 or 11), Maven, wget, unzip
+* Setup Jenkins-Runner:
+** Install Local Jenkins:
+*** `wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war` download the latest war file of jenkins
+*** `unzip jenkins.war -d /tmp/jenkins` extract jenkins into tmp
+*** `JENKINS_HOME=/tmp/jenkins_home java -jar jenkins.war` set Jenkins Home and run Jenkins
+*** go to http://localhost:8080/, follow the installation step
+and install the recommended set of plugins
+** Install Jenkins-Runner:
+*** Download the zip file https://repo.jenkins-ci.org/releases/io/jenkins/jenkinsfile-runner/jenkinsfile-runner/1.0-beta-18/jenkinsfile-runner-1.0-beta-18.zip
+*** `unzip ~/Downloads/getting-started-grpc.zip -d ~/Downloads/.` e.g. simply unzip in Downloads
+*** `sudo chmod +x ~/Downloads/jenkinsfile-runner-1.0-beta-18/bin/jenkinsfile-runner` make executable
+
+=== Run
+
+1. Start the postgres database with docker. Simply type `docker-compose up postgres-db` in the root directory
+2. Start the quarkus servers: go into the `backend` / `testing-api` directory and run them by
+`./mvnw clean compile quarkus:dev`
+3. Now you can use the Project under https://localhost:8080
+
+PS: Import Database into Intellij with backend/datasource.txt file
+=> Import from Clipboard => search for Example ID to test the project
+
+== https://github.com/jenkinsci/jenkinsfile-runner#usage-in-command-line[Jenkins-Runner]
+
+* Usage: `jenkinsfile-runner -w <path to war> -p <path to plugins> -f <path to Jenkinsfile> [-a "param1=Hello" -a "param2=value2"]`
+ e.g. ` ~/Downloads/jenkinsfile-runner-1.0-beta-18/bin/jenkinsfile-runner -w /tmp/jenkins -p /tmp/jenkins_home/plugins/ -f ./Jenkinsfile
