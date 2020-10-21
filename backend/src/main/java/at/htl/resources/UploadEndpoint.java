@@ -42,7 +42,7 @@ public class UploadEndpoint {
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     @Transactional
     public Response handleUploads(MultipartFormDataInput input) {
         String res = "";
