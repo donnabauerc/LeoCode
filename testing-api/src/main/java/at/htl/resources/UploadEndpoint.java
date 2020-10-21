@@ -1,7 +1,6 @@
 package at.htl.resources;
 
-import at.htl.control.FileHandler;
-import at.htl.control.MultipartBody;
+import at.htl.control.*;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logmanager.Logger;
@@ -15,7 +14,6 @@ import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -36,13 +34,10 @@ public class UploadEndpoint {
     @POST
     @Consumes("multipart/form-data")
     public Response uploadProject(MultipartFormDataInput input) {
-
         pathToProject = ".." + FILE_SEPARATOR + projectUnderTest + FILE_SEPARATOR;
 
-
-        FileHandler.createDir();
-
-
+        FileHandler.setup();
+        
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 
         try {
@@ -51,8 +46,8 @@ public class UploadEndpoint {
                     uploadForm.get("file").get(0).getBody(InputStream.class, null),
                     uploadForm.get("fileType").get(0).getBodyAsString()
             ));
-
-            log.info("Uploaded file: " + uploadForm.get("fileName").get(0).getBodyAsString());
+            
+            log.info("Received file: " + uploadForm.get("fileName").get(0).getBodyAsString());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,6 +56,7 @@ public class UploadEndpoint {
     }
 
     public static void reset(){
+        //delete shellscript?
         files = new LinkedList<>();
         FileHandler.testFiles = new LinkedList<>();
         FileHandler.codeFiles = new LinkedList<>();

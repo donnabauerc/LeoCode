@@ -26,12 +26,9 @@ public class FileHandler {
     public static List<String> testFiles = new LinkedList<>();
     public static List<String> codeFiles = new LinkedList<>();
     public static List<String> currentlyUploadedFiles = new LinkedList<>();
-    private static final List<String> executeTests = Arrays.asList("cd ../../project-under-test",
-            "mvn test", "cat ./target/surefire-reports/*.txt > testing-api-V6.0/target/log.txt");
-
-    public static Repository repository;
-    public static Git git;
-
+    private static final List<String> executeTests = Arrays.asList("cd ../project-under-test",
+            "~/Downloads/jenkinsfile-runner-1.0-beta-18/bin/jenkinsfile-runner -w /tmp/jenkins -p /tmp/jenkins_home/plugins/ -f ./Jenkinsfile > log.txt",
+            "mv ./log.txt ../");
 
     public static void saveFile(byte[] content, String filename) throws IOException {
         File file = new File(filename);
@@ -50,7 +47,7 @@ public class FileHandler {
     public static void uploadFile(MultipartBody multipartBody) {// test, pom, code
         String fileDestination = "unknown";
 
-        log.info("Uploading Files");
+        log.info("Uploading: " + multipartBody.fileName);
 
         try {
             fileDestination = multipartBody.fileName;
@@ -95,7 +92,7 @@ public class FileHandler {
         log.info("Moving files");
 
         for (String fileDestination : currentlyUploadedFiles) {
-            if (!fileDestination.endsWith("xml")) {
+            if (fileDestination.endsWith("java")) {
                 try {
                     File file = new File(fileDestination);
                     BufferedReader br = new BufferedReader(new FileReader(file));
@@ -148,50 +145,21 @@ public class FileHandler {
         return "Something went wrong";
     }
 
-    public static void createDir(){
+    public static void setup(){
         File dir = new File(UploadEndpoint.pathToProject);
 
         if(!dir.exists()){
-            FileHandler.cloneRepo();
-            //dir.mkdir();
+            dir.mkdir();
             try {
-                new File("./log.txt").createNewFile();
+                new File(UploadEndpoint.pathToProject + "log.txt").createNewFile();
 
                 File shellScript = new File("../run-tests.sh");
                 shellScript.createNewFile();
                 shellScript.setExecutable(true);
                 Files.write(shellScript.toPath(), executeTests, StandardCharsets.UTF_8);
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    public static void cloneRepo(){
-        try {
-            log.info(UploadEndpoint.pathToProject);
-            Git.cloneRepository()
-                    .setURI("https://github.com/donnabauerc/project-under-test.git")
-                    .setDirectory(new File(UploadEndpoint.pathToProject))
-                    .call();
-
-            repository =  new FileRepositoryBuilder()
-                    .setGitDir(new File(UploadEndpoint.pathToProject + ".git"))
-                    .readEnvironment()
-                    .findGitDir()
-                    .setMustExist(true)
-                    .build();
-
-            git = new Git(FileHandler.repository);
-
-            //empty repo
-            git.rm().addFilepattern("src").call();
-            git.rm().addFilepattern("pom.xml").call();
-
-
-        } catch (GitAPIException | IOException e) {
-            e.printStackTrace();
         }
     }
 }
