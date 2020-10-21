@@ -1,0 +1,67 @@
+### Create a Example
+POST localhost:9090/upload
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="exampleName"
+Content-Type: text/plain
+
+Example 1
+
+--WebAppBoundary
+Content-Disposition: form-data; name="instruction"; filename="instruction.md"
+Content-Type: text/markdown
+
+< ../simulating-files/instruction.md
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="pom"; filename="pom.xml"
+Content-Type: text/xml
+
+< ../simulating-files/pom.xml
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="solution"; filename="HelloWorld.java"
+Content-Type: text/x-java
+
+< ../simulating-files/HelloWorld.java
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="test"; filename="HelloWorldTest.java"
+Content-Type: text/x-java
+
+< ../simulating-files/HelloWorldTest.java
+
+--WebAppBoundary--
+Content-Disposition: form-data; name="jenkinsfile"; filename="Jenkinsfile"
+Content-Type: application/octet-stream
+
+< ../simulating-files/Jenkinsfile
+
+--WebAppBoundary--
+
+### Test your Code with Example 1
+POST localhost:9090/upload
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="username"
+Content-Type: text/plain
+
+HttpTester
+
+--WebAppBoundary
+Content-Disposition: form-data; name="example"
+Content-Type: text/plain
+
+5
+--WebAppBoundary
+Content-Disposition: form-data; name="code"; filename="HelloWorld.java"
+Content-Type: text/x-java
+
+< ../simulating-files/HelloWorld.java
+
+--WebAppBoundary--
+
