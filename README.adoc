@@ -47,6 +47,9 @@ be found in the database.
 Import Database into Intellij with backend/datasource.txt file
 => Import from Clipboard => search for Example ID to test the project
 
+Notice: This Jenkins has only some basic Plugins, if you want to enable the use of Docker for example,
+your need to make several changes.
+
 == https://github.com/jenkinsci/jenkinsfile-runner#usage-in-command-line[Jenkins-Runner]
 
 * Usage: `jenkinsfile-runner -w <path to war> -p <path to plugins> -f <path to Jenkinsfile> [-a "param1=Hello" -a "param2=value2"]`
