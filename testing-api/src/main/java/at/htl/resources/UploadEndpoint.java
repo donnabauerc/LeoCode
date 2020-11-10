@@ -7,6 +7,7 @@ import org.jboss.logmanager.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -21,7 +22,8 @@ import java.util.Map;
 @Path("upload")
 public class UploadEndpoint {
 
-    private static final Logger log = Logger.getLogger(UploadEndpoint.class.getSimpleName());
+    @Inject
+    Loggers log;
 
     public final static String FILE_SEPARATOR = System.getProperty("file.separator");
     public final static String OS = System.getProperty("os.name").toLowerCase();
