@@ -27,7 +27,7 @@ public class FileHandler {
     public static List<String> codeFiles = new LinkedList<>();
     public static List<String> currentlyUploadedFiles = new LinkedList<>();
     private static final List<String> executeTests = Arrays.asList("cd ../project-under-test",
-            "~/Downloads/jenkinsfile-runner-1.0-beta-18/bin/jenkinsfile-runner -w /tmp/jenkins -p /tmp/jenkins_home/plugins/ -f ./Jenkinsfile > log.txt",
+            "/opt/jenkinsfile-runner/bin/jenkinsfile-runner -w /opt/jenkins -p /opt/jenkins_home/plugins/ -f ./Jenkinsfile > log.txt",
             "mv ./log.txt ../");
 
     public static void saveFile(byte[] content, String filename) throws IOException {
