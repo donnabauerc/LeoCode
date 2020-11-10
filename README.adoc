@@ -25,14 +25,15 @@ Since until now I haven't dockerized this version you need to setup some stuff, 
 * Setup Jenkins-Runner:
 ** Install Local Jenkins:
 *** `wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war` download the latest war file of jenkins
-*** `unzip jenkins.war -d /tmp/jenkins` extract jenkins into tmp
-*** `JENKINS_HOME=/tmp/jenkins_home java -jar jenkins.war` set Jenkins Home and run Jenkins
+*** `unzip jenkins.war -d /opt/jenkins` extract jenkins into tmp
+*** `JENKINS_HOME=/opt/jenkins_home java -jar jenkins.war` set Jenkins Home and run Jenkins
 *** go to http://localhost:8080/, follow the installation step
-and install the recommended set of plugins
+and install the recommended set of plugins (also change admin password)
+*** install the https://plugins.jenkins.io/docker-workflow/[Docker Pipeline] Plugin (Manage Jenkins -> Plugins ...)
 ** Install Jenkins-Runner:
-*** Download the zip file https://repo.jenkins-ci.org/releases/io/jenkins/jenkinsfile-runner/jenkinsfile-runner/1.0-beta-18/jenkinsfile-runner-1.0-beta-18.zip
-*** `unzip ~/Downloads/getting-started-grpc.zip -d ~/Downloads/.` e.g. simply unzip in Downloads
-*** `sudo chmod +x ~/Downloads/jenkinsfile-runner-1.0-beta-18/bin/jenkinsfile-runner` make executable
+*** Download the zip file `wget https://repo.jenkins-ci.org/releases/io/jenkins/jenkinsfile-runner/jenkinsfile-runner/1.0-beta-18/jenkinsfile-runner-1.0-beta-18.zip`
+*** `unzip jenkinsfile-runner-1.0-beta-18.zip -d /opt/jenkinsfile-runner` e.g. simply unzip
+*** `sudo chmod +x /opt/jenkinsfile-runner/bin/jenkinsfile-runner` make executable
 
 === Run
 
