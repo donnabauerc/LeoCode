@@ -2,7 +2,6 @@ package at.htl.resources;
 
 import at.htl.control.*;
 import at.htl.entities.*;
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logmanager.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
@@ -34,7 +33,8 @@ public class UploadEndpoint {
     @RestClient
     MultipartService service;
 
-    private static final Logger log = Logger.getLogger(UploadEndpoint.class.getSimpleName());
+    @Inject
+    Logger log;
 
     public static boolean uploadIsFromStudent;
     public static Example example;

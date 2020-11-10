@@ -1,11 +1,11 @@
 package at.htl.control;
 
-import at.htl.entities.File;
-import at.htl.entities.FileType;
+import at.htl.entities.*;
 import at.htl.resources.UploadEndpoint;
 import org.jboss.logmanager.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,8 +15,9 @@ import java.util.List;
 
 public class FileHandler {
 
-    private static final Logger log = Logger.getLogger(FileHandler.class.getSimpleName());
-
+    @Inject
+    static Loggers log;
+    
     public static String getFileName(MultivaluedMap<String, String> header) {
         String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
 

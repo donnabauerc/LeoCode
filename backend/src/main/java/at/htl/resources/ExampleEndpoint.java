@@ -1,10 +1,12 @@
 package at.htl.resources;
 
+import at.htl.control.Loggers;
 import at.htl.entities.Example;
 import at.htl.entities.File;
 import at.htl.entities.FileType;
 import org.jboss.logmanager.Logger;
 
+import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -18,7 +20,8 @@ import java.util.List;
 @Path("/example")
 public class ExampleEndpoint {
 
-    private static final Logger log = Logger.getLogger(ExampleEndpoint.class.getSimpleName());
+    @Inject
+    Loggers log;
 
     @GET
     @Path("/getAll")
