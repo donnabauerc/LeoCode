@@ -1,10 +1,8 @@
 package at.htl.resources;
 
-import at.htl.control.Loggers;
 import at.htl.entities.Example;
 import at.htl.entities.File;
-import at.htl.entities.FileType;
-import org.jboss.logmanager.Logger;
+import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -14,14 +12,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.LinkedList;
 import java.util.List;
 
 @Path("/example")
 public class ExampleEndpoint {
 
     @Inject
-    Loggers log;
+    Logger log;
 
     @GET
     @Path("/getAll")

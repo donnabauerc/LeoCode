@@ -3,7 +3,7 @@ package at.htl.resources;
 import at.htl.control.*;
 import at.htl.entities.*;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.jboss.logmanager.Logger;
+import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 

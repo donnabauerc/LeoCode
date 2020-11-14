@@ -3,7 +3,7 @@ package at.htl.resources;
 import at.htl.control.*;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.jboss.logmanager.Logger;
+import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
@@ -23,7 +23,7 @@ import java.util.Map;
 public class UploadEndpoint {
 
     @Inject
-    Loggers log;
+    private Logger log;
 
     public final static String FILE_SEPARATOR = System.getProperty("file.separator");
     public final static String OS = System.getProperty("os.name").toLowerCase();
