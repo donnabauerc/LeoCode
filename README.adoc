@@ -22,6 +22,11 @@ Since until now I haven't dockerized this version you need to setup some stuff, 
 === Setup
 
 * You will need: JDK(8 or 11), Maven, wget, unzip
+
+WARNING: I recently set up a local Jenkins and couldn't get it to work under JDK 11 only a downgrade to JDK 8 seemed to
+fix the issues (e.g. installing the recommended jenkins plugins correct). Which is strange because JDK 11 is explicitely
+mentioned on the official Jenkins Website to work too.
+
 * Setup Jenkins-Runner:
 ** Install Local Jenkins:
 *** `wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war` download the latest war file of jenkins
@@ -34,6 +39,7 @@ and install the recommended set of plugins (also change admin password)
 *** Download the zip file `wget https://repo.jenkins-ci.org/releases/io/jenkins/jenkinsfile-runner/jenkinsfile-runner/1.0-beta-18/jenkinsfile-runner-1.0-beta-18.zip`
 *** `unzip jenkinsfile-runner-1.0-beta-18.zip -d /opt/jenkinsfile-runner` e.g. simply unzip
 *** `sudo chmod +x /opt/jenkinsfile-runner/bin/jenkinsfile-runner` make executable
+
 
 === Run
 
