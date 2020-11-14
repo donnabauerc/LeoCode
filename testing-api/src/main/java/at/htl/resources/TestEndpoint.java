@@ -18,6 +18,7 @@ import java.util.List;
 public class TestEndpoint {
 
     @Inject
+    Logger log;
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
