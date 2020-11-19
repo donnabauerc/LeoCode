@@ -1,0 +1,5 @@
+.idea
+backend/.idea
+backend/target
+testing-api/.idea
+testing-api/target
