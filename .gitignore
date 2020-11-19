@@ -1,5 +1,9 @@
 .idea
+
 backend/.idea
 backend/target
+
 testing-api/.idea
 testing-api/target
+testing-api/log.txt
+testing-api/run-tests.sh
