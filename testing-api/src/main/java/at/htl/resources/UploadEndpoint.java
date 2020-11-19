@@ -27,7 +27,7 @@ public class UploadEndpoint {
 
     public final static String FILE_SEPARATOR = System.getProperty("file.separator");
     public final static String OS = System.getProperty("os.name").toLowerCase();
-    public static List<MultipartBody> files = new LinkedList<>();
+    public static List<MultipartBody> files = new LinkedList<MultipartBody>();
     public static String pathToProject;
 
     @ConfigProperty(name = "project-under-test")

@@ -34,14 +34,14 @@ public class TestEndpoint {
 
         UploadEndpoint.reset();
 
-//        return Response.ok(FileHandler.fetchResult()).build();
-        return Response.ok("Tested Project").build();
+        log.info("Successfully Tested Project");
+
+        //return Response.ok(FileHandler.fetchResult()).build();
+        return Response.ok("Successfully Tested Project").build();
     }
 
     public void saveFilesInRightDirectory(List<MultipartBody> files){
-        files.forEach(multipartBody -> {
-            FileHandler.uploadFile(multipartBody);
-        });
+        files.forEach(FileHandler::uploadFile);
         FileHandler.moveToRequiredDirectory();
     }
 }

@@ -110,7 +110,7 @@ public class UploadEndpoint {
                 log.info("Running Tests");
 
                 res = service.runTests();
-                log.info("\n" + res);
+                log.info(res);
             } catch (Exception e) {
                 e.printStackTrace();
             }

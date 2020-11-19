@@ -51,7 +51,7 @@ public class FileHandler {
                     f.setExample(UploadEndpoint.example);
                     f.persist();
 
-                    log.info("Uploaded " + f);
+                    log.info("Uploaded " + f + " to Database");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
