@@ -1,3 +1,4 @@
 .idea
 backend/.idea
 testing-api/.idea
+testing-api/target/*
