@@ -41,11 +41,10 @@ public class FileHandler {
             }
         } else {
             for (InputPart inputPart : inputParts) {
-                try {
+                try (InputStream inputStream = inputPart.getBody(InputStream.class, null);) {
                     MultivaluedMap<String, String> header = inputPart.getHeaders();
                     String name = getFileName(header);
 
-                    InputStream inputStream = inputPart.getBody(InputStream.class, null);
                     byte[] bytes = inputStream.readAllBytes();
 
                     at.htl.entities.File f = new File(name, FileType.valueOf(fileType.toUpperCase()), bytes);
@@ -67,10 +66,8 @@ public class FileHandler {
         log.info("Extracting " + filename + " from DB");
         java.io.File newFile = new java.io.File("./"+filename);
 
-        try {
-            OutputStream os = new FileOutputStream(newFile);
+        try (OutputStream os = new FileOutputStream(newFile);) {
             os.write(bytes);
-            os.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

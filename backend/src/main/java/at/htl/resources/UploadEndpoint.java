@@ -69,30 +69,38 @@ public class UploadEndpoint {
 
                 Example example = Example.findById(Long.parseLong(exampleId));
 
-                //add pom
+                //search for files in db
                 File pom = File.find("select f from File f where type = ?1 and example = ?2", FileType.POM, example).firstResult();
-                InputStream pomInputStream = new ByteArrayInputStream(pom.getFile());
-                files.add(new MultipartBody(pom.getName(), pomInputStream, FileType.POM.toString()));
-
-                //add Jenkinsfile
                 File jenkinsfile = File.find("select f from File f where type = ?1 and example = ?2", FileType.JENKINSFILE, example).firstResult();
-                InputStream jenkinsInputStream = new ByteArrayInputStream(jenkinsfile.getFile());
-                files.add(new MultipartBody(jenkinsfile.getName(), jenkinsInputStream, FileType.JENKINSFILE.toString()));
-
                 List<File> tests = File.find("select f from File f where type = ?1 and example = ?2", FileType.TEST, example).list();
 
+                try (
+                        InputStream pomInputStream = new ByteArrayInputStream(pom.getFile());
+                        InputStream jenkinsInputStream = new ByteArrayInputStream(jenkinsfile.getFile());
+                ) {
+                    files.add(new MultipartBody(pom.getName(), pomInputStream, FileType.POM.toString()));
+                    files.add(new MultipartBody(jenkinsfile.getName(), jenkinsInputStream, FileType.JENKINSFILE.toString()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 tests.forEach(test -> {
-                    InputStream testInputStream = new ByteArrayInputStream(test.getFile());
-                    files.add(new MultipartBody(test.getName(), testInputStream, FileType.TEST.toString()));
+                    try (InputStream testInputStream = new ByteArrayInputStream(test.getFile())) {
+                        files.add(new MultipartBody(test.getName(), testInputStream, FileType.TEST.toString()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 });
 
                 for (InputPart inputPart : codeFiles) {
                     try {
                         MultivaluedMap<String, String> header = inputPart.getHeaders();
                         String name = FileHandler.getFileName(header);
-                        InputStream inputStream = inputPart.getBody(InputStream.class, null);
 
-                        files.add(new MultipartBody(name, inputStream, FileType.CODE.toString()));
+                        try (InputStream inputStream = inputPart.getBody(InputStream.class, null)) {
+                            files.add(new MultipartBody(name, inputStream, FileType.CODE.toString()));
+                        }
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -100,11 +108,9 @@ public class UploadEndpoint {
 
                 sendFile();
                 log.info("Running Tests");
+
                 res = service.runTests();
                 log.info("\n" + res);
-
-            } catch (IOException e) {
-                e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }
