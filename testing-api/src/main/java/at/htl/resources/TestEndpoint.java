@@ -9,9 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 
 @Path("run")
@@ -23,7 +21,8 @@ public class TestEndpoint {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Response testProject() throws IOException, InterruptedException {
-        saveFilesInRightDirectory(UploadEndpoint.files);
+
+        setupFiles(UploadEndpoint.files);
         log.info("Running tests");
 
         ProcessBuilder builder =  new ProcessBuilder("../run-tests.sh");
@@ -40,7 +39,7 @@ public class TestEndpoint {
         return Response.ok("Successfully Tested Project").build();
     }
 
-    public void saveFilesInRightDirectory(List<MultipartBody> files){
+    public void setupFiles(List<MultipartBody> files){
         files.forEach(FileHandler::uploadFile);
         FileHandler.moveToRequiredDirectory();
     }

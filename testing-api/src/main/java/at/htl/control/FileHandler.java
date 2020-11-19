@@ -37,11 +37,12 @@ public class FileHandler {
             file.createNewFile();
         }
 
-        FileOutputStream fop = new FileOutputStream(file);
-
-        fop.write(content);
-        fop.flush();
-        fop.close();
+        try (FileOutputStream fop = new FileOutputStream(file)) {
+            fop.write(content);
+            fop.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void uploadFile(MultipartBody multipartBody) {// test, pom, code
@@ -49,10 +50,8 @@ public class FileHandler {
 
         log.info("Uploading: " + multipartBody.fileName);
 
-        try {
+        try (InputStream inputStream = multipartBody.file) {
             fileDestination = multipartBody.fileName;
-
-            InputStream inputStream = multipartBody.file;
             byte[] bytes = inputStream.readAllBytes();
 
             fileDestination = UploadEndpoint.pathToProject + fileDestination;
@@ -64,11 +63,10 @@ public class FileHandler {
             }
 
             saveFile(bytes, fileDestination);
-
-            } catch (IOException e) {
+            currentlyUploadedFiles.add(fileDestination);
+        } catch (IOException e) {
                 e.printStackTrace();
             }
-            currentlyUploadedFiles.add(fileDestination);
     }
 
     public static void clearDirectory(String path) {
@@ -93,9 +91,8 @@ public class FileHandler {
 
         for (String fileDestination : currentlyUploadedFiles) {
             if (fileDestination.endsWith("java")) {
-                try {
-                    File file = new File(fileDestination);
-                    BufferedReader br = new BufferedReader(new FileReader(file));
+                File file = new File(fileDestination);
+                try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                     String packages = br.readLine();
                     String pathBeforePackages = UploadEndpoint.FILE_SEPARATOR + "src" + UploadEndpoint.FILE_SEPARATOR;
 
@@ -127,7 +124,6 @@ public class FileHandler {
                     }
 
                     file.renameTo(new File(fileDestination));
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
