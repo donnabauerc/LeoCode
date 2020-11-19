@@ -36,6 +36,7 @@ public class UploadEndpoint {
     @POST
     @Consumes("multipart/form-data")
     public Response uploadProject(MultipartFormDataInput input) {
+        Response res;
         pathToProject = ".." + FILE_SEPARATOR + projectUnderTest + FILE_SEPARATOR;
 
         FileHandler.setup();
@@ -50,11 +51,13 @@ public class UploadEndpoint {
             ));
             
             log.info("Received file: " + uploadForm.get("fileName").get(0).getBodyAsString());
+            res = Response.ok("Uploaded File").build();
         } catch (IOException e) {
+            res = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
             e.printStackTrace();
         }
 
-        return Response.ok("Uploaded File").build();
+        return res;
     }
 
     public static void reset(){
@@ -63,6 +66,7 @@ public class UploadEndpoint {
         FileHandler.testFiles = new LinkedList<>();
         FileHandler.codeFiles = new LinkedList<>();
         FileHandler.currentlyUploadedFiles = new LinkedList<>();
+        
         try {
             FileUtils.deleteDirectory(new File(pathToProject));
         } catch (IOException e) {

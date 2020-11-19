@@ -21,22 +21,27 @@ public class TestEndpoint {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Response testProject() throws IOException, InterruptedException {
+        Response res;
+        try {
+            setupFiles(UploadEndpoint.files);
+            log.info("Running tests");
 
-        setupFiles(UploadEndpoint.files);
-        log.info("Running tests");
+            ProcessBuilder builder =  new ProcessBuilder("../run-tests.sh");
+            Process process = builder.start();
 
-        ProcessBuilder builder =  new ProcessBuilder("../run-tests.sh");
-        Process process = builder.start();
+            int exitCode = process.waitFor();
+            assert exitCode == 0;
 
-        int exitCode = process.waitFor();
-        assert exitCode == 0;
+            UploadEndpoint.reset();
 
-        UploadEndpoint.reset();
-
-        log.info("Successfully Tested Project");
-
+            log.info("Successfully Tested Project");
+            res = Response.ok("Successfully Tested Project").build();
+        } catch (Exception e) {
+            res = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
+            e.printStackTrace();
+        }
         //return Response.ok(FileHandler.fetchResult()).build();
-        return Response.ok("Successfully Tested Project").build();
+        return res;
     }
 
     public void setupFiles(List<MultipartBody> files){

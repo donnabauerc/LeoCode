@@ -45,7 +45,7 @@ public class UploadEndpoint {
     @Produces(MediaType.TEXT_PLAIN)
     @Transactional
     public Response handleUploads(MultipartFormDataInput input) {
-        String res = "";
+        Response res;
 
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
         uploadIsFromStudent = (uploadForm.size() < 5);
@@ -59,7 +59,7 @@ public class UploadEndpoint {
             });
 
             example.persist();
-            res = "Created Example";
+            res = Response.ok("Created Example").build();
         }else{
             files = new LinkedList<>();
             try {
@@ -109,13 +109,15 @@ public class UploadEndpoint {
                 sendFile();
                 log.info("Running Tests");
 
-                res = service.runTests();
-                log.info(res);
+                String testResult = service.runTests();
+                log.info(testResult);
+                res = Response.ok(testResult).build();
             } catch (Exception e) {
+                res = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
                 e.printStackTrace();
             }
         }
-        return Response.ok(new Result(res)).build();
+        return res;
     }
 
     public void sendFile() throws Exception {
