@@ -2,8 +2,10 @@
 
 backend/.idea
 backend/target
+backend/project-under-test.zip
 
 testing-api/.idea
 testing-api/target
 testing-api/log.txt
 testing-api/run-tests.sh
+testing-api/project-under-test
