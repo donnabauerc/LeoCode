@@ -82,7 +82,12 @@ public class FileHandler {
                 ) {
             files.forEach(file -> {
                 try {
-                    zipOut.putNextEntry(new ZipEntry(file.getName()));
+                    if (file.getType().equals(FileType.TEST)) {
+                        zipOut.putNextEntry(new ZipEntry("test/"+file.getName()));
+                    } else {
+                        zipOut.putNextEntry(new ZipEntry(file.getName()));
+                    }
+
                     zipOut.write(file.getFile(), 0, file.getFile().length);
                 } catch (IOException e) {
                     e.printStackTrace();
