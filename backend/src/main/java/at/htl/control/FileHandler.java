@@ -1,16 +1,16 @@
 package at.htl.control;
 
 import at.htl.entities.*;
+import at.htl.entities.File;
 import at.htl.resources.UploadEndpoint;
 import org.jboss.logmanager.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 
 import javax.ws.rs.core.MultivaluedMap;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class FileHandler {
     
@@ -73,6 +73,24 @@ public class FileHandler {
         }
 
         return newFile;
+    }
+
+    public static void zipFiles(List<File> files){
+        try (
+                FileOutputStream fos = new FileOutputStream("../project-under-test.zip");
+                ZipOutputStream zipOut = new ZipOutputStream(fos)
+                ) {
+            files.forEach(file -> {
+                try {
+                    zipOut.putNextEntry(new ZipEntry(file.getName()));
+                    zipOut.write(file.getFile(), 0, file.getFile().length);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

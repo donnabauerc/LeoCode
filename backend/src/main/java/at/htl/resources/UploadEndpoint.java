@@ -38,7 +38,6 @@ public class UploadEndpoint {
 
     public static boolean uploadIsFromStudent;
     public static Example example;
-    public List<MultipartBody> files;
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -61,11 +60,12 @@ public class UploadEndpoint {
             example.persist();
             res = Response.ok("Created Example").build();
         }else{
-            files = new LinkedList<>();
             try {
                 String username = uploadForm.get("username").get(0).getBodyAsString();
                 String exampleId = uploadForm.get("example").get(0).getBodyAsString();
+
                 List<InputPart> codeFiles = uploadForm.get("code");
+                List<File> files = new LinkedList<>();
 
                 Example example = Example.findById(Long.parseLong(exampleId));
 
@@ -74,7 +74,11 @@ public class UploadEndpoint {
                 File jenkinsfile = File.find("select f from File f where type = ?1 and example = ?2", FileType.JENKINSFILE, example).firstResult();
                 List<File> tests = File.find("select f from File f where type = ?1 and example = ?2", FileType.TEST, example).list();
 
-                try (
+                files.add(pom);
+                files.add(jenkinsfile);
+                tests.forEach(files::add);
+
+                /*try (
                         InputStream pomInputStream = new ByteArrayInputStream(pom.getFile());
                         InputStream jenkinsInputStream = new ByteArrayInputStream(jenkinsfile.getFile());
                 ) {
@@ -90,7 +94,7 @@ public class UploadEndpoint {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                });
+                });*/
 
                 for (InputPart inputPart : codeFiles) {
                     try {
@@ -98,7 +102,8 @@ public class UploadEndpoint {
                         String name = FileHandler.getFileName(header);
 
                         try (InputStream inputStream = inputPart.getBody(InputStream.class, null)) {
-                            files.add(new MultipartBody(name, inputStream, FileType.CODE.toString()));
+                            byte[] bytes = inputStream.readAllBytes();
+                            files.add(new File(name, FileType.CODE, bytes));
                         }
 
                     } catch (IOException e) {
@@ -106,12 +111,14 @@ public class UploadEndpoint {
                     }
                 }
 
-                sendFile();
+                FileHandler.zipFiles(files);
+                //sendFile();
                 log.info("Running Tests");
 
-                String testResult = service.runTests();
-                log.info(testResult);
-                res = Response.ok(testResult).build();
+                //String testResult = service.runTests();
+                //log.info(testResult);
+                //res = Response.ok(testResult).build();
+                res = Response.ok().build();
             } catch (Exception e) {
                 res = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
                 e.printStackTrace();
@@ -120,11 +127,11 @@ public class UploadEndpoint {
         return res;
     }
 
-    public void sendFile() throws Exception {
+    /*public void sendFile() throws Exception {
         files.forEach(multipartBody -> {
             log.info(multipartBody.fileName);
             service.sendMultipartData(multipartBody);
         });
-    }
+    }*/
 
 }
