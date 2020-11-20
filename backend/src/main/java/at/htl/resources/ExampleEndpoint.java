@@ -26,7 +26,7 @@ public class ExampleEndpoint {
     public Response getAll() {
         log.info("Received Get All Request");
         Response res = Response.ok(Example.listAll()).build();
-        res.getHeaders().add("Access-Control-Allow-Origin","*");
+        res.getHeaders().add("Access-Control-Allow-Origin", "*");
         return res;
     }
 
@@ -34,17 +34,17 @@ public class ExampleEndpoint {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response getById(@PathParam("id") long id){
+    public Response getById(@PathParam("id") long id) {
         log.info("Received Get By Id Request");
         Example e = Example.findById(id);
-        ExampleResponse exampleResponse = new ExampleResponse(e, File.find("select f from File f where example = ?1" ,  e).list());
+        ExampleResponse exampleResponse = new ExampleResponse(e, File.find("select f from File f where example = ?1", e).list());
         Response res = Response.ok(exampleResponse).build();
-        res.getHeaders().add("Access-Control-Allow-Origin","*");
+        res.getHeaders().add("Access-Control-Allow-Origin", "*");
         return res;
     }
 }
 
-class ExampleResponse{
+class ExampleResponse {
     public Example example;
     public List<File> files;
 

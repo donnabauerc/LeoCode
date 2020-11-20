@@ -17,7 +17,7 @@ public class Topic extends PanacheEntity {
     private Date year;
 
     @Transient
-    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+    private final SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
 
     public Topic() {
         this.year = new Date();
@@ -68,7 +68,7 @@ public class Topic extends PanacheEntity {
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", curriculum=" + curriculum +
-                ", year=" + formatter.format(year)  +
+                ", year=" + formatter.format(year) +
                 '}';
     }
 }

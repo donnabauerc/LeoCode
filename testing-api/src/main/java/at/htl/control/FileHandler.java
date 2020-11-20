@@ -1,33 +1,25 @@
 package at.htl.control;
 
 import at.htl.resources.UploadEndpoint;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.internal.storage.file.FileRepository;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.jboss.logmanager.Logger;
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 
-import javax.ws.rs.core.MultivaluedMap;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class FileHandler {
 
     private static final Logger log = Logger.getLogger(FileHandler.class.getSimpleName()); //Because of static methods ...
-
-    public static Map<String, String> currentFiles; //test, code or other
     private static final List<String> executeTests = Arrays.asList("cd ../project-under-test",
             "/opt/jenkinsfile-runner/bin/jenkinsfile-runner -w /opt/jenkins -p /opt/jenkins_home/plugins/ -f ./Jenkinsfile > log.txt",
             "mv ./log.txt ../");
+    public static Map<String, String> currentFiles; //test, code or other
 
     public static void moveToRequiredDirectory() {
         log.info("Moving files");
@@ -83,7 +75,7 @@ public class FileHandler {
         new File(UploadEndpoint.pathToProject + "test").delete();
     }
 
-    public static String fetchResult(){
+    public static String fetchResult() {
         Path file = Path.of(".." + UploadEndpoint.FILE_SEPARATOR + "log.txt");
         try {
             return Files.readString(file);
@@ -93,11 +85,11 @@ public class FileHandler {
         return "Something went wrong";
     }
 
-    public static void setup(){
+    public static void setup() {
         try {
             File projectDirectory = new File(UploadEndpoint.pathToProject);
 
-            if(!projectDirectory.exists()) {
+            if (!projectDirectory.exists()) {
                 projectDirectory.mkdir();
             }
 
@@ -112,7 +104,7 @@ public class FileHandler {
             e.printStackTrace();
         }
     }
-    
+
     public static void unzipProject(MultipartBody mb) {
         File dest = new File(UploadEndpoint.pathToProject);
 
@@ -122,12 +114,12 @@ public class FileHandler {
                 File newFile = new File(dest + UploadEndpoint.FILE_SEPARATOR + zipEntry.toString());
 
                 if (zipEntry.toString().contains("/")) {
-                    if(!newFile.getParentFile().exists()) {
+                    if (!newFile.getParentFile().exists()) {
                         newFile.getParentFile().mkdirs();
                     }
                     newFile.createNewFile();
                     currentFiles.put("test", newFile.getPath());
-                } else if (newFile.getPath().toString().contains(".java")) {
+                } else if (newFile.getPath().contains(".java")) {
                     newFile.createNewFile();
                     currentFiles.put("code", newFile.getPath());
                 } else {

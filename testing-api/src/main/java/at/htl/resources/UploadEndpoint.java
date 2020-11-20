@@ -1,7 +1,7 @@
 package at.htl.resources;
 
-import at.htl.control.*;
-import org.apache.commons.io.FileUtils;
+import at.htl.control.FileHandler;
+import at.htl.control.MultipartBody;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
@@ -12,8 +12,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,14 +21,12 @@ import java.util.Map;
 @Path("upload")
 public class UploadEndpoint {
 
-    @Inject
-    Logger log;
-
     public final static String FILE_SEPARATOR = System.getProperty("file.separator");
     public final static String OS = System.getProperty("os.name").toLowerCase();
     public static List<MultipartBody> files = new LinkedList<MultipartBody>();
     public static String pathToProject;
-
+    @Inject
+    Logger log;
     @ConfigProperty(name = "project-under-test")
     String projectUnderTest;
 
@@ -44,10 +40,10 @@ public class UploadEndpoint {
         try {
             FileHandler.setup();
             log.info("Received Project");
-            
+
             Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
-            MultipartBody multipartBody = new MultipartBody( uploadForm.get("fileName").get(0).getBodyAsString(),
-                            uploadForm.get("file").get(0).getBody(InputStream.class, null));
+            MultipartBody multipartBody = new MultipartBody(uploadForm.get("fileName").get(0).getBodyAsString(),
+                    uploadForm.get("file").get(0).getBody(InputStream.class, null));
 
             FileHandler.unzipProject(multipartBody);
 

@@ -19,7 +19,7 @@ public class Student extends PanacheEntityBase {
     private String schoolClass;
 
     @OneToMany(mappedBy = "student")
-    private List<Exercise> exercises;
+    private final List<Exercise> exercises;
 
     public Student() {
         this.username = "NAN";
@@ -70,7 +70,7 @@ public class Student extends PanacheEntityBase {
         return exercises;
     }
 
-    public void addExercise(Exercise exercise){
+    public void addExercise(Exercise exercise) {
         this.exercises.add(exercise);
     }
 

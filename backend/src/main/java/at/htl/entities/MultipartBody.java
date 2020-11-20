@@ -5,8 +5,6 @@ import org.jboss.resteasy.annotations.providers.multipart.PartType;
 
 import javax.ws.rs.core.MediaType;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
 
 public class MultipartBody {
     @FormParam("file")

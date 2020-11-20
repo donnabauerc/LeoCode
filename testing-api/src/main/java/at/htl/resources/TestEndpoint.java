@@ -1,6 +1,6 @@
 package at.htl.resources;
 
-import at.htl.control.*;
+import at.htl.control.FileHandler;
 import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
@@ -9,9 +9,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 
 @Path("run")
 public class TestEndpoint {
@@ -27,7 +24,7 @@ public class TestEndpoint {
             FileHandler.moveToRequiredDirectory();
             log.info("Running tests");
 
-            ProcessBuilder builder =  new ProcessBuilder("../run-tests.sh");
+            ProcessBuilder builder = new ProcessBuilder("../run-tests.sh");
             Process process = builder.start();
 
             int exitCode = process.waitFor();

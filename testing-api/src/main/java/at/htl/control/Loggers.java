@@ -1,7 +1,6 @@
 package at.htl.control;
 
 
-
 import org.jboss.logging.Logger;
 
 import javax.enterprise.inject.Produces;

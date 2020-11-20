@@ -1,8 +1,11 @@
 package at.htl.resources;
 
-import at.htl.control.*;
-import at.htl.entities.*;
+import at.htl.control.FileHandler;
+import at.htl.control.MultipartService;
+import at.htl.entities.Example;
 import at.htl.entities.File;
+import at.htl.entities.FileType;
+import at.htl.entities.MultipartBody;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
@@ -14,13 +17,13 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -28,16 +31,14 @@ import java.util.Map;
 @Path("upload")
 public class UploadEndpoint {
 
+    public static final String zip = "../project-under-test.zip";
+    public static boolean uploadIsFromStudent;
+    public static Example example;
     @Inject
     @RestClient
     MultipartService service;
-
     @Inject
     Logger log;
-
-    public static boolean uploadIsFromStudent;
-    public static final String zip = "../project-under-test.zip";
-    public static Example example;
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -49,7 +50,7 @@ public class UploadEndpoint {
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
         uploadIsFromStudent = (uploadForm.size() < 5);
 
-        if(!uploadIsFromStudent){
+        if (!uploadIsFromStudent) {
             log.info("Creating Example");
             example = new Example();
 
@@ -59,7 +60,7 @@ public class UploadEndpoint {
 
             example.persist();
             res = Response.ok("Created Example").build();
-        }else{
+        } else {
             try {
                 String username = uploadForm.get("username").get(0).getBodyAsString();
                 String exampleId = uploadForm.get("example").get(0).getBodyAsString();
