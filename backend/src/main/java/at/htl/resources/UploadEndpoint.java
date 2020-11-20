@@ -98,11 +98,10 @@ public class UploadEndpoint {
                 sendFile();
 
                 log.info("Running Tests");
-                //String testResult = service.runTests();
+                String testResult = service.runTests();
 
-                //log.info(testResult);
-                //res = Response.ok(testResult).build();
-                res = Response.ok().build();
+                log.info(testResult);
+                res = Response.ok(testResult).build();
             } catch (Exception e) {
                 res = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
                 e.printStackTrace();
@@ -116,6 +115,8 @@ public class UploadEndpoint {
 
         try (InputStream inputStream = new FileInputStream(zip)) {
             service.sendMultipartData(new MultipartBody(zip, inputStream));
+
+            new java.io.File(zip).delete();
         } catch (FileNotFoundException e) { //TODO: print Error to User
             e.printStackTrace();
         } catch (IOException e) {

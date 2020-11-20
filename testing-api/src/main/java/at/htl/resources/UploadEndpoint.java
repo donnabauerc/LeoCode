@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ import java.util.Map;
 public class UploadEndpoint {
 
     @Inject
-    private Logger log;
+    Logger log;
 
     public final static String FILE_SEPARATOR = System.getProperty("file.separator");
     public final static String OS = System.getProperty("os.name").toLowerCase();
@@ -38,6 +39,7 @@ public class UploadEndpoint {
     public Response uploadProject(MultipartFormDataInput input) {
         Response res;
         pathToProject = ".." + FILE_SEPARATOR + projectUnderTest + FILE_SEPARATOR;
+        FileHandler.currentFiles = new HashMap<>();
 
         try {
             FileHandler.setup();
@@ -48,29 +50,12 @@ public class UploadEndpoint {
                             uploadForm.get("file").get(0).getBody(InputStream.class, null));
 
             FileHandler.unzipProject(multipartBody);
-            
+
             res = Response.ok("Uploaded File").build();
-            
         } catch (Exception e) {
             res = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
             e.printStackTrace();
         }
-
         return res;
     }
-
-    public static void reset(){
-        //delete shellscript?
-        files = new LinkedList<>();
-        FileHandler.testFiles = new LinkedList<>();
-        FileHandler.codeFiles = new LinkedList<>();
-        FileHandler.currentlyUploadedFiles = new LinkedList<>();
-        
-        try {
-            FileUtils.deleteDirectory(new File(pathToProject));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
