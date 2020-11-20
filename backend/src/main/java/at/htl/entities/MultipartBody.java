@@ -17,15 +17,9 @@ public class MultipartBody {
     @PartType(MediaType.TEXT_PLAIN)
     public String fileName;
 
-    @FormParam("fileType")
-    @PartType(MediaType.TEXT_PLAIN)
-    public String fileType;
-
-
-    public MultipartBody(String fileName, InputStream file, String fileType) {
+    public MultipartBody(String fileName, InputStream file) {
         this.fileName = fileName;
         this.file = file;
-        this.fileType = fileType;
     }
 
     @Override

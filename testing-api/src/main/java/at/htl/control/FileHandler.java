@@ -19,6 +19,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class FileHandler {
 
@@ -45,7 +47,7 @@ public class FileHandler {
         }
     }
 
-    public static void uploadFile(MultipartBody multipartBody) {// test, pom, code
+    /*public static void uploadFile(MultipartBody multipartBody) {// test, pom, code
         String fileDestination = "unknown";
 
         log.info("Uploading: " + multipartBody.fileName);
@@ -67,7 +69,7 @@ public class FileHandler {
         } catch (IOException e) {
                 e.printStackTrace();
             }
-    }
+    }*/
 
     public static void clearDirectory(String path) {
         try {
@@ -142,20 +144,46 @@ public class FileHandler {
     }
 
     public static void setup(){
-        File dir = new File(UploadEndpoint.pathToProject);
+        try {
+            File projectDirectory = new File(UploadEndpoint.pathToProject);
 
-        if(!dir.exists()){
-            dir.mkdir();
-            try {
-                new File(UploadEndpoint.pathToProject + "log.txt").createNewFile();
-
-                File shellScript = new File("../run-tests.sh");
-                shellScript.createNewFile();
-                shellScript.setExecutable(true);
-                Files.write(shellScript.toPath(), executeTests, StandardCharsets.UTF_8);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if(!projectDirectory.exists()) {
+                projectDirectory.mkdir();
             }
+
+            new File(UploadEndpoint.pathToProject + "log.txt").createNewFile();
+
+            File shellScript = new File("../run-tests.sh");
+            shellScript.createNewFile();
+            shellScript.setExecutable(true);
+            Files.write(shellScript.toPath(), executeTests, StandardCharsets.UTF_8);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void unzipProject(MultipartBody mb) {
+        File dest = new File(UploadEndpoint.pathToProject);
+
+        try (ZipInputStream zis = new ZipInputStream(mb.file)) {
+            ZipEntry zipEntry = zis.getNextEntry();
+            while (zipEntry != null) {
+                File newFile = new File(dest + UploadEndpoint.FILE_SEPARATOR + zipEntry.toString());
+
+                if (zipEntry.toString().contains("/")) {
+                    newFile.getParentFile().mkdirs();
+                }
+                newFile.createNewFile();
+
+                FileOutputStream fos = new FileOutputStream(newFile);
+                fos.write(zis.readAllBytes());
+                fos.close();
+                
+                zipEntry = zis.getNextEntry();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

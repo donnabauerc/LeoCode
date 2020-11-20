@@ -6,11 +6,9 @@ public class MultipartBody {
 
     public InputStream file;
     public String fileName;
-    public String fileType;
 
-    public MultipartBody(String fileName, InputStream file, String fileType) {
+    public MultipartBody(String fileName, InputStream file) {
         this.file = file;
         this.fileName = fileName;
-        this.fileType = fileType;
     }
 }

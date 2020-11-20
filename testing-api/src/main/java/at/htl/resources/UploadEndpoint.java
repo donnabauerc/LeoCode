@@ -39,20 +39,19 @@ public class UploadEndpoint {
         Response res;
         pathToProject = ".." + FILE_SEPARATOR + projectUnderTest + FILE_SEPARATOR;
 
-        FileHandler.setup();
-        
-        Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
-
         try {
-            files.add(new MultipartBody(
-                    uploadForm.get("fileName").get(0).getBodyAsString(),
-                    uploadForm.get("file").get(0).getBody(InputStream.class, null),
-                    uploadForm.get("fileType").get(0).getBodyAsString()
-            ));
+            FileHandler.setup();
+            log.info("Received Project");
             
-            log.info("Received file: " + uploadForm.get("fileName").get(0).getBodyAsString());
+            Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
+            MultipartBody multipartBody = new MultipartBody( uploadForm.get("fileName").get(0).getBodyAsString(),
+                            uploadForm.get("file").get(0).getBody(InputStream.class, null));
+
+            FileHandler.unzipProject(multipartBody);
+            
             res = Response.ok("Uploaded File").build();
-        } catch (IOException e) {
+            
+        } catch (Exception e) {
             res = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
             e.printStackTrace();
         }

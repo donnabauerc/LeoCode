@@ -77,7 +77,7 @@ public class FileHandler {
 
     public static void zipFiles(List<File> files){
         try (
-                FileOutputStream fos = new FileOutputStream("../project-under-test.zip");
+                FileOutputStream fos = new FileOutputStream(UploadEndpoint.zip);
                 ZipOutputStream zipOut = new ZipOutputStream(fos)
                 ) {
             files.forEach(file -> {

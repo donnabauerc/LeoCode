@@ -2,6 +2,7 @@ package at.htl.resources;
 
 import at.htl.control.*;
 import at.htl.entities.*;
+import at.htl.entities.File;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
@@ -17,9 +18,7 @@ import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -37,6 +36,7 @@ public class UploadEndpoint {
     Logger log;
 
     public static boolean uploadIsFromStudent;
+    public static final String zip = "../project-under-test.zip";
     public static Example example;
 
     @POST
@@ -78,24 +78,7 @@ public class UploadEndpoint {
                 files.add(jenkinsfile);
                 tests.forEach(files::add);
 
-                /*try (
-                        InputStream pomInputStream = new ByteArrayInputStream(pom.getFile());
-                        InputStream jenkinsInputStream = new ByteArrayInputStream(jenkinsfile.getFile());
-                ) {
-                    files.add(new MultipartBody(pom.getName(), pomInputStream, FileType.POM.toString()));
-                    files.add(new MultipartBody(jenkinsfile.getName(), jenkinsInputStream, FileType.JENKINSFILE.toString()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                tests.forEach(test -> {
-                    try (InputStream testInputStream = new ByteArrayInputStream(test.getFile())) {
-                        files.add(new MultipartBody(test.getName(), testInputStream, FileType.TEST.toString()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });*/
-
+                //add code from student
                 for (InputPart inputPart : codeFiles) {
                     try {
                         MultivaluedMap<String, String> header = inputPart.getHeaders();
@@ -112,10 +95,11 @@ public class UploadEndpoint {
                 }
 
                 FileHandler.zipFiles(files);
-                //sendFile();
-                log.info("Running Tests");
+                sendFile();
 
+                log.info("Running Tests");
                 //String testResult = service.runTests();
+
                 //log.info(testResult);
                 //res = Response.ok(testResult).build();
                 res = Response.ok().build();
@@ -127,11 +111,16 @@ public class UploadEndpoint {
         return res;
     }
 
-    /*public void sendFile() throws Exception {
-        files.forEach(multipartBody -> {
-            log.info(multipartBody.fileName);
-            service.sendMultipartData(multipartBody);
-        });
-    }*/
+    public void sendFile() {
+        log.info("Sending Files to Testing API");
+
+        try (InputStream inputStream = new FileInputStream(zip)) {
+            service.sendMultipartData(new MultipartBody(zip, inputStream));
+        } catch (FileNotFoundException e) { //TODO: print Error to User
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

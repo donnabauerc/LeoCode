@@ -45,7 +45,7 @@ public class TestEndpoint {
     }
 
     public void setupFiles(List<MultipartBody> files){
-        files.forEach(FileHandler::uploadFile);
-        FileHandler.moveToRequiredDirectory();
+        //files.forEach(FileHandler::uploadFile);
+        //FileHandler.moveToRequiredDirectory();
     }
 }
