@@ -27,6 +27,10 @@ WARNING: I recently set up a local Jenkins and couldn't get it to work under JDK
 fix the issues (e.g. installing the recommended jenkins plugins correct). Which is strange because JDK 11 is explicitely
 mentioned on the official Jenkins Website to work too.
 
+WARNING: When setting up the project lately I also figured out, that if you have a JDK 15 installed, it is possible that
+you have to delete the JDK 15 (only switching the JDK version didn't work for me). If the log.txt file has an error in it,
+which is saying Java Version 59 not supported... something, that's probably the reason for it.
+
 * Setup Jenkins-Runner:
 ** Install Local Jenkins:
 *** `wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war` download the latest war file of jenkins
