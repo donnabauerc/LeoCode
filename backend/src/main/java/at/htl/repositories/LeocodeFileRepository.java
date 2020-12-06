@@ -37,7 +37,7 @@ public class LeocodeFileRepository implements PanacheRepository<LeocodeFile> {
                     break;
                 default: //files
                     for (InputPart inputPart : inputParts) {
-                        try (InputStream inputStream = inputPart.getBody(InputStream.class, null);) {
+                        try (InputStream inputStream = inputPart.getBody(InputStream.class, null)) {
                             MultivaluedMap<String, String> header = inputPart.getHeaders();
                             String name = getMultipartFileName(header);
                             byte[] bytes = inputStream.readAllBytes();

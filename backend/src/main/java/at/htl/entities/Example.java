@@ -2,9 +2,8 @@ package at.htl.entities;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
-import javax.persistence.*;
-import java.util.LinkedList;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "examples")

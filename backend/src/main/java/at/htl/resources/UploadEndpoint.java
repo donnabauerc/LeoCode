@@ -11,7 +11,10 @@ import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.LinkedList;
@@ -34,7 +37,7 @@ public class UploadEndpoint {
     @Path("/example")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response uploadExample(MultipartFormDataInput input){
+    public Response uploadExample(MultipartFormDataInput input) {
         log.info("Received UploadExample Request");
         Example example = exampleRepository.createExampleFromMultipartFiles(input);
         return Response.ok(example).build();
@@ -45,7 +48,7 @@ public class UploadEndpoint {
     @Path("/exercise")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response uploadExercise(MultipartFormDataInput input){
+    public Response uploadExercise(MultipartFormDataInput input) {
         log.info("Received UploadExercise Request");
 
         Response res;

@@ -21,8 +21,6 @@ public class LeocodeFile extends PanacheEntity {
     @JoinColumn(name = "example")
     public Example example;
 
-    //TODO: Creator
-
     public LeocodeFile() {
     }
 
