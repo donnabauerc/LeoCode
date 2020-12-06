@@ -1,16 +1,16 @@
 package at.htl.resources;
 
 import at.htl.control.FileHandler;
-import at.htl.entities.Example;
-import at.htl.entities.LeocodeFile;
-import at.htl.entities.LeocodeFileType;
+import at.htl.entities.*;
 import at.htl.repositories.ExampleRepository;
 import at.htl.repositories.LeocodeFileRepository;
+import at.htl.repositories.SubmitionRepository;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -30,6 +30,8 @@ public class UploadEndpoint {
     @Inject
     LeocodeFileRepository fileRepository;
     @Inject
+    SubmitionRepository submitionRepository;
+    @Inject
     FileHandler fileHandler;
 
     //Upload from Teacher
@@ -48,6 +50,7 @@ public class UploadEndpoint {
     @Path("/exercise")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
     public Response uploadExercise(MultipartFormDataInput input) {
         log.info("Received UploadExercise Request");
 
@@ -64,12 +67,15 @@ public class UploadEndpoint {
 
             //search for files in db
             files.addAll(fileRepository.getFilesRequiredForTesting(example));
-
             //add code from student
             files.addAll(fileRepository.persistFilesFromMultipart(LeocodeFileType.CODE.toString(), username, codeFiles, example));
 
             String location = fileHandler.zipLeocodeFiles(files);
             log.info("created zip: " + location);
+
+            Submition submition = new Submition(location, LeocodeStatus.CREATED, username);
+            submitionRepository.persist(submition);
+
             //sendFile();
 
             log.info("Running Tests");
