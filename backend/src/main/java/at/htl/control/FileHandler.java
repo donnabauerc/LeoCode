@@ -2,10 +2,8 @@ package at.htl.control;
 
 import at.htl.entities.LeocodeFile;
 import at.htl.entities.LeocodeFileType;
-import at.htl.repositories.LeocodeFileRepository;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -16,8 +14,6 @@ import java.util.zip.ZipOutputStream;
 public class FileHandler {
 
     public final String zipLocation = "../project-under-test.zip";
-    @Inject
-    LeocodeFileRepository fileRepository;
 
     public String zipLeocodeFiles(List<LeocodeFile> files) {
         try (
