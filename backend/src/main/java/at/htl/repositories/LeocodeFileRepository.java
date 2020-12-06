@@ -2,7 +2,7 @@ package at.htl.repositories;
 
 import at.htl.entities.Example;
 import at.htl.entities.LeocodeFile;
-import at.htl.entities.LeocodeFiletype;
+import at.htl.entities.LeocodeFileType;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
@@ -42,7 +42,7 @@ public class LeocodeFileRepository implements PanacheRepository<LeocodeFile> {
                             String name = getMultipartFileName(header);
                             byte[] bytes = inputStream.readAllBytes();
 
-                            LeocodeFile f = new LeocodeFile(name, username, LeocodeFiletype.valueOf(fileType.toUpperCase()), bytes, example);
+                            LeocodeFile f = new LeocodeFile(name, username, LeocodeFileType.valueOf(fileType.toUpperCase()), bytes, example);
                             persist(f);
                             files.add(f);
                             log.info("Uploaded " + f.toString() + " to Database");

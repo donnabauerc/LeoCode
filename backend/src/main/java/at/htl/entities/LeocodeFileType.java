@@ -1,6 +1,6 @@
 package at.htl.entities;
 
-public enum LeocodeFiletype {
+public enum LeocodeFileType {
     POM,
     INSTRUCTION,
     TEST,

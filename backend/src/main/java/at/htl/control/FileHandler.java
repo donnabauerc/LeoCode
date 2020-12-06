@@ -1,7 +1,7 @@
 package at.htl.control;
 
 import at.htl.entities.LeocodeFile;
-import at.htl.entities.LeocodeFiletype;
+import at.htl.entities.LeocodeFileType;
 import at.htl.repositories.LeocodeFileRepository;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -26,7 +26,7 @@ public class FileHandler {
         ) {
             files.forEach(file -> {
                 try {
-                    if (file.filetype.equals(LeocodeFiletype.TEST)) {
+                    if (file.filetype.equals(LeocodeFileType.TEST)) {
                         zipOut.putNextEntry(new ZipEntry("test/" + file.name));
                     } else {
                         zipOut.putNextEntry(new ZipEntry(file.name));

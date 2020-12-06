@@ -11,7 +11,7 @@ public class LeocodeFile extends PanacheEntity {
     public String author;
 
     @Enumerated(value = EnumType.STRING)
-    public LeocodeFiletype filetype;
+    public LeocodeFileType filetype;
 
     @Lob
     @Basic(fetch = FetchType.EAGER)
@@ -24,7 +24,7 @@ public class LeocodeFile extends PanacheEntity {
     public LeocodeFile() {
     }
 
-    public LeocodeFile(String name, String author, LeocodeFiletype filetype, byte[] content, Example example) {
+    public LeocodeFile(String name, String author, LeocodeFileType filetype, byte[] content, Example example) {
         this.name = name;
         this.author = author;
         this.filetype = filetype;

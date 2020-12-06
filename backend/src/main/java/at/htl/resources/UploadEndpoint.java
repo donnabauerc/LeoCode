@@ -3,7 +3,7 @@ package at.htl.resources;
 import at.htl.control.FileHandler;
 import at.htl.entities.Example;
 import at.htl.entities.LeocodeFile;
-import at.htl.entities.LeocodeFiletype;
+import at.htl.entities.LeocodeFileType;
 import at.htl.repositories.ExampleRepository;
 import at.htl.repositories.LeocodeFileRepository;
 import org.jboss.logging.Logger;
@@ -66,7 +66,7 @@ public class UploadEndpoint {
             files.addAll(fileRepository.getFilesRequiredForTesting(example));
 
             //add code from student
-            files.addAll(fileRepository.persistFilesFromMultipart(LeocodeFiletype.CODE.toString(), username, codeFiles, example));
+            files.addAll(fileRepository.persistFilesFromMultipart(LeocodeFileType.CODE.toString(), username, codeFiles, example));
 
             String location = fileHandler.zipLeocodeFiles(files);
             log.info("created zip: " + location);
