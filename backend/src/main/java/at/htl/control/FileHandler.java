@@ -13,7 +13,7 @@ import java.util.zip.ZipOutputStream;
 @ApplicationScoped
 public class FileHandler {
 
-    public final String zipLocation = "../../projects/project-under-test";
+    public final String zipLocation = "../../projects-in-queue/project-under-test";
 
     public String zipLeocodeFiles(Long submitionId, List<LeocodeFile> files) {
         final String destination = zipLocation + "-" + submitionId.toString() + ".zip";

@@ -78,6 +78,7 @@ public class UploadEndpoint {
             log.info("created zip: " + submition.pathToZip);
 
             //sendFile();
+            submition.status = LeocodeStatus.SUBMITTED;
 
             log.info("Running Tests");
             //String testResult = service.runTests();
