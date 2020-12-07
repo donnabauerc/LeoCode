@@ -1,5 +1,5 @@
 ### Create a Example
-POST localhost:9090/upload
+POST localhost:9090/upload/example
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
@@ -40,6 +40,12 @@ Content-Type: application/octet-stream
 < ../simulating-files/Jenkinsfile
 
 --WebAppBoundary--
+Content-Disposition: form-data; name="username"
+Content-Type: text/plain
+
+Lehrer HttpTest
+
+--WebAppBoundary
 
 ### Test your Code with Example 1
 POST localhost:9090/upload
@@ -50,7 +56,7 @@ Content-Type: multipart/form-data; boundary=WebAppBoundary
 Content-Disposition: form-data; name="username"
 Content-Type: text/plain
 
-HttpTester
+Schueler HttpTest
 
 --WebAppBoundary
 Content-Disposition: form-data; name="example"
