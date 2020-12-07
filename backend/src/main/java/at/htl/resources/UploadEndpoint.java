@@ -70,11 +70,12 @@ public class UploadEndpoint {
             //add code from student
             files.addAll(fileRepository.persistFilesFromMultipart(LeocodeFileType.CODE.toString(), username, codeFiles, example));
 
-            String location = fileHandler.zipLeocodeFiles(files);
-            log.info("created zip: " + location);
-
-            Submition submition = new Submition(location, LeocodeStatus.CREATED, username);
+            Submition submition = new Submition();
+            submition.author = username;
             submitionRepository.persist(submition);
+
+            submition.pathToZip = fileHandler.zipLeocodeFiles(submition.id, files);
+            log.info("created zip: " + submition.pathToZip);
 
             //sendFile();
 
