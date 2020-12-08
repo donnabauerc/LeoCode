@@ -4,11 +4,17 @@ import at.htl.Main;
 import org.jboss.logging.Logger;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class FileHandler {
 
@@ -18,6 +24,7 @@ public class FileHandler {
     private final static List<String> runTestsContent = Arrays.asList("cd ./project-under-test",
             "/opt/jenkinsfile-runner/bin/jenkinsfile-runner -w /opt/jenkins -p /opt/jenkins_home/plugins/ -f ./Jenkinsfile > log.txt",
             "mv ./log.txt ../");
+    public static Map<String, String> currentFiles; //test, code or other
 
     private static final Logger log = Logger.getLogger(Main.class);
 
@@ -27,6 +34,7 @@ public class FileHandler {
         try {
             log.info("setup test environment");
             projectUnderTestZipPath = pathToProjectQueue + "project-under-test-" + Main.submitionId + ".zip";
+            currentFiles = new HashMap<>();
             File projectDirectory = new File(projectUnderTest);
             File runTestsShellscript = new File(runTestsFile);
 
@@ -50,6 +58,36 @@ public class FileHandler {
     }
 
     public static void unzipProject() {
+        try (ZipInputStream zis = new ZipInputStream(new FileInputStream(projectUnderTestZipPath))) {
+            log.info("unzipping " + projectUnderTestZipPath);
+            File dest = new File(projectUnderTest);
 
+            ZipEntry zipEntry = zis.getNextEntry();
+            while (zipEntry != null) {
+                File newFile = new File(dest + "/" + zipEntry.toString());
+
+                if (zipEntry.toString().contains("/")) {
+                    if (!newFile.getParentFile().exists()) {
+                        newFile.getParentFile().mkdirs();
+                    }
+                    newFile.createNewFile();
+                    currentFiles.put("test", newFile.getPath());
+                } else if (newFile.getPath().contains(".java")) {
+                    newFile.createNewFile();
+                    currentFiles.put("code", newFile.getPath());
+                } else {
+                    newFile.createNewFile();
+                    currentFiles.put("other", newFile.getPath());
+                }
+
+                FileOutputStream fos = new FileOutputStream(newFile);
+                fos.write(zis.readAllBytes());
+                fos.close();
+
+                zipEntry = zis.getNextEntry();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

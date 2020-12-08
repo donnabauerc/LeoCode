@@ -16,5 +16,6 @@ public class Main {
         submitionId = args[0];
 
         FileHandler.setup();
+        FileHandler.unzipProject();
     }
 }
