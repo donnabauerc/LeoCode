@@ -13,31 +13,31 @@ Example 1
 Content-Disposition: form-data; name="instruction"; filename="instruction.md"
 Content-Type: text/markdown
 
-< ../simulating-files/instruction.md
+< ./simulating-files/instruction.md
 
 --WebAppBoundary--
 Content-Disposition: form-data; name="pom"; filename="pom.xml"
 Content-Type: text/xml
 
-< ../simulating-files/pom.xml
+< ./simulating-files/pom.xml
 
 --WebAppBoundary--
 Content-Disposition: form-data; name="solution"; filename="HelloWorld.java"
 Content-Type: text/x-java
 
-< ../simulating-files/HelloWorld.java
+< ./simulating-files/HelloWorld.java
 
 --WebAppBoundary--
 Content-Disposition: form-data; name="test"; filename="HelloWorldTest.java"
 Content-Type: text/x-java
 
-< ../simulating-files/HelloWorldTest.java
+< ./simulating-files/HelloWorldTest.java
 
 --WebAppBoundary--
 Content-Disposition: form-data; name="jenkinsfile"; filename="Jenkinsfile"
 Content-Type: application/octet-stream
 
-< ../simulating-files/Jenkinsfile
+< ./simulating-files/Jenkinsfile
 
 --WebAppBoundary--
 Content-Disposition: form-data; name="username"
@@ -67,7 +67,7 @@ Content-Type: text/plain
 Content-Disposition: form-data; name="code"; filename="HelloWorld.java"
 Content-Type: text/x-java
 
-< ../simulating-files/HelloWorld.java
+< ./simulating-files/HelloWorld.java
 
 --WebAppBoundary--
 
