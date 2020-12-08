@@ -1,12 +1,10 @@
 package at.htl.control;
 
 import at.htl.Main;
+import org.apache.commons.io.FileUtils;
 import org.jboss.logging.Logger;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
@@ -40,7 +38,7 @@ public class FileHandler {
 
             if (projectDirectory.exists()) {
                 log.info("flushing " + projectDirectory.getPath());
-                Arrays.asList(projectDirectory.listFiles()).forEach(File::delete);
+                FileUtils.cleanDirectory(new File(projectUnderTest));
             } else {
                 log.info("creating " + projectDirectory.getPath());
                 projectDirectory.mkdir();
@@ -89,5 +87,58 @@ public class FileHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void createJavaProjectStructure() {
+        log.info("Moving files");
+
+        currentFiles.forEach((k, v) -> {
+            File file = new File(v);
+            String fileDestination = v;
+
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                String packages = br.readLine();
+                String pathBeforePackages = "src/";
+
+                switch (k) {
+                    case "test":
+                        pathBeforePackages += "test";
+                        //fileDestination = "/" + file.getName(); //because of test directory
+                        break;
+                    case "code":
+                        pathBeforePackages += "main";
+                        break;
+                    case "other":
+                        return;
+                }
+
+                packages = "/java/"
+                        + packages
+                        .substring(
+                                packages.lastIndexOf(" ") + 1,
+                                packages.lastIndexOf(";"))
+                        .replace(".", "/");
+
+                fileDestination = projectUnderTest
+                        + pathBeforePackages
+                        + packages
+                        + fileDestination.substring(fileDestination.lastIndexOf("/"));
+
+                //move file
+                File directories = new File(fileDestination
+                        .substring(0, fileDestination.lastIndexOf("/"))
+                        + "/");
+
+                if (!directories.exists()) {
+                    directories.mkdirs();
+                }
+
+                file.renameTo(new File(fileDestination));
+
+            } catch (IOException e) { //delete test directory
+                e.printStackTrace();
+            }
+        });
+        new File(projectUnderTest + "test").delete();
     }
 }
