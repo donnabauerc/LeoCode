@@ -18,5 +18,6 @@ public class Main {
         FileHandler.setup();
         FileHandler.unzipProject();
         FileHandler.createJavaProjectStructure();
+        FileHandler.runTests();
     }
 }

@@ -90,7 +90,7 @@ public class FileHandler {
     }
 
     public static void createJavaProjectStructure() {
-        log.info("Moving files");
+        log.info("moving files");
 
         currentFiles.forEach((k, v) -> {
             File file = new File(v);
@@ -140,5 +140,18 @@ public class FileHandler {
             }
         });
         new File(projectUnderTest + "test").delete();
+    }
+
+    public static void runTests() {
+        log.info("running tests");
+        try {
+            ProcessBuilder builder = new ProcessBuilder("./run-tests.sh");
+            Process process = builder.start();
+            int exitCode = process.waitFor();
+            assert exitCode == 0;
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 }
