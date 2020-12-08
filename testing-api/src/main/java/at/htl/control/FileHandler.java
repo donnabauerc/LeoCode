@@ -12,8 +12,6 @@ import java.util.List;
 
 public class FileHandler {
 
-    private final static String submitionId = "8";
-
     private final static String pathToProjectQueue = "../projects-in-queue/";
     private final static String projectUnderTest = "./project-under-test/";
     private final static String runTestsFile = "./run-tests.sh";
@@ -28,7 +26,7 @@ public class FileHandler {
     public static void setup() {
         try {
             log.info("setup test environment");
-            projectUnderTestZipPath = pathToProjectQueue + "project-under-test-" + submitionId + ".zip";
+            projectUnderTestZipPath = pathToProjectQueue + "project-under-test-" + Main.submitionId + ".zip";
             File projectDirectory = new File(projectUnderTest);
             File runTestsShellscript = new File(runTestsFile);
 
@@ -49,5 +47,9 @@ public class FileHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void unzipProject() {
+
     }
 }
