@@ -16,8 +16,10 @@ https://github.com/donnabauerc/LeoCodeDocs
 So the structure of the repository is pretty basic. In the backend directory you can find everything related to the
 backend e.g. a Quarkus Server => same thing for the testing-api directory.
 
-== Run this Branch yourself
+== Run yourself
 Since until now I haven't dockerized this version you need to setup some stuff, in order to run the project:
+
+WARNING: Ignore the steps, the README is deprecated. If you want to run the project yourself please contact me
 
 === Setup
 
