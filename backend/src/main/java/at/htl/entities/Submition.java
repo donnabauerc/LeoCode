@@ -24,4 +24,14 @@ public class Submition extends PanacheEntity {
         this.status = status;
         this.author = author;
     }
+
+    @Override
+    public String toString() {
+        return "Submition{" +
+                "pathToZip='" + pathToZip + '\'' +
+                ", status=" + status +
+                ", author='" + author + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }
