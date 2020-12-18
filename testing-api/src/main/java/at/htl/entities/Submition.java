@@ -2,6 +2,7 @@ package at.htl.entities;
 
 public class Submition {
 
+    public Long id;
     public String pathToZip;
     public LeocodeStatus status;
     public String author;
@@ -25,7 +26,8 @@ public class Submition {
     @Override
     public String toString() {
         return "Submition{" +
-                "pathToZip='" + pathToZip + '\'' +
+                "id=" + id +
+                ", pathToZip='" + pathToZip + '\'' +
                 ", status=" + status +
                 ", author='" + author + '\'' +
                 '}';
