@@ -2,6 +2,7 @@ package at.htl.resources;
 
 import at.htl.control.FileHandler;
 import at.htl.entities.*;
+import at.htl.kafka.SubmitionProducer;
 import at.htl.repositories.ExampleRepository;
 import at.htl.repositories.LeocodeFileRepository;
 import at.htl.repositories.SubmitionRepository;
@@ -33,6 +34,8 @@ public class UploadEndpoint {
     SubmitionRepository submitionRepository;
     @Inject
     FileHandler fileHandler;
+    @Inject
+    SubmitionProducer submitionProducer;
 
     //Upload from Teacher
     @POST
@@ -78,6 +81,7 @@ public class UploadEndpoint {
             log.info("created zip: " + submition.pathToZip);
 
             //sendFile();
+            submitionProducer.sendSubmition(submition);
             submition.status = LeocodeStatus.SUBMITTED;
 
             log.info("Running Tests");

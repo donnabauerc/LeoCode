@@ -13,6 +13,8 @@ public class Submition extends PanacheEntity {
     public LeocodeStatus status;
     public String author;
 
+    //TODO:send Result
+
     public Submition() {
         this.status = LeocodeStatus.CREATED;
     }
