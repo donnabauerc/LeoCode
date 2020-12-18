@@ -80,15 +80,10 @@ public class UploadEndpoint {
             submition.pathToZip = fileHandler.zipLeocodeFiles(submition.id, files);
             log.info("created zip: " + submition.pathToZip);
 
-            //sendFile();
             submitionProducer.sendSubmition(submition);
             submition.status = LeocodeStatus.SUBMITTED;
-
             log.info("Running Tests");
-            //String testResult = service.runTests();
 
-            //log.info(testResult);
-            //res = Response.ok(testResult).build();
             res = Response.ok().build();
         } catch (Exception e) {
             res = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
