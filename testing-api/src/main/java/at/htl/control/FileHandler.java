@@ -21,7 +21,7 @@ public class FileHandler {
 
     private final Path PROJECT_UNDER_TEST_DIRECTORY = Paths.get("../project-under-test/");
     private final Path RUN_TEST_SCRIPT = Paths.get("../run-tests.sh");
-    private final List<String> SHELL_SCRIPT_CONTENT = Arrays.asList("cd ./project-under-test",
+    private final List<String> SHELL_SCRIPT_CONTENT = Arrays.asList("cd ../project-under-test",
             "/opt/jenkinsfile-runner/bin/jenkinsfile-runner -w /opt/jenkins -p /opt/jenkins_home/plugins/ -f ./Jenkinsfile > log.txt",
             "mv ./log.txt ../");
 
@@ -31,6 +31,17 @@ public class FileHandler {
 
     @Inject
     Logger log;
+
+    public String testProject(String projectPath) {
+        setup(projectPath);
+        unzipProject();
+        createJavaProjectStructure();
+        runTests();
+
+        //TODO: evaluate Result
+
+        return "----Test Result----";
+    }
 
     public void setup(String projectPath) {
         try {
@@ -144,5 +155,17 @@ public class FileHandler {
         });
 
         Paths.get(PROJECT_UNDER_TEST_DIRECTORY.toString() + "/test").toFile().delete();
+    }
+
+    public void runTests() {
+        log.info("running tests");
+        try {
+            ProcessBuilder builder = new ProcessBuilder("../run-tests.sh");
+            Process process = builder.start();
+            int exitCode = process.waitFor();
+            assert exitCode == 0;
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

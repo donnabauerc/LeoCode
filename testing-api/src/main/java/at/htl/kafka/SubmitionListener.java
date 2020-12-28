@@ -25,10 +25,11 @@ public class SubmitionListener {
     public void listen(Submition s) {
         log.info("Received Message: " + s.toString());
 
-        fileHandler.setup(s.pathToZip);
-        fileHandler.unzipProject();
-        fileHandler.createJavaProjectStructure();;
-
-        submitionProducer.sendSubmition(s);
+        Runnable runnable = () -> {
+            s.status = LeocodeStatus.SUCCESS; //just for now, depends on Test Result
+            s.result = fileHandler.testProject(s.pathToZip);
+            submitionProducer.sendSubmition(s);
+        };
+        new Thread(runnable).start();
     }
 }

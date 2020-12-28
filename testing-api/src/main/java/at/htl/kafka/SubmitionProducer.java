@@ -1,6 +1,5 @@
 package at.htl.kafka;
 
-import at.htl.entities.LeocodeStatus;
 import at.htl.entities.Submition;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
@@ -19,17 +18,7 @@ public class SubmitionProducer {
     Emitter<Submition> emitter;
 
     public void sendSubmition(Submition s) {
-        Runnable runnable = () -> {
-            try {
-                Thread.sleep(5000);
-                s.status = LeocodeStatus.SUCCESS;
-                s.result = "This is a TestResult ----- Build Success -----";
-                emitter.send(s);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        };
-        new Thread(runnable).start();
+        emitter.send(s);
         log.info("sent kafka message: " + s.toString());
     }
 }
