@@ -1,5 +1,6 @@
 package at.htl.kafka;
 
+import at.htl.control.FileHandler;
 import at.htl.entities.LeocodeStatus;
 import at.htl.entities.Submition;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
@@ -15,11 +16,18 @@ public class SubmitionListener {
     Logger log;
 
     @Inject
+    FileHandler fileHandler;
+
+    @Inject
     SubmitionProducer submitionProducer;
 
     @Incoming("submition-input")
     public void listen(Submition s) {
         log.info("Received Message: " + s.toString());
+
+        fileHandler.setup(s.pathToZip);
+        fileHandler.unzipProject();
+
         submitionProducer.sendSubmition(s);
     }
 }
