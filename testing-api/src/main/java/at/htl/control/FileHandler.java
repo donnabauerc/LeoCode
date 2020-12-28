@@ -5,10 +5,7 @@ import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -96,5 +93,56 @@ public class FileHandler {
         }
     }
 
+    public void createJavaProjectStructure() {
+        log.info("create Java Project Structure");
 
+        currentFiles.forEach((k, v) -> {
+            File file = v.toFile();
+            String fileDestination = v.toString();
+
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                String packages = br.readLine();
+                String pathBeforePackages = "/src/";
+
+                switch (k) {
+                    case "test":
+                        pathBeforePackages += "test";
+                        break;
+                    case "code":
+                        pathBeforePackages += "main";
+                        break;
+                    case "other":
+                        return;
+                }
+
+                packages = "/java/"
+                        + packages
+                        .substring(
+                                packages.lastIndexOf(" ") + 1,
+                                packages.lastIndexOf(";"))
+                        .replace(".", "/");
+
+                fileDestination = PROJECT_UNDER_TEST_DIRECTORY.toString()
+                        + pathBeforePackages
+                        + packages
+                        + fileDestination.substring(fileDestination.lastIndexOf("/"));
+
+                //move file
+                File directories = new File(fileDestination
+                        .substring(0, fileDestination.lastIndexOf("/"))
+                        + "/");
+
+                if (!directories.exists()) {
+                    directories.mkdirs();
+                }
+
+                file.renameTo(new File(fileDestination));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        Paths.get(PROJECT_UNDER_TEST_DIRECTORY.toString() + "/test").toFile().delete();
+    }
 }

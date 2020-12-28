@@ -27,6 +27,7 @@ public class SubmitionListener {
 
         fileHandler.setup(s.pathToZip);
         fileHandler.unzipProject();
+        fileHandler.createJavaProjectStructure();;
 
         submitionProducer.sendSubmition(s);
     }
