@@ -26,8 +26,9 @@ public class SubmitionListener {
         log.info("Received Message: " + s.toString());
 
         Runnable runnable = () -> {
-            s.status = LeocodeStatus.SUCCESS; //just for now, depends on Test Result
-            s.result = fileHandler.testProject(s.pathToZip);
+            fileHandler.testProject(s.pathToZip);
+            s.result = fileHandler.getResult();
+            s.status = fileHandler.evaluateStatus(s.result);
             submitionProducer.sendSubmition(s);
         };
         new Thread(runnable).start();

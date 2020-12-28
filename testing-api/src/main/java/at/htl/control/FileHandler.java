@@ -1,5 +1,6 @@
 package at.htl.control;
 
+import at.htl.entities.LeocodeStatus;
 import org.apache.commons.io.FileUtils;
 import org.jboss.logging.Logger;
 
@@ -13,6 +14,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -23,7 +25,7 @@ public class FileHandler {
     private final Path RUN_TEST_SCRIPT = Paths.get("../run-tests.sh");
     private final List<String> SHELL_SCRIPT_CONTENT = Arrays.asList("cd ../project-under-test",
             "/opt/jenkinsfile-runner/bin/jenkinsfile-runner -w /opt/jenkins -p /opt/jenkins_home/plugins/ -f ./Jenkinsfile > log.txt",
-            "mv ./log.txt ../");
+            "tail -n 1 log.txt > ../result.txt");
 
 
     public Path pathToProject;
@@ -32,15 +34,11 @@ public class FileHandler {
     @Inject
     Logger log;
 
-    public String testProject(String projectPath) {
+    public void testProject(String projectPath) {
         setup(projectPath);
         unzipProject();
         createJavaProjectStructure();
         runTests();
-
-        //TODO: evaluate Result
-
-        return "----Test Result----";
     }
 
     public void setup(String projectPath) {
@@ -167,5 +165,35 @@ public class FileHandler {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getResult(){
+        log.info("getResult");
+        try (BufferedReader br = new BufferedReader(new FileReader("../result.txt"))) {
+            return br.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Something Went Wrong";
+        }
+    }
+
+    public LeocodeStatus evaluateStatus(String result){
+        log.info("evaluateStatus");
+
+        result = result.substring(result.lastIndexOf(" ") + 1);
+
+        LeocodeStatus status;
+        switch (result){
+            case "FAILURE":
+                status = LeocodeStatus.FAIL;
+                break;
+            case "SUCCESS":
+                status = LeocodeStatus.SUCCESS;
+                break;
+            default:
+                status = LeocodeStatus.ERROR;
+                break;
+        }
+        return status;
     }
 }
