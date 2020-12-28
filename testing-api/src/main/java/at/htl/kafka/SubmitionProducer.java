@@ -23,6 +23,7 @@ public class SubmitionProducer {
             try {
                 Thread.sleep(5000);
                 s.status = LeocodeStatus.SUCCESS;
+                s.result = "This is a TestResult ----- Build Success -----";
                 emitter.send(s);
             } catch (InterruptedException e) {
                 e.printStackTrace();

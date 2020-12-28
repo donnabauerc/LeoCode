@@ -89,7 +89,7 @@ public class UploadEndpoint {
             res = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
             e.printStackTrace();
         }
-
+        //redirect user to websocket with Submition Progress e.g. Status
         return Response.ok(res).build();
     }
 
