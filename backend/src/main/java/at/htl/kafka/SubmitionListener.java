@@ -1,5 +1,6 @@
 package at.htl.kafka;
 
+import at.htl.entities.LeocodeStatus;
 import at.htl.entities.Submition;
 import at.htl.repositories.SubmitionRepository;
 import org.eclipse.microprofile.context.ManagedExecutor;
@@ -21,25 +22,26 @@ public class SubmitionListener {
 
     @Incoming("submition-result")
     public void listen(Submition s) {
-        //https://stackoverflow.com/questions/58534957/how-to-execute-jpa-entity-manager-operations-inside-quarkus-kafka-consumer-metho
-        ManagedExecutor executor = ManagedExecutor.builder()
-                .maxAsync(5)
-                .propagated(ThreadContext.CDI,
-                        ThreadContext.TRANSACTION)
-                .build();
-        ThreadContext threadContext = ThreadContext.builder()
-                .propagated(ThreadContext.CDI,
-                        ThreadContext.TRANSACTION)
-                .build();
+        if (!s.status.equals(LeocodeStatus.SUBMITTED)) {
+            //https://stackoverflow.com/questions/58534957/how-to-execute-jpa-entity-manager-operations-inside-quarkus-kafka-consumer-metho
+            ManagedExecutor executor = ManagedExecutor.builder()
+                    .maxAsync(5)
+                    .propagated(ThreadContext.CDI,
+                            ThreadContext.TRANSACTION)
+                    .build();
+            ThreadContext threadContext = ThreadContext.builder()
+                    .propagated(ThreadContext.CDI,
+                            ThreadContext.TRANSACTION)
+                    .build();
 
-        executor.runAsync(threadContext.contextualRunnable(() -> {
-            try {
-                submitionRepository.update(s);
-                log.info("Finished Testing: " + s.toString());
-            } catch(Exception e) {
-                log.error("Something wrong happened !!!", e);
-            }
-        }));
-        //Todo: Notify User
+            executor.runAsync(threadContext.contextualRunnable(() -> {
+                try {
+                    submitionRepository.update(s);
+                    log.info("Finished Testing: " + s.toString());
+                } catch (Exception e) {
+                    log.error("Something wrong happened !!!", e);
+                }
+            }));
+        }
     }
 }

@@ -23,14 +23,16 @@ public class SubmitionListener {
 
     @Incoming("submition-input")
     public void listen(Submition s) {
-        log.info("Received Message: " + s.toString());
+        if (s.status.equals(LeocodeStatus.SUBMITTED)) {
+            log.info("Received Message: " + s.toString());
 
-        Runnable runnable = () -> {
-            fileHandler.testProject(s.pathToZip);
-            s.result = fileHandler.getResult();
-            s.status = fileHandler.evaluateStatus(s.result);
-            submitionProducer.sendSubmition(s);
-        };
-        new Thread(runnable).start();
+            Runnable runnable = () -> {
+                fileHandler.testProject(s.pathToZip);
+                s.result = fileHandler.getResult();
+                s.status = fileHandler.evaluateStatus(s.result);
+                submitionProducer.sendSubmition(s);
+            };
+            new Thread(runnable).start();
+        }
     }
 }
