@@ -1,6 +1,6 @@
 package at.htl.entities;
 
-public class Submition {
+public class Submission {
 
     public Long id;
     public String pathToZip;
@@ -9,17 +9,17 @@ public class Submition {
 
     public String result;
 
-    public Submition() {
+    public Submission() {
         this.status = LeocodeStatus.CREATED;
     }
 
-    public Submition(String pathToZip, String author) {
+    public Submission(String pathToZip, String author) {
         this();
         this.pathToZip = pathToZip;
         this.author = author;
     }
 
-    public Submition(String pathToZip, LeocodeStatus status, String author) {
+    public Submission(String pathToZip, LeocodeStatus status, String author) {
         this.pathToZip = pathToZip;
         this.status = status;
         this.author = author;
@@ -27,7 +27,7 @@ public class Submition {
 
     @Override
     public String toString() {
-        return "Submition{" +
+        return "Submission{" +
                 "id=" + id +
                 ", pathToZip='" + pathToZip + '\'' +
                 ", status=" + status +

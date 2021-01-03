@@ -8,7 +8,7 @@ import javax.persistence.Enumerated;
 import at.htl.entities.LeocodeStatus;
 
 @Entity
-public class Submition extends PanacheEntity {
+public class Submission extends PanacheEntity {
     public String pathToZip;
     @Enumerated(value = EnumType.STRING)
     public LeocodeStatus status;
@@ -16,11 +16,11 @@ public class Submition extends PanacheEntity {
 
     public String result;
 
-    public Submition() {
+    public Submission() {
         this.status = LeocodeStatus.CREATED;
     }
 
-    public Submition(String pathToZip, LeocodeStatus status, String author) {
+    public Submission(String pathToZip, LeocodeStatus status, String author) {
         this.pathToZip = pathToZip;
         this.status = status;
         this.author = author;

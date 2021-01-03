@@ -2,10 +2,10 @@ package at.htl.resources;
 
 import at.htl.control.FileHandler;
 import at.htl.entities.*;
-import at.htl.kafka.SubmitionProducer;
+import at.htl.kafka.SubmissionProducer;
 import at.htl.repositories.ExampleRepository;
 import at.htl.repositories.LeocodeFileRepository;
-import at.htl.repositories.SubmitionRepository;
+import at.htl.repositories.SubmissionRepository;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
@@ -31,11 +31,11 @@ public class UploadEndpoint {
     @Inject
     LeocodeFileRepository fileRepository;
     @Inject
-    SubmitionRepository submitionRepository;
+    SubmissionRepository submissionRepository;
     @Inject
     FileHandler fileHandler;
     @Inject
-    SubmitionProducer submitionProducer;
+    SubmissionProducer submissionProducer;
 
     //Upload from Teacher
     @POST
@@ -73,15 +73,15 @@ public class UploadEndpoint {
             //add code from student
             files.addAll(fileRepository.persistFilesFromMultipart(LeocodeFileType.CODE.toString(), username, codeFiles, example));
 
-            Submition submition = new Submition();
-            submition.author = username;
-            submitionRepository.persist(submition);
+            Submission submission = new Submission();
+            submission.author = username;
+            submissionRepository.persist(submission);
 
-            submition.pathToZip = fileHandler.zipLeocodeFiles(submition.id, files);
-            log.info("created zip: " + submition.pathToZip);
+            submission.pathToZip = fileHandler.zipLeocodeFiles(submission.id, files);
+            log.info("created zip: " + submission.pathToZip);
 
-            submitionProducer.sendSubmition(submition);
-            submition.status = LeocodeStatus.SUBMITTED;
+            submissionProducer.sendSubmission(submission);
+            submission.status = LeocodeStatus.SUBMITTED;
             log.info("Running Tests");
 
             res = Response.ok().build();

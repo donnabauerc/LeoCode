@@ -2,7 +2,7 @@ package at.htl.kafka;
 
 import at.htl.control.FileHandler;
 import at.htl.entities.LeocodeStatus;
-import at.htl.entities.Submition;
+import at.htl.entities.Submission;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.jboss.logging.Logger;
 
@@ -10,7 +10,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 @ApplicationScoped
-public class SubmitionListener {
+public class SubmissionListener {
 
     @Inject
     Logger log;
@@ -19,10 +19,10 @@ public class SubmitionListener {
     FileHandler fileHandler;
 
     @Inject
-    SubmitionProducer submitionProducer;
+    SubmissionProducer submissionProducer;
 
     @Incoming("submition-input")
-    public void listen(Submition s) {
+    public void listen(Submission s) {
         if (s.status.equals(LeocodeStatus.SUBMITTED)) {
             log.info("Received Message: " + s.toString());
 
@@ -30,7 +30,7 @@ public class SubmitionListener {
                 fileHandler.testProject(s.pathToZip);
                 s.result = fileHandler.getResult();
                 s.status = fileHandler.evaluateStatus(s.result);
-                submitionProducer.sendSubmition(s);
+                submissionProducer.sendSubmition(s);
             };
             new Thread(runnable).start();
         }

@@ -1,8 +1,8 @@
 package at.htl.resources;
 
 import at.htl.entities.LeocodeStatus;
-import at.htl.entities.Submition;
-import at.htl.repositories.SubmitionRepository;
+import at.htl.entities.Submission;
+import at.htl.repositories.SubmissionRepository;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.groups.MultiSubscribe;
 import org.eclipse.microprofile.reactive.messaging.Channel;
@@ -19,15 +19,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.sse.Sse;
 import javax.ws.rs.sse.SseEventSink;
 
-@Path("/submition")
-public class SubmitionEndpoint {
+@Path("/submission")
+public class SubmissionEndpoint {
 
     @Inject
-    @Channel("submition-result")
-    Multi<Submition> results;
+    @Channel("submission-result")
+    Multi<Submission> results;
 
     @Inject
-    SubmitionRepository submitionRepository;
+    SubmissionRepository submissionRepository;
 
     @Inject
     Logger log;
@@ -37,20 +37,20 @@ public class SubmitionEndpoint {
     @Produces(MediaType.SERVER_SENT_EVENTS)
     @SseElementType("text/plain")
     public void stream(@Context Sse sse, @Context SseEventSink sseEventSink, @PathParam("id") Long id) {
-        Submition currentSubmition = submitionRepository.findById(id);
+        Submission currentSubmission = submissionRepository.findById(id);
         boolean canSubscribe = false;
 
         // When someone refreshes or connects later on send them the current status
-        if (currentSubmition != null) {
-            sseEventSink.send(sse.newEvent(currentSubmition.status.toString()));
+        if (currentSubmission != null) {
+            sseEventSink.send(sse.newEvent(currentSubmission.status.toString()));
             // anything other than SUBMITTED is complete
-            canSubscribe = currentSubmition.status == LeocodeStatus.SUBMITTED;
+            canSubscribe = currentSubmission.status == LeocodeStatus.SUBMITTED;
         }
 
         // Only allow sse if the submition is not complete
         if (canSubscribe) {
-            log.info("subscribed to Submition SSE");
-            MultiSubscribe<Submition> subscribe = results.subscribe();
+            log.info("subscribed to Submission SSE");
+            MultiSubscribe<Submission> subscribe = results.subscribe();
 
             subscribe.with(submition -> {
                 if (id.equals(submition.id)) {

@@ -1,8 +1,8 @@
 package at.htl.kafka;
 
 import at.htl.entities.LeocodeStatus;
-import at.htl.entities.Submition;
-import at.htl.repositories.SubmitionRepository;
+import at.htl.entities.Submission;
+import at.htl.repositories.SubmissionRepository;
 import org.eclipse.microprofile.context.ManagedExecutor;
 import org.eclipse.microprofile.context.ThreadContext;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
@@ -12,16 +12,16 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 @ApplicationScoped
-public class SubmitionListener {
+public class SubmissionListener {
 
     @Inject
     Logger log;
 
     @Inject
-    SubmitionRepository submitionRepository;
+    SubmissionRepository submissionRepository;
 
-    @Incoming("submition-result")
-    public void listen(Submition s) {
+    @Incoming("submission-result")
+    public void listen(Submission s) {
         if (!s.status.equals(LeocodeStatus.SUBMITTED)) {
             //https://stackoverflow.com/questions/58534957/how-to-execute-jpa-entity-manager-operations-inside-quarkus-kafka-consumer-metho
             ManagedExecutor executor = ManagedExecutor.builder()
@@ -36,7 +36,7 @@ public class SubmitionListener {
 
             executor.runAsync(threadContext.contextualRunnable(() -> {
                 try {
-                    submitionRepository.update(s);
+                    submissionRepository.update(s);
                     log.info("Finished Testing: " + s.toString());
                 } catch (Exception e) {
                     log.error("Something wrong happened !!!", e);
