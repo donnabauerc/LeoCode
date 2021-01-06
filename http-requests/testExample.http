@@ -1,0 +1,23 @@
+### Test your Code with ExampleId 6
+POST localhost:9090/upload
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="username"
+Content-Type: text/plain
+
+Schueler1
+
+--WebAppBoundary
+Content-Disposition: form-data; name="example"
+Content-Type: text/plain
+
+6
+--WebAppBoundary
+Content-Disposition: form-data; name="code"; filename="HelloWorld.java"
+Content-Type: text/x-java
+
+< ./simulating-files/HelloWorld.java
+
+--WebAppBoundary--

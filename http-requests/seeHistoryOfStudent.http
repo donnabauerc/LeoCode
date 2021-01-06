@@ -1,0 +1,3 @@
+### List Submition History of Schueler1
+GET localhost:9090/portfolio/Schueler1
+Accept: application/json
