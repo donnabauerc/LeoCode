@@ -16,8 +16,8 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
+import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +54,7 @@ public class UploadEndpoint {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response uploadExercise(MultipartFormDataInput input) {
+    public Response uploadExercise(MultipartFormDataInput input, @Context UriInfo uriInfo) {
         log.info("Received UploadExercise Request");
 
         Response res;
@@ -85,12 +85,12 @@ public class UploadEndpoint {
             submission.status = LeocodeStatus.SUBMITTED;
             log.info("Running Tests");
 
-            res = Response.ok().build();
+            res = Response.seeOther(URI.create("http://localhost:9090/submission.html?id=" + submission.id.toString())).build();
         } catch (Exception e) {
             res = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
             e.printStackTrace();
         }
-        return Response.ok(res).build();
+        return res;
     }
 
 }
