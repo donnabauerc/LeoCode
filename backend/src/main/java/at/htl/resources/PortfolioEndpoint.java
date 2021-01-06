@@ -24,7 +24,7 @@ public class PortfolioEndpoint {
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getFinishedSubmitions(@PathParam("username") String username){
-        log.info("getFinishedSubmitions(" + username + ")");
+        log.info("Received getFinishedSubmitions(" + username + ") Request");
         return Response.ok(submissionRepository.getFinished(username)).build();
     }
 }
