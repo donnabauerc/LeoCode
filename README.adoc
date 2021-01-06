@@ -68,7 +68,11 @@ Jenkins-Runner
 `docker-compose up`
 
 2. Start the quarkus servers: go into the `backend` / `testing-api` directory and start them
-by typing `./mvnw clean compile quarkus:dev`
+by typing `./mvnw clean compile quarkus:dev`.
+
+NOTE: Since the Quarkus debugger listens to Port 5005 by default, you should start one
+instance by `./mvnw clean compile quarkus:dev -Ddebug` to change the port. Otherwise, you
+won't be able to use the debugging option, but the project should run anyway.
 
 Then you can run the requests.http file located in testing/http-requests but be sure to use
 the right ID, which can be found in the database.
