@@ -2,6 +2,7 @@
 Christian Donnabauer
 1.0, 2020-01-06
 :source-highlighter: rouge
+
 :icons: font
 :toc: left
 
@@ -19,16 +20,59 @@ always have a look at the IDs in the request compared to the IDs actually in the
 === Create Example
 This Endpoint consumes a Multipart upload containing:
 
-* **username**: Plain Text, setting the author
-* **exampleName**: Plain Text, the name of the Example
-* **exampleType**: Plain Text, defining how the example should be tested, currently only
-"MAVEN" is possible
-* **description**: Plain Text, short description of the example
-* **instruction**: Markdown File, long instruction of the example
-* **pom**: xml File, Pom File for Maven Projects, should be changed for other possible types
-* **solution**: Java File, the Solution for the Example
-* **test**: Java File, the Unittest for the Example
-* **jenkinsfile**: Jenkinsfile, used for the setup of the CI Pipeline
+[%header,cols=4*]
+|===
+|Name
+|Content-Type
+|Explanation
+|Example Value
+
+|username
+|text/plain
+|The name of the author of the Example
+|Donnabauerc
+
+|exampleName
+|text/plain
+|The name of the Example
+|HelloWorld
+
+|exampleType
+|text/plain
+|Definition how the example will be tested
+|currently only value "MAVEN" is supported
+
+|description
+|text/plain
+|Short description of the example
+|The goal of this example is to create a Maven Project, which prints Hello World!
+
+|instruction
+|text/markdown
+|Instruction File of the example
+|# Hello World ...
+
+|pom
+|text/xml
+|Pom File for Maven Projects, should be changed for other possible types
+|<?xml version="1.0"?>...
+
+|solution
+|text/x-java
+|The solution files for the Example
+|package at.htl; ...
+
+|test
+|text/x-java
+|The Unittests of the Example
+|package at.htl; ...
+
+|jenkinsfile
+|application/octet-stream
+|The Jenkinsfile used to setup the Pipeline for testing the example
+|pipeline { ...
+
+|===
 
 If applied correct, a example is created, which can now be attended. A Possible Output would
 like this:
@@ -37,14 +81,12 @@ like this:
 ----
 {
   "id": 6,
-  "author": "Lehrer1",
+  "author": "Donnabauerc",
   "description": "The goal of this example is to create a Maven Project, which prints Hello World! ",
-  "name": "Example 1",
+  "name": "Hello World",
   "type": "MAVEN"
 }
 ----
-
-
 
 === Test Example
 
