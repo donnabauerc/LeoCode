@@ -91,9 +91,13 @@ like this:
 === Test Example
 
 === Create And Run Example
+Simply the Combination of the other two Requests, so you can run the requests as one.
 
 === History of Student
 
 == SSE
+If you submitted your project correct, you can see the status of the submition
+as a sse. Simply go to http://localhost:9090/submission.html?id={id}[]. Of
+course, you need to set your submitionID to see your wanted submition.
 
 
