@@ -1,0 +1,57 @@
+= HTTP-Requests
+Christian Donnabauer
+1.0, 2020-01-06
+:source-highlighter: rouge
+:icons: font
+:toc: left
+
+
+This directory contains **.http** Files for the Rest Endpoints of the Backend Server. You can
+execute these Files using you IDE, but be aware that some Endpoints may require preparation
+e.g. other http requests before. For example you have to create an example first, before you
+can test it.
+
+Also, these requests are heavily dependent on IDs, which get generated automatically. So
+always have a look at the IDs in the request compared to the IDs actually in the database.
+
+== Rest Endpoints
+
+=== Create Example
+This Endpoint consumes a Multipart upload containing:
+
+* **username**: Plain Text, setting the author
+* **exampleName**: Plain Text, the name of the Example
+* **exampleType**: Plain Text, defining how the example should be tested, currently only
+"MAVEN" is possible
+* **description**: Plain Text, short description of the example
+* **instruction**: Markdown File, long instruction of the example
+* **pom**: xml File, Pom File for Maven Projects, should be changed for other possible types
+* **solution**: Java File, the Solution for the Example
+* **test**: Java File, the Unittest for the Example
+* **jenkinsfile**: Jenkinsfile, used for the setup of the CI Pipeline
+
+If applied correct, a example is created, which can now be attended. A Possible Output would
+like this:
+
+[source,json]
+----
+{
+  "id": 6,
+  "author": "Lehrer1",
+  "description": "The goal of this example is to create a Maven Project, which prints Hello World! ",
+  "name": "Example 1",
+  "type": "MAVEN"
+}
+----
+
+
+
+=== Test Example
+
+=== Create And Run Example
+
+=== History of Student
+
+== SSE
+
+
