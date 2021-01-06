@@ -1,5 +1,6 @@
 package at.htl.control;
 
+import at.htl.entities.ExampleType;
 import at.htl.entities.LeocodeStatus;
 import org.apache.commons.io.FileUtils;
 import org.jboss.logging.Logger;
@@ -14,7 +15,6 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -34,11 +34,21 @@ public class FileHandler {
     @Inject
     Logger log;
 
-    public void testProject(String projectPath) {
+    public void testProject(String projectPath, ExampleType type) {
         setup(projectPath);
         unzipProject();
-        createJavaProjectStructure();
-        runTests();
+        try {
+            switch (type){
+                case MAVEN:
+                    createMavenProjectStructure();
+                    runTests();
+                    break;
+                default:
+                    throw new Exception("Project Type not supported yet!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void setup(String projectPath) {
@@ -102,8 +112,8 @@ public class FileHandler {
         }
     }
 
-    public void createJavaProjectStructure() {
-        log.info("create Java Project Structure");
+    public void createMavenProjectStructure() {
+        log.info("create Maven Project Structure");
 
         currentFiles.forEach((k, v) -> {
             File file = v.toFile();

@@ -7,7 +7,7 @@ public class Submission {
     public LeocodeStatus status;
     public String author;
     public String result;
-    public Object example;
+    public Example example;
 
     public Submission() {
         this.status = LeocodeStatus.CREATED;

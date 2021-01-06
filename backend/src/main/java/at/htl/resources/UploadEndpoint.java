@@ -42,7 +42,7 @@ public class UploadEndpoint {
     @Path("/example")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response uploadExample(MultipartFormDataInput input) {
+    public Response uploadExample(MultipartFormDataInput input) { //TODO: Input Depends on Type => pom/build.xml
         log.info("Received UploadExample Request");
         Example example = exampleRepository.createExampleFromMultipartFiles(input);
         return Response.ok(example).build();

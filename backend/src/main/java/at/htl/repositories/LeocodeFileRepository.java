@@ -1,6 +1,7 @@
 package at.htl.repositories;
 
 import at.htl.entities.Example;
+import at.htl.entities.ExampleType;
 import at.htl.entities.LeocodeFile;
 import at.htl.entities.LeocodeFileType;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
@@ -23,10 +24,10 @@ public class LeocodeFileRepository implements PanacheRepository<LeocodeFile> {
     Logger log;
 
     @Transactional
-    public List<LeocodeFile> persistFilesFromMultipart(String fileType, String username, List<InputPart> inputParts, Example example) {
-        List<LeocodeFile> files = new LinkedList<>();//TODO: set username before returning list
+    public List<LeocodeFile> persistFilesFromMultipart(String inputType, String username, List<InputPart> inputParts, Example example) {
+        List<LeocodeFile> files = new LinkedList<>();
         try {
-            switch (fileType) {
+            switch (inputType) {
                 case "exampleName":
                     example.name = inputParts.get(0).getBodyAsString();
                     break;
@@ -35,6 +36,9 @@ public class LeocodeFileRepository implements PanacheRepository<LeocodeFile> {
                     break;
                 case "username":
                     break;
+                case "exampleType":
+                    example.type = ExampleType.valueOf(inputParts.get(0).getBodyAsString().toUpperCase());
+                    break;
                 default: //files
                     for (InputPart inputPart : inputParts) {
                         try (InputStream inputStream = inputPart.getBody(InputStream.class, null)) {
@@ -42,7 +46,7 @@ public class LeocodeFileRepository implements PanacheRepository<LeocodeFile> {
                             String name = getMultipartFileName(header);
                             byte[] bytes = inputStream.readAllBytes();
 
-                            LeocodeFile f = new LeocodeFile(name, username, LeocodeFileType.valueOf(fileType.toUpperCase()), bytes, example);
+                            LeocodeFile f = new LeocodeFile(name, username, LeocodeFileType.valueOf(inputType.toUpperCase()), bytes, example);
                             persist(f);
                             files.add(f);
                             log.info("Uploaded " + f.toString() + " to Database");
@@ -52,9 +56,6 @@ public class LeocodeFileRepository implements PanacheRepository<LeocodeFile> {
                     }
                     break;
             }
-            files.forEach(leocodeFile -> {
-                leocodeFile.author = username;
-            });
             return files;
         } catch (IOException e) {
             e.printStackTrace();

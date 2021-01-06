@@ -27,7 +27,7 @@ public class SubmissionListener {
             log.info("Received Message: " + s.toString());
 
             Runnable runnable = () -> {
-                fileHandler.testProject(s.pathToZip);
+                fileHandler.testProject(s.pathToZip, s.example.type);
                 s.result = fileHandler.getResult();
                 s.status = fileHandler.evaluateStatus(s.result);
                 submissionProducer.sendSubmition(s);
