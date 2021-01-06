@@ -85,7 +85,9 @@ public class UploadEndpoint {
             submission.status = LeocodeStatus.SUBMITTED;
             log.info("Running Tests");
 
-            res = Response.seeOther(URI.create("http://localhost:9090/submission.html?id=" + submission.id.toString())).build();
+            //res = Response.seeOther(URI.create("http://localhost:9090/submission.html?id=" + submission.id.toString())).build();
+            res = Response.created(URI.create("http://localhost:9090/submission.html?id=" + submission.id.toString()))
+                    .entity("succesfully submitted").build();
         } catch (Exception e) {
             res = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
             e.printStackTrace();
