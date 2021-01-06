@@ -24,14 +24,11 @@ public class ExampleRepository implements PanacheRepository<Example> {
     @Transactional
     public Example createExampleFromMultipartFiles(MultipartFormDataInput input) {
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
-        Example example = new Example(); //todo: add author to example
-        String username;
+        Example example = new Example();
 
         try {
-            username = uploadForm.get("username").get(0).getBodyAsString();
-            uploadForm.forEach((inputType, inputParts) -> {
-                fileRepository.persistFilesFromMultipart(inputType, username, inputParts, example);
-            });
+            example.author = uploadForm.get("username").get(0).getBodyAsString();
+            uploadForm.forEach((inputType, inputParts) -> fileRepository.persistFilesFromMultipart(inputType, example.author, inputParts, example));
             persist(example);
             log.info("Created Example: " + example.toString());
         } catch (IOException e) {
