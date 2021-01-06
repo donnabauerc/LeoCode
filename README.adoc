@@ -25,6 +25,10 @@ Project Structure, starts Jenkins) and returns a Kafka Message with the result.
 yourself, you can use the HTTP files to run a sample project-sequence. In the subdirectory
 **simulating-files** sample files for testing are already provided.
 
+* If you ran the project, the directory **projects-in-queue** should be created. This
+directory contains the zipped files created by the backend server. Once triggered the
+Testing-API takes these files, for testing.
+
 == Run yourself
 Since until now I haven't dockerized this version you need to setup some stuff, in order to
 run the project:
