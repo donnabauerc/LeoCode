@@ -2,19 +2,20 @@ package at.htl.entities;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
+
 import at.htl.entities.LeocodeStatus;
 
 @Entity
 public class Submission extends PanacheEntity {
+
     public String pathToZip;
     @Enumerated(value = EnumType.STRING)
     public LeocodeStatus status;
     public String author;
-
     public String result;
+    @OneToOne
+    public Example example;
 
     public Submission() {
         this.status = LeocodeStatus.CREATED;

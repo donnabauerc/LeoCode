@@ -75,6 +75,7 @@ public class UploadEndpoint {
 
             Submission submission = new Submission();
             submission.author = username;
+            submission.example = example;
             submissionRepository.persist(submission);
 
             submission.pathToZip = fileHandler.zipLeocodeFiles(submission.id, files);

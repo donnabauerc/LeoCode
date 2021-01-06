@@ -6,8 +6,8 @@ public class Submission {
     public String pathToZip;
     public LeocodeStatus status;
     public String author;
-
     public String result;
+    public Object example;
 
     public Submission() {
         this.status = LeocodeStatus.CREATED;
