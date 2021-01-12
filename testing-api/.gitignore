@@ -1,3 +1,7 @@
+run-tests.sh
+project-under-test
+result.txt
+
 #Maven
 target/
 pom.xml.tag

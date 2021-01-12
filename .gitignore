@@ -1,14 +1,5 @@
 .idea
 
-backend/.idea
-backend/target
-backend/project-under-test.zip
+backend/*.zip
 
-testing-api/.idea
-testing-api/target
-testing-api/log.txt
-testing-api/run-tests.sh
-testing-api/project-under-test
-testing-api/result.txt
-
-projects-in-queue/*
+projects-in-queue
