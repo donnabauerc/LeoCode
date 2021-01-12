@@ -117,51 +117,51 @@ public class FileHandler {
 
         currentFiles.forEach((k, v) -> {
             File file = v.toFile();
-            String fileDestination = v.toString();
+            StringBuilder fileDestination = new StringBuilder().append(PROJECT_UNDER_TEST_DIRECTORY);
 
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-                String packages = br.readLine();
-                String pathBeforePackages = "/src/";
+                fileDestination.append("/src/");
 
                 switch (k) {
                     case "test":
-                        pathBeforePackages += "test";
+                        fileDestination.append("test");
                         break;
                     case "code":
-                        pathBeforePackages += "main";
+                        fileDestination.append("main");
                         break;
-                    case "other":
+                    case "other": //Files already exist at the correct path (../project-under-test/)
                         return;
                 }
 
-                packages = "/java/"
-                        + packages
+                fileDestination.append("/java/");
+
+                //evaluate packages & filename
+                String packages = br.readLine();
+                packages = packages
                         .substring(
                                 packages.lastIndexOf(" ") + 1,
                                 packages.lastIndexOf(";"))
                         .replace(".", "/");
+                String filename = v.toString().substring(v.toString().lastIndexOf("/"));
 
-                fileDestination = PROJECT_UNDER_TEST_DIRECTORY.toString()
-                        + pathBeforePackages
-                        + packages
-                        + fileDestination.substring(fileDestination.lastIndexOf("/"));
+                fileDestination.append(packages).append(filename);
 
-                //move file
-                File directories = new File(fileDestination
-                        .substring(0, fileDestination.lastIndexOf("/"))
-                        + "/");
-
+                //create Directories
+                String directoriesOnly = fileDestination.substring(0, fileDestination.lastIndexOf("/") + 1);
+                File directories = new File(directoriesOnly);
                 if (!directories.exists()) {
                     directories.mkdirs();
                 }
 
-                file.renameTo(new File(fileDestination));
+                //move actual File
+                file.renameTo(new File(fileDestination.toString()));
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
 
+        //Delete temporary directory
         Paths.get(PROJECT_UNDER_TEST_DIRECTORY.toString() + "/test").toFile().delete();
     }
 
