@@ -119,6 +119,7 @@ Upload containing:
 
 A possible Response would be (the Submission ID):
 
+[source,html]
 ----
 successfully submitted with ID 10
 ----
@@ -173,8 +174,40 @@ A Possible Output would look like this:
 ----
 
 == SSE
-If you submitted your project correct, you can see the status of the submition
-as a sse. Simply go to http://localhost:9090/submission.html?id={id}[]. Of
-course, you need to set your submitionID to see your wanted submition.
+If you submitted your project correct, you can see the status of the submition as a sse.
+Simply insert the wanted Submission ID (returned by the Test Endpoint) into the link
+http://localhost:9090/submission/<id>[] and open it in your Webbrowser. At this Endpoint
+you can see the raw data, which would be processed with JS in an actual Frontend somewhat
+like http://localhost:9090/submission.html?id={id}[].
+
+The output of http://localhost:9090/submission/8[] for example looks something like that:
+[source,html]
+----
+data: 17:14:03 Uhr: SUBMITTED
+
+data: 17:15:04 Uhr: SUCCESS
+----
+
+Or http://localhost:9090/submission.html?id=8[] like:
+++++
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <title>Submition</title>
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly-additions.min.css">
+</head>
+<body>
+<div class="container">
+    <h2 id="heading">Submission 8</h2>
+    <div class="row">
+        <p class="col-md-12"><strong><span id="content">17:15:04 Uhr: SUCCESS</span></strong></p>
+    </div>
+</div>
+</body>
+</html>
+++++
+
+
 
 
