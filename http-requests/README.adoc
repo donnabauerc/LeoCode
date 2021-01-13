@@ -51,27 +51,27 @@ consumes a Multipart upload containing:
 |instruction
 |text/markdown
 |Instruction File of the example
-|# Hello World ...
+|# Hello World...
 
 |pom
 |text/xml
 |Pom File for Maven Projects, should be changed for other possible types
-|<?xml version="1.0"?>...
+|<?xml version="1.0"?...
 
 |solution
 |text/x-java
 |The solution files for the Example
-|package at.htl; ...
+|package at.htl...
 
 |test
 |text/x-java
 |The Unittests of the Example
-|package at.htl; ...
+|package at.htl...
 
 |jenkinsfile
 |application/octet-stream
 |The Jenkinsfile used to setup the Pipeline for testing the example
-|pipeline { ...
+|pipeline {...
 
 |===
 
@@ -89,6 +89,39 @@ A Possible Output would look like this:
 ----
 
 === Test Example
+This endpoint tests provided code with the related Example. It also consumes a Multipart
+Upload containing:
+
+[%header,cols=4*]
+|===
+|Name
+|Content-Type
+|Explanation
+|Example Value
+
+|example
+|text/plain
+|The Id of the Example, which is going to be attended
+|6
+
+|username
+|text/plain
+|The name of the user testing the Code
+|Donnabauerc
+
+
+|code
+|text/x-java
+|The Java Files written by the user, which should be tested
+|package at.htl...
+
+|===
+
+A possible Response would be (the Submission ID):
+
+----
+successfully submitted with ID 10
+----
 
 === Create And Run Example
 Simply the Combination of the other two Requests, so you can run the requests as one.
