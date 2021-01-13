@@ -18,7 +18,8 @@ always have a look at the IDs in the request compared to the IDs actually in the
 == Rest Endpoints
 
 === Create Example
-This Endpoint consumes a Multipart upload containing:
+If applied correct, an example is created, which can be attended afterwards. This Endpoint
+consumes a Multipart upload containing:
 
 [%header,cols=4*]
 |===
@@ -74,8 +75,7 @@ This Endpoint consumes a Multipart upload containing:
 
 |===
 
-If applied correct, a example is created, which can now be attended. A Possible Output would
-like this:
+A Possible Output would look like this:
 
 [source,json]
 ----
@@ -94,6 +94,50 @@ like this:
 Simply the Combination of the other two Requests, so you can run the requests as one.
 
 === History of Student
+Returns all the Submitions made by a specific student. In den provided example every
+Submition made by **Schueler1** gets returned, but you can change the Path-Parameter
+as you like.
+
+NOTE: Be aware that the database currently is drop-and-create (each time you
+restart the server, you need to Create and Run Examples, else the response is going
+to be empty)
+
+A Possible Output would look like this:
+[source, json]
+----
+[
+  {
+    "id": 8,
+    "author": "Schueler1",
+    "example": {
+      "id": 6,
+      "author": "Lehrer1",
+      "description": "The goal of this example is to create a Maven Project, which prints Hello World! ",
+      "name": "Example 1",
+      "type": "MAVEN"
+    },
+    "lastTimeChanged": "2021-01-13T16:46:24.765136",
+    "pathToZip": "../../projects-in-queue/project-under-test-8.zip",
+    "result": "Finished: FAILURE",
+    "status": "FAIL"
+  },
+  {
+    "id": 10,
+    "author": "Schueler1",
+    "example": {
+      "id": 6,
+      "author": "Lehrer1",
+      "description": "The goal of this example is to create a Maven Project, which prints Hello World! ",
+      "name": "Example 1",
+      "type": "MAVEN"
+    },
+    "lastTimeChanged": "2021-01-13T16:52:09.463372",
+    "pathToZip": "../../projects-in-queue/project-under-test-10.zip",
+    "result": "Finished: SUCCESS",
+    "status": "SUCCESS"
+  }
+]
+----
 
 == SSE
 If you submitted your project correct, you can see the status of the submition
