@@ -11,9 +11,9 @@
 </head>
 <body>
 <div class="container">
-    <h2>Last Submission</h2>
+    <h2 id="heading">Last Submission</h2>
     <div class="row">
-        <p class="col-md-12">The submission is <strong><span id="content">N/A</span></strong>.</p>
+        <p class="col-md-12"><strong><span id="content">N/A</span></strong></p>
     </div>
 </div>
 </body>
@@ -22,7 +22,7 @@
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     var id = urlParams.get('id');
-
+    document.getElementById("heading").textContent = 'Submission '+id;
     var source = new EventSource("/submission/" + id);
     source.onmessage = function (event) {
         document.getElementById("content").innerHTML = event.data;
