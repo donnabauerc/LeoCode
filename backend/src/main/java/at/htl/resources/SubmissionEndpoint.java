@@ -42,9 +42,14 @@ public class SubmissionEndpoint {
 
         // When someone refreshes or connects later on send them the current status
         if (currentSubmission != null) {
-            sseEventSink.send(sse.newEvent(currentSubmission.status.toString()));
+
+            String res = String.format("%tT Uhr: %s",
+                            currentSubmission.lastTimeChanged,
+                            currentSubmission.getStatus().toString());
+
+            sseEventSink.send(sse.newEvent(res));
             // anything other than SUBMITTED is complete
-            canSubscribe = currentSubmission.status == LeocodeStatus.SUBMITTED;
+            canSubscribe = currentSubmission.getStatus() == LeocodeStatus.SUBMITTED;
         }
 
         // Only allow sse if the submition is not complete
@@ -54,10 +59,14 @@ public class SubmissionEndpoint {
 
             subscribe.with(submition -> {
                 if (id.equals(submition.id)) {
-                    LeocodeStatus status = submition.status;
-                    sseEventSink.send(sse.newEvent(status.toString()));
 
-                    if (status != LeocodeStatus.SUBMITTED) {
+                    String res = String.format("%tT Uhr: %s",
+                            submition.lastTimeChanged,
+                            submition.getStatus().toString());
+
+                    sseEventSink.send(sse.newEvent(res));
+
+                    if (submition.getStatus() != LeocodeStatus.SUBMITTED) {
                         log.info("closed SSE");
                         sseEventSink.close();
                     }

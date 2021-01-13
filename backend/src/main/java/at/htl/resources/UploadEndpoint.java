@@ -82,7 +82,7 @@ public class UploadEndpoint {
             log.info("created zip: " + submission.pathToZip);
 
             submissionProducer.sendSubmission(submission);
-            submission.status = LeocodeStatus.SUBMITTED;
+            submission.setStatus(LeocodeStatus.SUBMITTED);
             log.info("Running Tests");
 
             //res = Response.seeOther(URI.create("http://localhost:9090/submission.html?id=" + submission.id.toString())).build();

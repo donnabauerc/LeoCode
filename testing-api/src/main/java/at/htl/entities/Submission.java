@@ -1,28 +1,35 @@
 package at.htl.entities;
 
+import java.time.LocalDateTime;
+
 public class Submission {
 
-    public Long id;
+    public long id;
     public String pathToZip;
-    public LeocodeStatus status;
+    private LeocodeStatus status;  //private so the timestamp gets updated, whenever its set
     public String author;
     public String result;
     public Example example;
+    public LocalDateTime lastTimeChanged;
+
 
     public Submission() {
-        this.status = LeocodeStatus.CREATED;
-    }
-
-    public Submission(String pathToZip, String author) {
-        this();
-        this.pathToZip = pathToZip;
-        this.author = author;
+        setStatus(LeocodeStatus.CREATED);
     }
 
     public Submission(String pathToZip, LeocodeStatus status, String author) {
         this.pathToZip = pathToZip;
         this.status = status;
         this.author = author;
+    }
+
+    public void setStatus(LeocodeStatus status) {
+        this.status = status;
+        this.lastTimeChanged = LocalDateTime.now();
+    }
+
+    public LeocodeStatus getStatus() {
+        return status;
     }
 
     @Override
@@ -32,6 +39,9 @@ public class Submission {
                 ", pathToZip='" + pathToZip + '\'' +
                 ", status=" + status +
                 ", author='" + author + '\'' +
+                ", result='" + result + '\'' +
+                ", example=" + example +
+                ", lastTimeChanged=" + lastTimeChanged +
                 '}';
     }
 }

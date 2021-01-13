@@ -6,19 +6,24 @@ import javax.persistence.*;
 
 import at.htl.entities.LeocodeStatus;
 
+import java.time.LocalDateTime;
+
 @Entity
 public class Submission extends PanacheEntity {
 
     public String pathToZip;
-    @Enumerated(value = EnumType.STRING)
-    public LeocodeStatus status;
+    @Enumerated(value = EnumType.STRING) //private so the timestamp gets updated, whenever its set
+    private LeocodeStatus status;
     public String author;
     public String result;
     @OneToOne
     public Example example;
+    @Column(columnDefinition = "TIMESTAMP")
+    public LocalDateTime lastTimeChanged;
+
 
     public Submission() {
-        this.status = LeocodeStatus.CREATED;
+        setStatus(LeocodeStatus.CREATED);
     }
 
     public Submission(String pathToZip, LeocodeStatus status, String author) {
@@ -27,13 +32,25 @@ public class Submission extends PanacheEntity {
         this.author = author;
     }
 
+    public void setStatus(LeocodeStatus status) {
+        this.status = status;
+        this.lastTimeChanged = LocalDateTime.now();
+    }
+
+    public LeocodeStatus getStatus() {
+        return status;
+    }
+
     @Override
     public String toString() {
-        return "Submition{" +
-                "pathToZip='" + pathToZip + '\'' +
+        return "Submission{" +
+                "id=" + id +
+                ", pathToZip='" + pathToZip + '\'' +
                 ", status=" + status +
                 ", author='" + author + '\'' +
-                ", id=" + id +
+                ", result='" + result + '\'' +
+                ", example=" + example +
+                ", lastTimeChanged=" + lastTimeChanged +
                 '}';
     }
 }
