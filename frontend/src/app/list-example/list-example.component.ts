@@ -1,8 +1,10 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatTable } from '@angular/material/table';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
 import { ListExampleDataSource, ListExampleItem } from './list-example-datasource';
+import {Example} from '../model/example.model';
+import {HttpService} from '../services/http.service';
 
 @Component({
   selector: 'app-list-example',
@@ -12,19 +14,27 @@ import { ListExampleDataSource, ListExampleItem } from './list-example-datasourc
 export class ListExampleComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatTable) table: MatTable<ListExampleItem>;
-  dataSource: ListExampleDataSource;
+  @ViewChild(MatTable) table: MatTable<Example>;
+  dataSource: MatTableDataSource<Example>;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'name'];
+  displayedColumns = ['name', 'description', 'type'];
 
-  ngOnInit() {
-    this.dataSource = new ListExampleDataSource();
+  constructor(private http: HttpService) {
   }
 
-  ngAfterViewInit() {
+  ngOnInit(): void {
+    this.dataSource = new MatTableDataSource<Example>();
+    this.refreshData();
+  }
+
+  ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.table.dataSource = this.dataSource;
+  }
+
+  refreshData(): void {
+    this.http.getExampleList().subscribe(exampleList => this.dataSource.data = exampleList);
   }
 }

@@ -14,16 +14,17 @@ import {RouterModule, Routes} from '@angular/router';
 import { CreateExampleComponent } from './create-example/create-example.component';
 import { TestExampleComponent } from './test-example/test-example.component';
 import { PortfolioComponent } from './portfolio/portfolio.component';
-import { ListExampleComponent } from './list-example/list-example.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import {ListExampleComponent} from './list-example/list-example.component';
+import {HttpClientModule} from '@angular/common/http';
 
 const appRoutes: Routes = [
-  {path: 'list-example', component: ListExampleComponent},
   {path: 'create-example', component: CreateExampleComponent},
   {path: 'test-example', component: TestExampleComponent},
-  {path: 'portfolio', component: PortfolioComponent}
+  {path: 'portfolio', component: PortfolioComponent},
+  {path: 'list-example', component: ListExampleComponent}
 ];
 
 @NgModule({
@@ -47,7 +48,8 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
