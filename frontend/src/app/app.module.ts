@@ -19,12 +19,15 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import {ListExampleComponent} from './list-example/list-example.component';
 import {HttpClientModule} from '@angular/common/http';
+import { DetailExampleComponent } from './detail-example/detail-example.component';
 
 const appRoutes: Routes = [
   {path: 'create-example', component: CreateExampleComponent},
   {path: 'test-example', component: TestExampleComponent},
   {path: 'portfolio', component: PortfolioComponent},
-  {path: 'list-example', component: ListExampleComponent}
+  {path: 'list-example', component: ListExampleComponent},
+  {path: 'example/:id', component: DetailExampleComponent},
+  { path: '',   redirectTo: '/list-example', pathMatch: 'full' }
 ];
 
 @NgModule({
@@ -34,7 +37,8 @@ const appRoutes: Routes = [
     CreateExampleComponent,
     TestExampleComponent,
     PortfolioComponent,
-    ListExampleComponent
+    ListExampleComponent,
+    DetailExampleComponent
   ],
   imports: [
     BrowserModule,
