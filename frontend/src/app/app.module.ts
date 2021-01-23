@@ -20,6 +20,7 @@ import { MatSortModule } from '@angular/material/sort';
 import {ListExampleComponent} from './list-example/list-example.component';
 import {HttpClientModule} from '@angular/common/http';
 import { DetailExampleComponent } from './detail-example/detail-example.component';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 const appRoutes: Routes = [
   {path: 'create-example', component: CreateExampleComponent},
@@ -53,7 +54,8 @@ const appRoutes: Routes = [
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    HttpClientModule
+    HttpClientModule,
+    MatFormFieldModule
   ],
   providers: [],
   bootstrap: [AppComponent]

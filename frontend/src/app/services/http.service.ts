@@ -15,4 +15,8 @@ export class HttpService {
   getExampleList(): Observable<Example[]> {
     return this.http.get<Example[]>(this.BASE_URL + 'example/list');
   }
+
+  getExampleById(id: number): Observable<Example>{
+    return this.http.get<Example>(this.BASE_URL  + 'example/' + id);
+  }
 }
