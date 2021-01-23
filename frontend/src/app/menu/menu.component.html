@@ -5,10 +5,10 @@
       [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item href="#">Examples</a>
-      <a mat-list-item href="#">Test Code</a>
-      <a mat-list-item href="#">Create</a>
-      <a mat-list-item href="#">Profile</a>
+      <a mat-list-item [routerLink]="['/list-example']">Examples</a>
+      <a mat-list-item [routerLink]="['/test-example']">Test Code</a>
+      <a mat-list-item [routerLink]="['/create-example']">Create</a>
+      <a mat-list-item [routerLink]="['/portfolio']">Profile</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -24,5 +24,6 @@
       <span>LeoCode</span>
     </mat-toolbar>
     <!-- Add Content Here => Router Outlet -->
+    <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
