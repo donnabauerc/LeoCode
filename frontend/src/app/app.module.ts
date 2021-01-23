@@ -10,14 +10,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { ExampleListComponent } from './list-example/example-list.component';
 import {RouterModule, Routes} from '@angular/router';
 import { CreateExampleComponent } from './create-example/create-example.component';
 import { TestExampleComponent } from './test-example/test-example.component';
 import { PortfolioComponent } from './portfolio/portfolio.component';
+import { ListExampleComponent } from './list-example/list-example.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 const appRoutes: Routes = [
-  {path: 'list-example', component: ExampleListComponent},
+  {path: 'list-example', component: ListExampleComponent},
   {path: 'create-example', component: CreateExampleComponent},
   {path: 'test-example', component: TestExampleComponent},
   {path: 'portfolio', component: PortfolioComponent}
@@ -27,10 +30,10 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     MenuComponent,
-    ExampleListComponent,
     CreateExampleComponent,
     TestExampleComponent,
-    PortfolioComponent
+    PortfolioComponent,
+    ListExampleComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +44,10 @@ const appRoutes: Routes = [
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   providers: [],
   bootstrap: [AppComponent]
