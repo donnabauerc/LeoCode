@@ -1,0 +1,26 @@
+<div class="container mt-5">
+  <form enctype="multipart/form-data" name="createExample">
+    <label>Name of the Author:</label>
+    <input type="text" name="username" placeholder="Lehrer 1" required class="form-control"><br>
+    <label>Name of the Example:</label>
+    <input type="text" name="exampleName" placeholder="Example Name" required class="form-control"><br>
+    <label>Type: </label>
+    <select class="form-control" name="exampleType" required>
+      <option value="MAVEN">Maven</option>
+      <option value="ANT">Ant</option>
+    </select><br>
+    <label>Short Description of the Example:</label>
+    <input type="text" name="description" placeholder="Description" required class="form-control"><br>
+    <label>Instruction File: </label>
+    <input type="file" name="instruction" placeholder="Instruction" required accept=".md" class="form-control"><br>
+    <label>POM: </label>
+    <input type="file" name="pom" placeholder="POM" required accept=".xml" class="form-control"><br>
+    <label>Correct Sourcecode Files: </label>
+    <input type="file" class="form-control" name="solution" accept=".java" multiple required><br>
+    <label>Test Files: </label>
+    <input type="file" class="form-control" name="test" accept=".java" multiple required><br>
+    <label>Jenkinsfile: </label>
+    <input type="file" class="form-control" name="jenkinsfile" required><br>
+    <input type="submit" (click)="upload()" value="Create Example">
+  </form>
+</div>
