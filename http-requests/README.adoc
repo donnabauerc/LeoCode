@@ -173,6 +173,49 @@ A Possible Output would look like this:
 ]
 ----
 
+=== Get Example By Id
+Returns a specific Example including a files Array. Here the parameter (the id) can be changed as you like.
+Currently the files are sent as text (should probably be changed in future). A sample output would look
+something similar to this:
+
+[source,json]
+----
+{
+  "id": 6,
+  "name": "Example 1",
+  "description": "The goal of this example is to create a Maven Project, which prints Hello World! ",
+  "author": "Lehrer1",
+  "type": "MAVEN",
+  "files": [
+    {
+      "name": "HelloWorld.java",
+      "filetype": "SOLUTION",
+      "content": "package at.htl.examples;\n\npublic class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}\n"
+    },
+    {
+      "name": "HelloWorldTest.java",
+      "filetype": "TEST",
+      "content": "package at.htl.examples;\n\nimport org.junit.jupiter.api.AfterEach;\nimport org.junit.jupiter.api.BeforeEach;\nimport org.junit.jupiter.api.Test;\n\nimport java.io.ByteArrayInputStream;\nimport java.io.ByteArrayOutputStream;\nimport java.io.InputStream;\nimport java.io.PrintStream;\n\nimport static org.assertj.core.api.Assertions.assertThat;\n\nclass HelloWorldTest {\n\n    private final InputStream systemIn = System.in;\n    private final PrintStream systemOut = System.out;\n\n    private ByteArrayInputStream testIn;\n    private ByteArrayOutputStream testOut;\n\n    @BeforeEach\n    public void setupOutput() {\n        testOut = new ByteArrayOutputStream();\n        System.setOut(new PrintStream(testOut));\n    }\n\n    private void provideInput(String data) {\n        testIn = new ByteArrayInputStream(data.getBytes());\n        System.setIn(testIn);\n    }\n\n    private String getOutput() {\n        return testOut.toString();\n    }\n\n    @AfterEach\n    public void restoreSystemInputOutput() {\n        System.setIn(systemIn);\n        System.setOut(systemOut);\n    }\n\n    @Test\n    public void test001() {\n        final String testString = \"Hello, World!\\n\";\n        provideInput(testString);\n\n        HelloWorld.main(null);\n        assertThat(testString).isEqualTo(getOutput());\n    }\n\n}\n"
+    },
+    {
+      "name": "instruction.md",
+      "filetype": "INSTRUCTION",
+      "content": "# This would be the Instruction File of an Example, written by teachers\n"
+    },
+    {
+      "name": "Jenkinsfile",
+      "filetype": "JENKINSFILE",
+      "content": "pipeline {\n    agent {\n        docker {\n            image 'maven:3-alpine'\n        }\n    }\n    stages {\n        stage('Test') {\n            steps {\n                sh 'mvn test'\n            }\n        }\n    }\n}"
+    },
+    {
+      "name": "pom.xml",
+      "filetype": "POM",
+      "content": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\n         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n    <modelVersion>4.0.0</modelVersion>\n\n    <groupId>at.htl</groupId>\n    <artifactId>code-examples</artifactId>\n    <version>1.0-SNAPSHOT</version>\n    <packaging>jar</packaging>\n\n    <properties>\n        <maven.compiler.source>8</maven.compiler.source>\n        <maven.compiler.target>8</maven.compiler.target>\n    </properties>\n\n    <build>\n        <plugins>\n            <plugin>\n                <artifactId>maven-surefire-plugin</artifactId>\n                <version>3.0.0-M4</version>\n            </plugin>\n            <plugin>\n                <groupId>org.apache.maven.plugins</groupId>\n                <artifactId>maven-surefire-report-plugin</artifactId>\n                <version>3.0.0-M4</version>\n                <executions>\n                    <execution>\n                        <phase>test</phase>\n                        <goals>\n                            <goal>report-only</goal>\n                        </goals>\n                    </execution>\n                </executions>\n            </plugin>\n        </plugins>\n    </build>\n\n    <dependencies>\n        <dependency>\n            <groupId>org.junit.jupiter</groupId>\n            <artifactId>junit-jupiter</artifactId>\n            <version>5.6.2</version>\n            <scope>test</scope>\n        </dependency>\n            <dependency>\n                <groupId>org.assertj</groupId>\n                <artifactId>assertj-core</artifactId>\n                <version>3.15.0</version>\n                <scope>test</scope>\n            </dependency>\n    </dependencies>\n</project>"
+    }
+  ]
+}
+----
+
 == SSE
 If you submitted your project correct, you can see the status of the submition as a sse.
 Simply insert the wanted Submission ID (returned by the Test Endpoint) into the link
