@@ -216,6 +216,30 @@ something similar to this:
 }
 ----
 
+=== List All Examples
+This Endpoint returns an Array of every Example currently stored in the database. A possible Response would
+look like this:
+
+[source,json]
+----
+
+  {
+    "id": 6,
+    "author": "Lehrer1",
+    "description": "The goal of this example is to create a Maven Project, which prints Hello World! ",
+    "name": "Example 1",
+    "type": "MAVEN"
+  },
+  {
+    "id": 12,
+    "author": "Lehrer1",
+    "description": "The goal of this example is to create a Maven Project, which prints Hello World! ",
+    "name": "Example 2",
+    "type": "MAVEN"
+  }
+]
+----
+
 == SSE
 If you submitted your project correct, you can see the status of the submition as a sse.
 Simply insert the wanted Submission ID (returned by the Test Endpoint) into the link
