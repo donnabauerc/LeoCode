@@ -1,0 +1,3 @@
+### Get Example inclusive Files
+GET localhost:9090/example/6
+Accept: application/json

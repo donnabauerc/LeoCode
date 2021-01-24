@@ -1,0 +1,3 @@
+### List All Examples
+GET localhost:9090/example/list
+Accept: application/json
