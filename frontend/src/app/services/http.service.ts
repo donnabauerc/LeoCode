@@ -21,6 +21,10 @@ export class HttpService {
   }
 
   createExample(form: HTMLFormElement): Observable<Example>{
-    return this.http.post<Example>(this.BASE_URL + '/upload/example', new FormData(form));
+    return this.http.post<Example>(this.BASE_URL + 'upload/example', new FormData(form));
+  }
+
+  testExample(form: FormData): Observable<any>{
+    return this.http.post<any>(this.BASE_URL + 'upload/exercise', form); // TODO: seems to throw error (with http status 201)
   }
 }
