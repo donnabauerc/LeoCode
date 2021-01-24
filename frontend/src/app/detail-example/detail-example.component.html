@@ -1,9 +1,44 @@
-<ul>
-  <li>Name: {{this.example.name}}</li>
-  <li>Description: {{this.example.description}}</li>
-  <li>Author: {{this.example.author}}</li>
-  <li>Type: {{this.example.type}}</li>
-  <li *ngFor="let f of this.example.files;">File: {{f.name}}</li>
-</ul>
+<div class="mat-elevation-z8">
+  <table mat-table class="full-width-table" matSort aria-label="Elements">
+    <!-- Id Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+      <td mat-cell *matCellDef="let row">{{row.id}}</td>
+    </ng-container>
 
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell *matCellDef="let row">{{row.name}}</td>
+    </ng-container>
 
+    <!-- Description Column -->
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+      <td mat-cell *matCellDef="let row">{{row.description}}</td>
+    </ng-container>
+
+    <!-- Type Column -->
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+      <td mat-cell *matCellDef="let row">{{row.type}}</td>
+    </ng-container>
+
+    <!-- Files Column -->
+    <ng-container matColumnDef="files">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Files</th>
+      <td mat-cell *matCellDef="let row"><a href="#" *ngFor="let file of row.files">{{file.name}}<br></a></td>
+    </ng-container>
+
+    <!--Action Test Example-->
+    <ng-container matColumnDef="test">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-raised-button color="primary" (click)="this.router.navigate(['/test-example', row.id])">Test</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

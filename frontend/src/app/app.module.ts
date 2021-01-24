@@ -34,6 +34,7 @@ const appRoutes: Routes = [
   {path: 'portfolio', component: PortfolioComponent},
   {path: 'list-example', component: ListExampleComponent},
   {path: 'example/:id', component: DetailExampleComponent},
+  {path: 'test-example/:id', component: TestExampleComponent},
   {path: '',  redirectTo: '/list-example', pathMatch: 'full' },
   {path: '**', component: FileNotFoundComponent}
 ];
