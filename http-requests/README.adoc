@@ -20,7 +20,7 @@ always have a look at the IDs in the request compared to the IDs actually in the
 
 == Rest Endpoints
 
-=== Create Example
+=== Create Example - http://localhost:9090/upload/example[]
 If applied correct, an example is created, which can be attended afterwards. This Endpoint
 consumes a Multipart upload containing:
 
@@ -91,7 +91,7 @@ A Possible Output would look like this:
 }
 ----
 
-=== Test Example
+=== Test Example - http://localhost:9090/upload/exercise[]
 This endpoint tests provided code with the related Example. It also consumes a Multipart
 Upload containing:
 
@@ -130,7 +130,7 @@ successfully submitted with ID 10
 === Create And Run Example
 Simply the Combination of the other two Requests, so you can run the requests as one.
 
-=== History of Student
+=== History of Student - http://localhost:9090/portfolio/{username}[]
 Returns all the Submitions made by a specific student. In den provided example every
 Submition made by **Schueler1** gets returned, but you can change the Path-Parameter
 as you like.
@@ -172,7 +172,7 @@ A Possible Output would look like this:
 ]
 ----
 
-=== Get Example By Id
+=== Get Example By Id - http://localhost:9090/example/{id}][]
 Returns a specific Example including a files Array. Here the parameter (the id) can be changed as you like.
 Currently the files are sent as text (should probably be changed in future). A sample output would look
 something similar to this:
@@ -215,7 +215,7 @@ something similar to this:
 }
 ----
 
-=== List All Examples
+=== List All Examples - http://localhost:9090/example/list[]
 This Endpoint returns an Array of every Example currently stored in the database. A possible Response would
 look like this:
 
