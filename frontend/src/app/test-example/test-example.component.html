@@ -1,1 +1,13 @@
-<p>test-example works!</p>
+<div class="container mt-5">
+  <form enctype="multipart/form-data" name="testExampleForm">
+    <div *ngIf="!checkPathParam()">
+      <label>Example Id:</label>
+      <input id="exampleId" type="text" name="example" placeholder="Example Id" required class="form-control">
+    </div>
+    <label>Username:</label>
+    <input type="text" name="username" placeholder="Username" required class="form-control">
+    <label>Your Sourcecode: </label>
+    <input type="file" class="form-control" name="code" accept=".java" multiple required>
+  </form>
+  <button mat-raised-button color="primary" (click)="sendSubmission()">Test Your Code</button>
+</div>
