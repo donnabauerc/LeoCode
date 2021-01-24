@@ -1,5 +1,5 @@
 ### Test your Code with ExampleId 6
-POST localhost:9090/upload
+POST localhost:9090/upload/exercise
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
