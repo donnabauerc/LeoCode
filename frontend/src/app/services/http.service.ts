@@ -20,7 +20,7 @@ export class HttpService {
     return this.http.get<Example>(this.BASE_URL  + 'example/' + id);
   }
 
-  createExample(form: HTMLFormElement): Observable<any>{
-    return this.http.post(this.BASE_URL + '/upload/example', new FormData(form));
+  createExample(form: HTMLFormElement): Observable<Example>{
+    return this.http.post<Example>(this.BASE_URL + '/upload/example', new FormData(form));
   }
 }

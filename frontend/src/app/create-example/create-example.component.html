@@ -1,5 +1,5 @@
 <div class="container mt-5">
-  <form enctype="multipart/form-data" name="createExample">
+  <form enctype="multipart/form-data" name="createExampleForm">
     <label>Name of the Author:</label>
     <input type="text" name="username" placeholder="Lehrer 1" required class="form-control"><br>
     <label>Name of the Example:</label>
@@ -21,6 +21,6 @@
     <input type="file" class="form-control" name="test" accept=".java" multiple required><br>
     <label>Jenkinsfile: </label>
     <input type="file" class="form-control" name="jenkinsfile" required><br>
-    <input type="submit" (click)="upload()" value="Create Example">
   </form>
+  <button mat-raised-button color="primary" (click)="upload()">Create Example</button>
 </div>
