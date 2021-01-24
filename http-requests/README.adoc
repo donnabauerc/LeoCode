@@ -6,11 +6,14 @@ Christian Donnabauer
 :icons: font
 :toc: left
 
-
 This directory contains **.http** Files for the Rest Endpoints of the Backend Server. You can
 execute these Files using you IDE, but be aware that some Endpoints may require preparation
 e.g. other http requests before. For example you have to create an example first, before you
 can test it.
+
+NOTE: Be aware that the database currently is drop-and-create (each time you
+restart the server, you need to Create and Run Examples, else the response is going
+to be empty)
 
 Also, these requests are heavily dependent on IDs, which get generated automatically. So
 always have a look at the IDs in the request compared to the IDs actually in the database.
@@ -131,10 +134,6 @@ Simply the Combination of the other two Requests, so you can run the requests as
 Returns all the Submitions made by a specific student. In den provided example every
 Submition made by **Schueler1** gets returned, but you can change the Path-Parameter
 as you like.
-
-NOTE: Be aware that the database currently is drop-and-create (each time you
-restart the server, you need to Create and Run Examples, else the response is going
-to be empty)
 
 A Possible Output would look like this:
 [source, json]
