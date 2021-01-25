@@ -27,6 +27,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SubmissionStatusComponent } from './submission-status/submission-status.component';
 
 const appRoutes: Routes = [
   {path: 'create-example', component: CreateExampleComponent},
@@ -35,6 +36,7 @@ const appRoutes: Routes = [
   {path: 'list-example', component: ListExampleComponent},
   {path: 'example/:id', component: DetailExampleComponent},
   {path: 'test-example/:id', component: TestExampleComponent},
+  {path: 'submission-status/:id', component: SubmissionStatusComponent},
   {path: '',  redirectTo: '/list-example', pathMatch: 'full' },
   {path: '**', component: FileNotFoundComponent}
 ];
@@ -47,7 +49,8 @@ const appRoutes: Routes = [
     TestExampleComponent,
     PortfolioComponent,
     ListExampleComponent,
-    DetailExampleComponent
+    DetailExampleComponent,
+    SubmissionStatusComponent
   ],
   imports: [
     BrowserModule,

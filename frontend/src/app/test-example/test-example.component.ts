@@ -35,8 +35,7 @@ export class TestExampleComponent implements OnInit {
       this.form.set('example', String(this.exampleId));
     }
     this.http.testExample(this.form).subscribe(value => {
-      console.log(value);
-      // TODO: this.router.navigate(); to SSE
+      this.router.navigate(['submission-status', value]);
     });
   }
 
