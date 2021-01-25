@@ -32,7 +32,7 @@ import { SubmissionStatusComponent } from './submission-status/submission-status
 const appRoutes: Routes = [
   {path: 'create-example', component: CreateExampleComponent},
   {path: 'test-example', component: TestExampleComponent},
-  {path: 'portfolio', component: PortfolioComponent},
+  {path: 'portfolio/:username', component: PortfolioComponent},
   {path: 'list-example', component: ListExampleComponent},
   {path: 'example/:id', component: DetailExampleComponent},
   {path: 'test-example/:id', component: TestExampleComponent},

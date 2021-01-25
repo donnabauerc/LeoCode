@@ -2,6 +2,7 @@ import {Injectable, NgZone} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Example} from '../model/example.model';
+import {Submission} from '../model/submission.model';
 
 @Injectable({
   providedIn: 'root'
@@ -43,5 +44,9 @@ export class HttpService {
         });
       };
     });
+  }
+
+  getFinishedSubmitions(username: string): Observable<Submission[]> {
+    return this.http.get<Submission[]>(this.BASE_URL + 'portfolio/' + username);
   }
 }

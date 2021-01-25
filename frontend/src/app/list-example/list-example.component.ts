@@ -37,6 +37,6 @@ export class ListExampleComponent implements AfterViewInit, OnInit {
   }
 
   refreshData(): void {
-    this.http.getExampleList().subscribe(exampleList => this.dataSource.data = exampleList);
+    this.http.getExampleList().subscribe(exampleList => this.dataSource.data = exampleList, error => console.log(error));
   }
 }
