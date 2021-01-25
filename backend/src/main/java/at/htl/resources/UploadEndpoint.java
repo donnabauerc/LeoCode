@@ -87,8 +87,9 @@ public class UploadEndpoint {
             log.info("Running Tests");
 
             //res = Response.seeOther(URI.create("http://localhost:9090/submission.html?id=" + submission.id.toString())).build();
-            res = Response.created(URI.create("http://localhost:9090/submission.html?id=" + submission.id.toString()))
-                    .entity("successfully submitted with ID " + submission.id.toString()).build();
+            //res = Response.created(URI.create("http://localhost:9090/submission.html?id=" + submission.id.toString()))
+            //        .entity("successfully submitted with ID " + submission.id.toString()).build();
+            res = Response.ok(submission.id.toString()).build();
         } catch (Exception e) {
             res = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
             e.printStackTrace();
