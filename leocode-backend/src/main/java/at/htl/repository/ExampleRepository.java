@@ -56,10 +56,9 @@ public class ExampleRepository implements PanacheRepository<Example> {
         });
 
         if (!example.isValid()) {
-            files.forEach(f -> leocodeFileRepository.delete(f));
             return null;
         }
-        if (files.isEmpty()) {
+        if (files.size() < 4) {
             return null;
         }
 
@@ -67,6 +66,7 @@ public class ExampleRepository implements PanacheRepository<Example> {
         files.forEach(f -> {
             f.author = example.author;
             f.example = example;
+            leocodeFileRepository.persist(f);
         });
 
         example.persist();

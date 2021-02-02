@@ -6,5 +6,5 @@ public enum LeocodeFileType {
     JENKINSFILE,
     SOLUTION,
     TEST,
-    POM //really necessary? => in project
+    POM
 }

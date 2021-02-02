@@ -36,7 +36,6 @@ public class LeocodeFile extends PanacheEntity {
                 ", name='" + name + '\'' +
                 ", author='" + author + '\'' +
                 ", fileType=" + fileType +
-                ", content=" + Arrays.toString(content) +
                 ", example=" + example.id +
                 '}';
     }
