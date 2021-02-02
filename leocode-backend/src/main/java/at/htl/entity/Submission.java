@@ -23,10 +23,11 @@ public class Submission extends PanacheEntity {
         setStatus(SubmissionStatus.CREATED);
     }
 
-    public Submission(String pathToProject, SubmissionStatus status, String author) {
+    public Submission(String pathToProject, String author, Example example) {
+        this();
         this.pathToProject = pathToProject;
-        this.status = status;
         this.author = author;
+        this.example = example;
     }
 
     public void setStatus(SubmissionStatus status) {

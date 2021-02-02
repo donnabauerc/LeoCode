@@ -2,9 +2,10 @@ package at.htl.entity;
 
 public enum LeocodeFileType {
     INSTRUCTION,
-    PROJECT,
+    PROJECT, //Not in database
     JENKINSFILE,
     SOLUTION,
     TEST,
-    POM
+    POM,
+    CODE //Not in database
 }
