@@ -2,6 +2,7 @@ package at.htl.entity;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -24,6 +25,23 @@ public class Example extends PanacheEntity {
         this.description = description;
         this.author = author;
         this.type = type;
+    }
+
+    @JsonbTransient
+    public boolean isValid(){
+        if (this.name == null) {
+            return false;
+        }
+        if (this.description == null) {
+            return false;
+        }
+        if (this.author == null) {
+            return false;
+        }
+        if (this.type == null) {
+            return false;
+        }
+        return true;
     }
 
     @Override
