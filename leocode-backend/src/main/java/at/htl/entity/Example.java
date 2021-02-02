@@ -8,7 +8,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "EXAMPLES")
+@Table(name = "LC_EXAMPLES")
 public class Example extends PanacheEntity {
     public String name;
     public String description;
