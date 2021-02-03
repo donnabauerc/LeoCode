@@ -1,7 +1,7 @@
 package at.htl.control;
 
 import at.htl.entities.ExampleType;
-import at.htl.entities.LeocodeStatus;
+import at.htl.entities.SubmissionStatus;
 import org.apache.commons.io.FileUtils;
 import org.jboss.logging.Logger;
 
@@ -187,21 +187,21 @@ public class FileHandler {
         }
     }
 
-    public LeocodeStatus evaluateStatus(String result){
+    public SubmissionStatus evaluateStatus(String result){
         log.info("evaluateStatus");
 
         result = result.substring(result.lastIndexOf(" ") + 1);
 
-        LeocodeStatus status;
+        SubmissionStatus status;
         switch (result){
             case "FAILURE":
-                status = LeocodeStatus.FAIL;
+                status = SubmissionStatus.FAIL;
                 break;
             case "SUCCESS":
-                status = LeocodeStatus.SUCCESS;
+                status = SubmissionStatus.SUCCESS;
                 break;
             default:
-                status = LeocodeStatus.ERROR;
+                status = SubmissionStatus.ERROR;
                 break;
         }
         return status;

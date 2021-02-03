@@ -3,32 +3,31 @@ package at.htl.entities;
 import java.time.LocalDateTime;
 
 public class Submission {
-
     public long id;
-    public String pathToZip;
-    private LeocodeStatus status;  //private so the timestamp gets updated, whenever its set
+    public String pathToProject;
     public String author;
     public String result;
-    public Example example;
+    private SubmissionStatus status; //private so the timestamp gets updated, whenever it is set => see setter
     public LocalDateTime lastTimeChanged;
-
+    public Example example;
 
     public Submission() {
-        setStatus(LeocodeStatus.CREATED);
+        setStatus(SubmissionStatus.CREATED);
     }
 
-    public Submission(String pathToZip, LeocodeStatus status, String author) {
-        this.pathToZip = pathToZip;
-        this.status = status;
+    public Submission(String pathToProject, String author, Example example) {
+        this();
+        this.pathToProject = pathToProject;
         this.author = author;
+        this.example = example;
     }
 
-    public void setStatus(LeocodeStatus status) {
+    public void setStatus(SubmissionStatus status) {
         this.status = status;
         this.lastTimeChanged = LocalDateTime.now();
     }
 
-    public LeocodeStatus getStatus() {
+    public SubmissionStatus getStatus() {
         return status;
     }
 
@@ -36,12 +35,12 @@ public class Submission {
     public String toString() {
         return "Submission{" +
                 "id=" + id +
-                ", pathToZip='" + pathToZip + '\'' +
-                ", status=" + status +
+                ", pathToProject='" + pathToProject + '\'' +
                 ", author='" + author + '\'' +
                 ", result='" + result + '\'' +
-                ", example=" + example +
+                ", status=" + status +
                 ", lastTimeChanged=" + lastTimeChanged +
+                ", example=" + example.id +
                 '}';
     }
 }

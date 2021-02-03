@@ -20,7 +20,7 @@ public class SubmissionListener {
     @Inject
     SubmissionRepository submissionRepository;
 
-    @Incoming("submission-result")
+    @Incoming("submission-result") // add @Blocking Annotation?
     public void listen(Submission s) {
         if (!s.getStatus().equals(SubmissionStatus.SUBMITTED)) {
             //https://stackoverflow.com/questions/58534957/how-to-execute-jpa-entity-manager-operations-inside-quarkus-kafka-consumer-metho
@@ -43,5 +43,6 @@ public class SubmissionListener {
                 }
             }));
         }
+        System.out.println(s);
     }
 }
