@@ -39,6 +39,14 @@ export class DetailExampleComponent implements AfterViewInit, OnInit {
 
   refreshData(id: number): void {
     // because just one value is returned but material requires array
-    this.http.getExampleById(id).subscribe(value => this.dataSource.data = [value], error => console.log(error));
+    this.http.getExampleById(id).subscribe(value => {
+      if (value === null) {
+        this.router.navigate(['NotFound']);
+      } else {
+        this.dataSource.data = [value];
+      }
+    }, error => {
+      console.log(error);
+    });
   }
 }

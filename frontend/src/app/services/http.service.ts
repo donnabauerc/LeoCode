@@ -23,7 +23,7 @@ export class HttpService {
   }
 
   createExample(form: HTMLFormElement): Observable<Example>{
-    return this.http.post<Example>(this.BASE_URL + 'upload/example', new FormData(form));
+    return this.http.post<Example>(this.BASE_URL + 'example', new FormData(form));
   }
 
   testExample(form: FormData): Observable<any>{
@@ -46,7 +46,7 @@ export class HttpService {
     });
   }
 
-  getFinishedSubmitions(username: string): Observable<Submission[]> {
+  getFinishedSubmissions(username: string): Observable<Submission[]> {
     return this.http.get<Submission[]>(this.BASE_URL + 'portfolio/' + username);
   }
 }

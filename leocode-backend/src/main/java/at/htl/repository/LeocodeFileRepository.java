@@ -120,4 +120,9 @@ public class LeocodeFileRepository implements PanacheRepository<LeocodeFile> {
     public List<LeocodeFile> getFilesRequiredForTesting(Example example) {
         return find("select f from LeocodeFile f where example = ?1 and filetype not in ('INSTRUCTION', 'SOLUTION', 'CODE') ", example).list();
     }
+
+    @Transactional
+    public List<LeocodeFile> findByExample(Example example){
+        return find("select f from LeocodeFile f where example = ?1", example).list();
+    }
 }

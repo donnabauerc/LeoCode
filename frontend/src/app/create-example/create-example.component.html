@@ -13,12 +13,8 @@
     <input type="text" name="description" placeholder="Description" required class="form-control"><br>
     <label>Instruction File: </label>
     <input type="file" name="instruction" placeholder="Instruction" required accept=".md" class="form-control"><br>
-    <label>POM: </label>
-    <input type="file" name="pom" placeholder="POM" required accept=".xml" class="form-control"><br>
-    <label>Correct Sourcecode Files: </label>
-    <input type="file" class="form-control" name="solution" accept=".java" multiple required><br>
-    <label>Test Files: </label>
-    <input type="file" class="form-control" name="test" accept=".java" multiple required><br>
+    <label>Zip file (containing a pom.xml, correct Solution & Unittests): </label>
+    <input type="file" class="form-control" name="project" accept=".zip" required><br>
     <label>Jenkinsfile: </label>
     <input type="file" class="form-control" name="jenkinsfile" required><br>
   </form>
