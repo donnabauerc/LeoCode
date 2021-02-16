@@ -27,7 +27,7 @@ export class HttpService {
   }
 
   testExample(form: FormData): Observable<any>{
-    return this.http.post<any>(this.BASE_URL + 'upload/exercise', form);
+    return this.http.post<any>(this.BASE_URL + 'submission', form);
   }
 
   getSubmissionStatusSse(id: number): Observable<MessageEvent> {
@@ -47,6 +47,6 @@ export class HttpService {
   }
 
   getFinishedSubmissions(username: string): Observable<Submission[]> {
-    return this.http.get<Submission[]>(this.BASE_URL + 'portfolio/' + username);
+    return this.http.get<Submission[]>(this.BASE_URL + 'submission/history/' + username);
   }
 }

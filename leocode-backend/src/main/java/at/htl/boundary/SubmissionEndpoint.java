@@ -1,5 +1,6 @@
 package at.htl.boundary;
 
+import at.htl.dto.SubmissionDTO;
 import at.htl.entity.Example;
 import at.htl.entity.LeocodeFile;
 import at.htl.entity.Submission;
@@ -14,10 +15,7 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.LinkedList;
@@ -88,4 +86,14 @@ public class SubmissionEndpoint {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e).build();
         }
     }
+
+    @GET
+    @Path("/history/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listFinishedSubmissions(@PathParam("username") String username){
+        List<Submission> submissions = submissionRepository.getFinishedByUsername(username);
+        return Response.ok(submissionRepository.createSubmissionDTOs(submissions)).build();
+    }
+
+
 }
