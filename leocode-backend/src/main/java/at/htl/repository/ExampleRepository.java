@@ -47,7 +47,7 @@ public class ExampleRepository implements PanacheRepository<Example> {
                         example.type = ExampleType.valueOf(inputParts.get(0).getBodyAsString().toUpperCase());
                         break;
                     default: //files
-                        files.addAll(leocodeFileRepository.createFilesFromInputParts(inputType, inputParts, "unknown", null));
+                        files.addAll(leocodeFileRepository.createFilesFromInputParts(inputType, inputParts, "unknown", example));
                         break;
                 }
             } catch (IOException e) {
