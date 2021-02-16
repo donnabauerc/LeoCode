@@ -43,6 +43,5 @@ public class SubmissionListener {
                 }
             }));
         }
-        System.out.println(s);
     }
 }

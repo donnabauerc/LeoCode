@@ -23,17 +23,15 @@ public class SubmissionListener {
 
     @Incoming("submission-input")
     public void listen(Submission s) {
-        System.out.println(s);
-//        if (s.getStatus().equals(SubmissionStatus.SUBMITTED)) {
-//            log.info("Received Message: " + s.toString());
-//
-////            Runnable runnable = () -> {
-////                fileHandler.testProject(s.pathToProject, s.example.type);
-////                s.result = fileHandler.getResult();
-////                s.setStatus(fileHandler.evaluateStatus(s.result));
-////                submissionProducer.sendSubmition(s);
-////            };
-////            new Thread(runnable).start();
-//        }
+        if (s.getStatus().equals(SubmissionStatus.SUBMITTED)) {
+            log.info("Received Message: " + s.toString());
+            Runnable runnable = () -> {
+                fileHandler.testProject(s.pathToProject, s.example.type);
+                s.result = fileHandler.getResult();
+                s.setStatus(fileHandler.evaluateStatus(s.result));
+                submissionProducer.sendSubmition(s);
+            };
+            new Thread(runnable).start();
+        }
     }
 }
