@@ -9,21 +9,32 @@ import at.htl.kafka.SubmissionProducer;
 import at.htl.repository.ExampleRepository;
 import at.htl.repository.LeocodeFileRepository;
 import at.htl.repository.SubmissionRepository;
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.groups.MultiSubscribe;
+import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.jboss.logging.Logger;
+import org.jboss.resteasy.annotations.SseElementType;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.sse.Sse;
+import javax.ws.rs.sse.SseEventSink;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 @Path("/submission")
 public class SubmissionEndpoint {
+
+    @Inject
+    @Channel("submission-result")
+    Multi<Submission> results;
 
     @Inject
     Logger log;
@@ -95,5 +106,44 @@ public class SubmissionEndpoint {
         return Response.ok(submissionRepository.createSubmissionDTOs(submissions)).build();
     }
 
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    @SseElementType("text/plain")
+    public void stream(@Context Sse sse, @Context SseEventSink sseEventSink, @PathParam("id") Long id) {
+        Submission currentSubmission = submissionRepository.findById(id);
+        boolean canSubscribe = false;
 
+        // When someone refreshes or connects later on send them the current status
+        if (currentSubmission != null) {
+
+            String res = String.format("%tT Uhr: %s",
+                    currentSubmission.lastTimeChanged,
+                    currentSubmission.getStatus().toString());
+
+            sseEventSink.send(sse.newEvent(res));
+            // anything other than SUBMITTED is complete
+            canSubscribe = currentSubmission.getStatus() == SubmissionStatus.SUBMITTED;
+        }
+
+        // Only allow sse if the submition is not complete
+        if (canSubscribe) {
+            MultiSubscribe<Submission> subscribe = results.subscribe();
+
+            subscribe.with(submition -> {
+                if (id.equals(submition.id)) {
+
+                    String res = String.format("%tT Uhr: %s",
+                            submition.lastTimeChanged,
+                            submition.getStatus().toString());
+
+                    sseEventSink.send(sse.newEvent(res));
+
+                    if (submition.getStatus() != SubmissionStatus.SUBMITTED) {
+                        sseEventSink.close();
+                    }
+                }
+            });
+        }
+    }
 }
