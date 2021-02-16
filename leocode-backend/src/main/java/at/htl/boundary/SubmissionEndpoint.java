@@ -130,16 +130,16 @@ public class SubmissionEndpoint {
         if (canSubscribe) {
             MultiSubscribe<Submission> subscribe = results.subscribe();
 
-            subscribe.with(submition -> {
-                if (id.equals(submition.id)) {
+            subscribe.with(submission -> {
+                if (id.equals(submission.id)) {
 
                     String res = String.format("%tT Uhr: %s",
-                            submition.lastTimeChanged,
-                            submition.getStatus().toString());
+                            submission.lastTimeChanged,
+                            submission.getStatus().toString());
 
                     sseEventSink.send(sse.newEvent(res));
 
-                    if (submition.getStatus() != SubmissionStatus.SUBMITTED) {
+                    if (submission.getStatus() != SubmissionStatus.SUBMITTED) {
                         sseEventSink.close();
                     }
                 }

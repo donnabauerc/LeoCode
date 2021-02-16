@@ -46,6 +46,24 @@ public class ExampleRepository implements PanacheRepository<Example> {
                     case "exampleType":
                         example.type = ExampleType.valueOf(inputParts.get(0).getBodyAsString().toUpperCase());
                         break;
+                    case "blacklist":
+                        inputParts.forEach(inputPart -> {
+                            try {
+                                example.blacklist.add(inputPart.getBodyAsString());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                        break;
+                    case "whitelist":
+                        inputParts.forEach(inputPart -> {
+                            try {
+                                example.whitelist.add(inputPart.getBodyAsString());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                        break;
                     default: //files
                         files.addAll(leocodeFileRepository.createFilesFromInputParts(inputType, inputParts, "unknown", example));
                         break;
