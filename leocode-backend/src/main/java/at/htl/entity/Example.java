@@ -4,8 +4,10 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "LC_EXAMPLES")
@@ -16,16 +18,18 @@ public class Example extends PanacheEntity {
     @Enumerated(value = EnumType.STRING)
     public ExampleType type;
     @ElementCollection
-    public List<String> whitelist;
+    @CollectionTable(name = "LC_EXAMPLE_WHITELIST")
+    public Set<String> whitelist;
     @ElementCollection
-    public List<String> blacklist;
+    @CollectionTable(name = "LC_EXAMPLE_BLACKLIST")
+    public Set<String> blacklist;
 
     public Example() {
-        this.whitelist = new LinkedList<>();
-        this.blacklist = new LinkedList<>();
+        this.whitelist = new HashSet<>();
+        this.blacklist = new HashSet<>();
     }
 
-    public Example(String name, String description, String author, ExampleType type, List<String> whitelist, List<String> blacklist) {
+    public Example(String name, String description, String author, ExampleType type, Set<String> whitelist, Set<String> blacklist) {
         this.name = name;
         this.description = description;
         this.author = author;
@@ -59,6 +63,8 @@ public class Example extends PanacheEntity {
                 ", description='" + description + '\'' +
                 ", author='" + author + '\'' +
                 ", type=" + type +
+                ", whitelist=" + whitelist +
+                ", blacklist=" + blacklist +
                 '}';
     }
 }

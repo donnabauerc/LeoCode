@@ -6,6 +6,7 @@ import at.htl.entity.LeocodeFile;
 import javax.persistence.ElementCollection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class ExampleDTO {
     public long id;
@@ -14,11 +15,11 @@ public class ExampleDTO {
     public String description;
     public String type;
 
-    public List<String> whitelist;
-    public List<String> blacklist;
+    public Set<String> whitelist;
+    public Set<String> blacklist;
     public List<LeocodeFileDTO> files;
 
-    public ExampleDTO(long id, String name, String author, String description, String type, LinkedList<LeocodeFileDTO> files, LinkedList<String> whitelist, LinkedList<String> blacklist) {
+    public ExampleDTO(long id, String name, String author, String description, String type, LinkedList<LeocodeFileDTO> files, Set<String> whitelist, Set<String> blacklist) {
         this.id = id;
         this.name = name;
         this.author = author;

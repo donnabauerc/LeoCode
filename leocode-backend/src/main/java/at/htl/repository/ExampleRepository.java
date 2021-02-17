@@ -25,6 +25,9 @@ public class ExampleRepository implements PanacheRepository<Example> {
     @Inject
     LeocodeFileRepository leocodeFileRepository;
 
+    @Inject
+    LeocodeKeywordRepository leocodeKeywordRepository;
+
     @Transactional
     public Example createExampleFromMultipart(MultipartFormDataInput input) {
         Map<String, List<InputPart>> inputForm = input.getFormDataMap();
@@ -47,22 +50,10 @@ public class ExampleRepository implements PanacheRepository<Example> {
                         example.type = ExampleType.valueOf(inputParts.get(0).getBodyAsString().toUpperCase());
                         break;
                     case "blacklist":
-                        inputParts.forEach(inputPart -> {
-                            try {
-                                example.blacklist.add(inputPart.getBodyAsString());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        });
+                        example.blacklist = leocodeKeywordRepository.filterStringInput(inputParts);
                         break;
                     case "whitelist":
-                        inputParts.forEach(inputPart -> {
-                            try {
-                                example.whitelist.add(inputPart.getBodyAsString());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        });
+                        example.whitelist = leocodeKeywordRepository.filterStringInput(inputParts);
                         break;
                     default: //files
                         files.addAll(leocodeFileRepository.createFilesFromInputParts(inputType, inputParts, "unknown", example));
