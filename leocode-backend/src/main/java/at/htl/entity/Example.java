@@ -17,10 +17,10 @@ public class Example extends PanacheEntity {
     public String author;
     @Enumerated(value = EnumType.STRING)
     public ExampleType type;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "LC_EXAMPLE_WHITELIST")
     public Set<String> whitelist;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "LC_EXAMPLE_BLACKLIST")
     public Set<String> blacklist;
 
