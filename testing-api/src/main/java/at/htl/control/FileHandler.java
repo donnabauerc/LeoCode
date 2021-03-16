@@ -54,7 +54,7 @@ public class FileHandler {
                 switch (type){
                     case MAVEN:
                         createMavenProjectStructure();
-                        //runTests(); => TODO: uncomment SubmissionListener
+                        runTests();
                     break;
                     default:
                         throw new Exception("Project Type not supported yet!");

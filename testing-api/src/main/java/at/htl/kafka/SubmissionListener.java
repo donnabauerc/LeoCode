@@ -27,8 +27,8 @@ public class SubmissionListener {
             log.info("Received Message: " + s.toString());
             Runnable runnable = () -> {
                 s.result = fileHandler.testProject(s.pathToProject, s.example.type, s.example.whitelist, s.example.blacklist);
-                //s.setStatus(fileHandler.evaluateStatus(s.result));
-                //submissionProducer.sendSubmition(s);
+                s.setStatus(fileHandler.evaluateStatus(s.result));
+                submissionProducer.sendSubmition(s);
             };
             new Thread(runnable).start();
         }
