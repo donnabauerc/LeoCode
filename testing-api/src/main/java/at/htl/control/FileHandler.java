@@ -12,9 +12,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -29,26 +31,39 @@ public class FileHandler {
 
 
     public Path pathToProject;
-    public HashMap<String, Path> currentFiles;
+    public HashMap<String, Path> currentFiles; //TODO: probably wrong, because of possible multiple same keys (multiple code files)
 
     @Inject
     Logger log;
 
-    public void testProject(String projectPath, ExampleType type) {
+    public String testProject(String projectPath, ExampleType type, Set<String> whitelist, Set<String> blacklist) {
         setup(projectPath);
         unzipProject();
-        try {
-            switch (type){
-                case MAVEN:
-                    createMavenProjectStructure();
-                    runTests();
+
+        String resWhitelist;
+        String resBlacklist;
+
+        if((resWhitelist = checkWhitelist(whitelist)) != null) {
+            return resWhitelist;
+        } else if ((resBlacklist = checkBlacklist(blacklist)) != null) {
+            return resBlacklist;
+        } else {
+            try {
+                switch (type){
+                    case MAVEN:
+                        createMavenProjectStructure();
+                        //runTests(); => uncomment SubmissionListener
                     break;
-                default:
-                    throw new Exception("Project Type not supported yet!");
+                    default:
+                        throw new Exception("Project Type not supported yet!");
+                }
+                return getResult();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "Oops, something went wrong!";
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
     }
 
     public void setup(String projectPath) {
@@ -74,6 +89,8 @@ public class FileHandler {
                 runTestsShellscript.setExecutable(true);
                 Files.write(runTestsShellscript.toPath(), SHELL_SCRIPT_CONTENT, StandardCharsets.UTF_8);
             }
+
+            //Todo: delete result.txt file before run => only latest result or not existing
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -205,5 +222,48 @@ public class FileHandler {
                 break;
         }
         return status;
+    }
+
+    public String checkWhitelist(Set<String> whitelist) {
+        Iterator it = currentFiles.entrySet().iterator();
+        while(it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            switch (pair.getKey().toString()){
+                case "code":
+                    for(String s : whitelist) {
+                        try(BufferedReader br = new BufferedReader(new FileReader(currentFiles.get(pair.getKey()).toFile()))){
+                            String line;
+                            boolean wordWasUsed = false;
+                            while((line = br.readLine())!= null) {
+                                String[] words = line.split(" ");
+                                for (String w: words) {
+                                    if(wordWasUsed = w.equalsIgnoreCase(s)){
+                                        break;
+                                    }
+                                }
+                                if(wordWasUsed) {
+                                    break;
+                                }
+                            }
+
+                            if(!wordWasUsed){
+                                log.info("Whitelist Error: " + s + " was not used!");
+                                return "Whitelist Error: " + s + " was not used!";
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            return "Sorry, there has been an unknown error!";
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        return null;
+    }
+
+    public String checkBlacklist(Set<String> blacklist) {
+        return null;
     }
 }
