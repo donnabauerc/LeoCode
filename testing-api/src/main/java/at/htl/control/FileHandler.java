@@ -44,10 +44,9 @@ public class FileHandler {
         String resWhitelist;
         String resBlacklist;
 
-//        if((resWhitelist = checkWhitelist(whitelist)) != null) {
-//            return resWhitelist;
-//        } else
-        if ((resBlacklist = checkBlacklist(blacklist)) != null) {
+        if((resWhitelist = checkWhitelist(whitelist)) != null) {
+            return resWhitelist;
+        } else if ((resBlacklist = checkBlacklist(blacklist)) != null) {
             return resBlacklist;
         } else {
             try {
@@ -226,44 +225,27 @@ public class FileHandler {
         return status;
     }
 
-//    public String checkWhitelist(Set<String> whitelist) { //Todo: add line counter
-//        Iterator it = currentFiles.entrySet().iterator();
-//        while(it.hasNext()) {
-//            Map.Entry pair = (Map.Entry)it.next();
-//            switch (pair.getValue().toString()){
-//                case "code":
-//                    for(String s : whitelist) {
-//                        try(BufferedReader br = new BufferedReader(new FileReader(Paths.get(pair.getKey().toString()).toFile()))){
-//                            String line;
-//                            boolean wordWasUsed = false;
-//                            while((line = br.readLine())!= null) {
-//                                String[] words = line.split(" ");
-//                                for (String w: words) {
-//                                    if(wordWasUsed = w.equalsIgnoreCase(s)){
-//                                        break;
-//                                    }
-//                                }
-//                                if(wordWasUsed) {
-//                                    break;
-//                                }
-//                            }
-//
-//                            if(!wordWasUsed){
-//                                log.info("Whitelist Error: " + s + " was not used!");
-//                                return "Whitelist Error: " + s + " was not used!";
-//                            }
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                            return "Sorry, there has been an unknown error!";
-//                        }
-//                    }
-//                    break;
-//                default:
-//                    break;
-//            }
-//        }
-//        return null;
-//    }
+    public String checkWhitelist(Set<String> whitelist) { //Todo: add line counter
+        log.info("checking Whitelist");
+        List<Map.Entry<Path, String>> currentCodeFiles = currentFiles.entrySet().stream()
+                .filter(pathStringEntry -> pathStringEntry.getValue().equals("code"))
+                .collect(Collectors.toList());
+
+        for(Map.Entry<Path, String> e: currentCodeFiles) {
+            for(String s : whitelist) {
+                try{
+                    if(!checkForUsage(s, e.getKey().toFile())){
+                        log.info("Whitelist Error: " + s + " has not been used!");
+                        return "Whitelist Error: " + s + " has not been used!";
+                    }
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                    return "Sorry, there has been an unknown error!";
+                }
+            }
+        }
+        return null; //If everything seemed alright (e.g. every Whitelist Word was found)
+    }
 
     public String checkBlacklist(Set<String> blacklist) { //Todo: add line counter
         log.info("checking Blacklist");
