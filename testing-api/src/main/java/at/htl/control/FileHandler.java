@@ -32,7 +32,7 @@ public class FileHandler {
 
 
     public Path pathToProject;
-    public HashMap<Path, String> currentFiles; //TODO: probably wrong, because of possible multiple same keys (multiple code files)
+    public HashMap<Path, String> currentFiles;
 
     @Inject
     Logger log;
@@ -44,16 +44,16 @@ public class FileHandler {
         String resWhitelist;
         String resBlacklist;
 
-        if((resWhitelist = checkWhitelist(whitelist)) != null) {
+        if((resWhitelist = checkWhiteOrBlacklist("whitelist", whitelist)) != null) {
             return resWhitelist;
-        } else if ((resBlacklist = checkBlacklist(blacklist)) != null) {
+        } else if ((resBlacklist = checkWhiteOrBlacklist("blacklist", blacklist)) != null) {
             return resBlacklist;
         } else {
             try {
                 switch (type){
                     case MAVEN:
                         createMavenProjectStructure();
-                        //runTests(); => uncomment SubmissionListener
+                        //runTests(); => TODO: uncomment SubmissionListener
                     break;
                     default:
                         throw new Exception("Project Type not supported yet!");
@@ -225,48 +225,40 @@ public class FileHandler {
         return status;
     }
 
-    public String checkWhitelist(Set<String> whitelist) { //Todo: add line counter
-        log.info("checking Whitelist");
+    public String checkWhiteOrBlacklist(String type, Set<String> list){ //TODO: add line counter
         List<Map.Entry<Path, String>> currentCodeFiles = currentFiles.entrySet().stream()
                 .filter(pathStringEntry -> pathStringEntry.getValue().equals("code"))
                 .collect(Collectors.toList());
 
         for(Map.Entry<Path, String> e: currentCodeFiles) {
-            for(String s : whitelist) {
+            for(String s : list) {
                 try{
-                    if(!checkForUsage(s, e.getKey().toFile())){
-                        log.info("Whitelist Error: " + s + " has not been used!");
-                        return "Whitelist Error: " + s + " has not been used!";
+                    switch (type.toLowerCase()){
+                        case "blacklist":
+                            log.info("checking Blacklist");
+                            if(checkForUsage(s, e.getKey().toFile())){
+                                log.info("Blacklist Error: " + s + " was used!");
+                                return "Blacklist Error: " + s + " was used!";
+                            }
+                            break;
+                        case "whitelist":
+                            log.info("checking Whitelist");
+                            if(!checkForUsage(s, e.getKey().toFile())){
+                                log.info("Whitelist Error: " + s + " has not been used!");
+                                return "Whitelist Error: " + s + " has not been used!";
+                            }
+                            break;
+                        default:
+                            throw new IOException();
                     }
+
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                     return "Sorry, there has been an unknown error!";
                 }
             }
         }
-        return null; //If everything seemed alright (e.g. every Whitelist Word was found)
-    }
-
-    public String checkBlacklist(Set<String> blacklist) { //Todo: add line counter
-        log.info("checking Blacklist");
-        List<Map.Entry<Path, String>> currentCodeFiles = currentFiles.entrySet().stream()
-                .filter(pathStringEntry -> pathStringEntry.getValue().equals("code"))
-                .collect(Collectors.toList());
-
-        for(Map.Entry<Path, String> e: currentCodeFiles) {
-            for(String s : blacklist) {
-                try{
-                    if(checkForUsage(s, e.getKey().toFile())){
-                        log.info("Blacklist Error: " + s + " was used!");
-                        return "Blacklist Error: " + s + " was used!";
-                    }
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                    return "Sorry, there has been an unknown error!";
-                }
-            }
-        }
-        return null; //If everything seemed alright (e.g. no Blacklist Word was found)
+        return null;
     }
 
     public boolean checkForUsage(String needle, File haystack) throws IOException {
