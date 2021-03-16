@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -31,7 +32,7 @@ public class FileHandler {
 
 
     public Path pathToProject;
-    public HashMap<String, Path> currentFiles; //TODO: probably wrong, because of possible multiple same keys (multiple code files)
+    public HashMap<Path, String> currentFiles; //TODO: probably wrong, because of possible multiple same keys (multiple code files)
 
     @Inject
     Logger log;
@@ -43,9 +44,10 @@ public class FileHandler {
         String resWhitelist;
         String resBlacklist;
 
-        if((resWhitelist = checkWhitelist(whitelist)) != null) {
-            return resWhitelist;
-        } else if ((resBlacklist = checkBlacklist(blacklist)) != null) {
+//        if((resWhitelist = checkWhitelist(whitelist)) != null) {
+//            return resWhitelist;
+//        } else
+        if ((resBlacklist = checkBlacklist(blacklist)) != null) {
             return resBlacklist;
         } else {
             try {
@@ -70,7 +72,7 @@ public class FileHandler {
         try {
             log.info("setup test environment");
             pathToProject = Paths.get(projectPath);
-            currentFiles = new HashMap<String, Path>();
+            currentFiles = new HashMap<Path, String>();
 
             File projectDirectory = PROJECT_UNDER_TEST_DIRECTORY.toFile();
             File runTestsShellscript = RUN_TEST_SCRIPT.toFile();
@@ -109,11 +111,11 @@ public class FileHandler {
                     if (!newFile.getParentFile().exists()) {
                         newFile.getParentFile().mkdirs();
                     }
-                    currentFiles.put("test", newFile.toPath());
+                    currentFiles.put(newFile.toPath() ,"test");
                 } else if (newFile.getPath().contains(".java")) {
-                    currentFiles.put("code", newFile.toPath());
+                    currentFiles.put(newFile.toPath(), "code");
                 } else {
-                    currentFiles.put("other", newFile.toPath());
+                    currentFiles.put(newFile.toPath(), "other");
                 }
 
                 newFile.createNewFile();
@@ -133,13 +135,13 @@ public class FileHandler {
         log.info("create Maven Project Structure");
 
         currentFiles.forEach((k, v) -> {
-            File file = v.toFile();
+            File file = k.toFile();
             StringBuilder fileDestination = new StringBuilder().append(PROJECT_UNDER_TEST_DIRECTORY);
 
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 fileDestination.append("/src/");
 
-                switch (k) {
+                switch (v) {
                     case "test":
                         fileDestination.append("test");
                         break;
@@ -159,7 +161,7 @@ public class FileHandler {
                                 packages.lastIndexOf(" ") + 1,
                                 packages.lastIndexOf(";"))
                         .replace(".", "/");
-                String filename = v.toString().substring(v.toString().lastIndexOf("/"));
+                String filename = k.toString().substring(k.toString().lastIndexOf("/"));
 
                 fileDestination.append(packages).append(filename);
 
@@ -224,46 +226,79 @@ public class FileHandler {
         return status;
     }
 
-    public String checkWhitelist(Set<String> whitelist) {
-        Iterator it = currentFiles.entrySet().iterator();
-        while(it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            switch (pair.getKey().toString()){
-                case "code":
-                    for(String s : whitelist) {
-                        try(BufferedReader br = new BufferedReader(new FileReader(currentFiles.get(pair.getKey()).toFile()))){
-                            String line;
-                            boolean wordWasUsed = false;
-                            while((line = br.readLine())!= null) {
-                                String[] words = line.split(" ");
-                                for (String w: words) {
-                                    if(wordWasUsed = w.equalsIgnoreCase(s)){
-                                        break;
-                                    }
-                                }
-                                if(wordWasUsed) {
-                                    break;
-                                }
-                            }
+//    public String checkWhitelist(Set<String> whitelist) { //Todo: add line counter
+//        Iterator it = currentFiles.entrySet().iterator();
+//        while(it.hasNext()) {
+//            Map.Entry pair = (Map.Entry)it.next();
+//            switch (pair.getValue().toString()){
+//                case "code":
+//                    for(String s : whitelist) {
+//                        try(BufferedReader br = new BufferedReader(new FileReader(Paths.get(pair.getKey().toString()).toFile()))){
+//                            String line;
+//                            boolean wordWasUsed = false;
+//                            while((line = br.readLine())!= null) {
+//                                String[] words = line.split(" ");
+//                                for (String w: words) {
+//                                    if(wordWasUsed = w.equalsIgnoreCase(s)){
+//                                        break;
+//                                    }
+//                                }
+//                                if(wordWasUsed) {
+//                                    break;
+//                                }
+//                            }
+//
+//                            if(!wordWasUsed){
+//                                log.info("Whitelist Error: " + s + " was not used!");
+//                                return "Whitelist Error: " + s + " was not used!";
+//                            }
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                            return "Sorry, there has been an unknown error!";
+//                        }
+//                    }
+//                    break;
+//                default:
+//                    break;
+//            }
+//        }
+//        return null;
+//    }
 
-                            if(!wordWasUsed){
-                                log.info("Whitelist Error: " + s + " was not used!");
-                                return "Whitelist Error: " + s + " was not used!";
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            return "Sorry, there has been an unknown error!";
-                        }
+    public String checkBlacklist(Set<String> blacklist) { //Todo: add line counter
+        log.info("checking Blacklist");
+        List<Map.Entry<Path, String>> currentCodeFiles = currentFiles.entrySet().stream()
+                .filter(pathStringEntry -> pathStringEntry.getValue().equals("code"))
+                .collect(Collectors.toList());
+
+        for(Map.Entry<Path, String> e: currentCodeFiles) {
+            for(String s : blacklist) {
+                try{
+                    if(checkForUsage(s, e.getKey().toFile())){
+                        log.info("Blacklist Error: " + s + " was used!");
+                        return "Blacklist Error: " + s + " was used!";
                     }
-                    break;
-                default:
-                    break;
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                    return "Sorry, there has been an unknown error!";
+                }
             }
         }
-        return null;
+        return null; //If everything seemed alright (e.g. no Blacklist Word was found)
     }
 
-    public String checkBlacklist(Set<String> blacklist) {
-        return null;
+    public boolean checkForUsage(String needle, File haystack) throws IOException {
+        try(BufferedReader br = new BufferedReader(new FileReader(haystack))) {
+            String line;
+            while((line = br.readLine())!= null) {
+                String[] words = line.split(" ");
+                for (String w: words) {
+                    if(w.equalsIgnoreCase(needle)){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
