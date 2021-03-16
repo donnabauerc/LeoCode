@@ -25,10 +25,11 @@ import java.util.zip.ZipInputStream;
 public class FileHandler {
 
     private final Path PROJECT_UNDER_TEST_DIRECTORY = Paths.get("../project-under-test/");
+    private final Path BUILD_RESULT = Paths.get("../result.txt");
     private final Path RUN_TEST_SCRIPT = Paths.get("../run-tests.sh");
-    private final List<String> SHELL_SCRIPT_CONTENT = Arrays.asList("cd ../project-under-test",
+    private final List<String> SHELL_SCRIPT_CONTENT = Arrays.asList("cd " + PROJECT_UNDER_TEST_DIRECTORY.toString(),
             "/opt/jenkinsfile-runner/bin/jenkinsfile-runner -w /opt/jenkins -p /opt/jenkins_home/plugins/ -f ./Jenkinsfile > log.txt",
-            "tail -n 1 log.txt > ../result.txt");
+            "tail -n 1 log.txt > " + BUILD_RESULT.toString());
 
 
     public Path pathToProject;
@@ -84,6 +85,10 @@ public class FileHandler {
                 projectDirectory.mkdir();
             }
 
+            if (BUILD_RESULT.toFile().exists()) {
+                Files.delete(BUILD_RESULT);
+            }
+
             if (!runTestsShellscript.exists()) {
                 log.info("creating " + runTestsShellscript.getPath());
                 runTestsShellscript.createNewFile();
@@ -91,7 +96,6 @@ public class FileHandler {
                 Files.write(runTestsShellscript.toPath(), SHELL_SCRIPT_CONTENT, StandardCharsets.UTF_8);
             }
 
-            //Todo: delete result.txt file before run => only latest result or not existing
         } catch (IOException e) {
             e.printStackTrace();
         }
