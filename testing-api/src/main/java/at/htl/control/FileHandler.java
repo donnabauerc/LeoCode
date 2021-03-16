@@ -225,7 +225,7 @@ public class FileHandler {
         return status;
     }
 
-    public String checkWhiteOrBlacklist(String type, Set<String> list){ //TODO: add line counter
+    public String checkWhiteOrBlacklist(String type, Set<String> list){
         List<Map.Entry<Path, String>> currentCodeFiles = currentFiles.entrySet().stream()
                 .filter(pathStringEntry -> pathStringEntry.getValue().equals("code"))
                 .collect(Collectors.toList());
@@ -236,14 +236,15 @@ public class FileHandler {
                     switch (type.toLowerCase()){
                         case "blacklist":
                             log.info("checking Blacklist");
-                            if(checkForUsage(s, e.getKey().toFile())){
-                                log.info("Blacklist Error: " + s + " was used!");
-                                return "Blacklist Error: " + s + " was used!";
+                            int c = checkForUsage(s, e.getKey().toFile());
+                            if(c >= 0){
+                                log.info("Blacklist Error: " + s + " has been used at line "+ c + "!");
+                                return "Blacklist Error: " + s + " has been used at line "+ c + "!";
                             }
                             break;
                         case "whitelist":
                             log.info("checking Whitelist");
-                            if(!checkForUsage(s, e.getKey().toFile())){
+                            if(checkForUsage(s, e.getKey().toFile()) < 0){
                                 log.info("Whitelist Error: " + s + " has not been used!");
                                 return "Whitelist Error: " + s + " has not been used!";
                             }
@@ -261,18 +262,20 @@ public class FileHandler {
         return null;
     }
 
-    public boolean checkForUsage(String needle, File haystack) throws IOException {
+    public int checkForUsage(String needle, File haystack) throws IOException {
+        int lineNumber = 0;
         try(BufferedReader br = new BufferedReader(new FileReader(haystack))) {
             String line;
             while((line = br.readLine())!= null) {
+                lineNumber++;
                 String[] words = line.split(" ");
                 for (String w: words) {
                     if(w.equalsIgnoreCase(needle)){
-                        return true;
+                        return lineNumber;
                     }
                 }
             }
         }
-        return false;
+        return -1;
     }
 }
