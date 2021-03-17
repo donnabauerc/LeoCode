@@ -17,6 +17,10 @@
     <input type="file" class="form-control" name="project" accept=".zip" required><br>
     <label>Jenkinsfile: </label>
     <input type="file" class="form-control" name="jenkinsfile" required><br>
+    <label>Whitelist: </label>
+    <input type="text" class="form-control" name="whitelist"><br>
+    <label>Blacklist: </label>
+    <input type="text" class="form-control" name="blacklist"><br>
   </form>
   <button mat-raised-button color="primary" (click)="upload()">Create Example</button>
 </div>

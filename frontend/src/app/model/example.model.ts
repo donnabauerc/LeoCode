@@ -6,5 +6,7 @@ export interface Example{
   description: string;
   author: string;
   type: any;
+  whitelist: string[];
+  blacklist: string[];
   files: LeoCodeFile[];
 }

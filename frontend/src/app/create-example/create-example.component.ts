@@ -23,12 +23,12 @@ export class CreateExampleComponent implements OnInit {
       this.http.createExample(this.form).subscribe(
         data => {
           this.router.navigate(['example', data.id]);
-        },
+          },
         error => {
           alert('Sorry there has been an error!');
           console.log(error);
         }
-      );
+        );
     }
   }
 
