@@ -14,7 +14,10 @@ public class LeocodeKeywordRepository {
         inputParts.forEach(inputPart -> {
             try {
                 String[] words = inputPart.getBodyAsString().split("\\P{Alpha}+");
-                filteredSet.addAll(Arrays.asList(words));
+                Arrays.stream(words)
+                        .filter(s -> !s.isBlank())
+                        .forEach(s -> filteredSet.add(s));
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
