@@ -8,7 +8,6 @@ import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.Locale;
 
 @ApplicationScoped
 public class SubmissionListener {
@@ -30,7 +29,7 @@ public class SubmissionListener {
                 s.result = fileHandler.testProject(s.pathToProject, s.example.type, s.example.whitelist, s.example.blacklist);
 
                 if(s.result.toLowerCase().contains("whitelist") || s.result.toLowerCase().contains("blacklist")){
-                    s.setStatus(SubmissionStatus.FAIL);
+                    s.setStatus(SubmissionStatus.FAILED);
                 } else {
                     s.setStatus(fileHandler.evaluateStatus(s.result));
                 }

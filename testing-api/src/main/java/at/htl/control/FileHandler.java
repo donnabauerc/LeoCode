@@ -13,10 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -217,10 +213,10 @@ public class FileHandler {
         SubmissionStatus status;
         switch (result){
             case "FAILURE":
-                status = SubmissionStatus.FAIL;
+                status = SubmissionStatus.FAILED;
                 break;
             case "SUCCESS":
-                status = SubmissionStatus.SUCCESS;
+                status = SubmissionStatus.CORRECT;
                 break;
             default:
                 status = SubmissionStatus.ERROR;
