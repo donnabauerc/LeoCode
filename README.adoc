@@ -71,15 +71,17 @@ Jenkins-Runner
 1. Start the postgres database & Kafka Broker via Docker compose. In the project root type
 `docker-compose up`
 
+NOTE: Import Database into Intellij with the `backend/datasource.txt` file
+=> go into IntelliJ open `Database/Import from Clipboard`, User: app Password: app
+
 2. Start the quarkus servers: go into the `backend` / `testing-api` directory and start them
 by typing `./mvnw clean compile quarkus:dev`.
 
 NOTE: Since the Quarkus debugger listens to Port 5005 by default, you should start one
-instance by `./mvnw clean compile quarkus:dev -Ddebug` to change the port. Otherwise, you
+instance by `./mvnw clean compile quarkus:dev -Ddebug <PortNumber e.g. 5006>` to change the port. Otherwise, you
 won't be able to use the debugging option, but the project should run anyway.
 
 Then you can run the requests.http file located in testing/http-requests but be sure to use
-the right ID, which can be found in the database.
+the right ID, which can be found in the database. As an alternative you can also use the Angular Frontend.
 
-Import Database into Intellij with the `backend/datasource.txt` file
-=> go into IntelliJ open `Database/Import from Clipboard`, User: app Password: app
+To start the Angular Frontend navigate into the `frontend` directory. Then you need to install the Node packages e.g. `npm i`. Afterwards you can run the Angular Server by `ng serve`.
